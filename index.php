@@ -21,6 +21,7 @@
           <input type="email" name="email" placeholder="Email" required />
           <input type="password" name="password" placeholder="Password" required />
           <button type="submit" name="register">Daftar</button>
+          <div class="textLink">Sudah Punya Akun? <a id="signIn" href="#">Masuk Sekarang</a></div>
         </form>
       </div>
 
@@ -32,23 +33,16 @@
           <input type="password" name="password" placeholder="Password" required />
           <a href="#">Lupa password?</a>
           <button type="submit" name="login">Masuk</button>
+          <div class="textLink">Belum Punya Akun? <a id="signUp" href="#">Daftar Sekarang</a></div>
         </form>
       </div>
-      
+
     </div>
 
-    <div class="overlay-container">
-      <div class="overlay">
-        <div class="overlay-panel overlay-left">
-          <h1>Selamat Datang Kembali!</h1>
-          <p>Tetap terhubung dengan kami, silakan login dengan data pribadi Anda</p>
-          <button class="ghost" id="signIn">Ke Halaman Login</button>
-        </div>
-        <div class="overlay-panel overlay-right">
-          <h1>Halo, Teman!</h1>
-          <p>Masukkan detail pribadi Anda dan mulailah perjalanan bersama kami</p>
-          <button class="ghost" id="signUp">Ke Halaman Daftar</button>
-        </div>
+    <div id="overlay-container" class="overlay-container">
+      <div class="overlay-panel overlay-left">
+      </div>
+      <div class="overlay-panel overlay-right">
       </div>
     </div>
   </div>

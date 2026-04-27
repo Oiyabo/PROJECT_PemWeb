@@ -1,0 +1,122 @@
+* {
+  box-sizing: border-box;
+}
+body {
+  background: #f6f5f7;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.container {
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow:
+    0 14px 28px rgba(0, 0, 0, 0.25),
+    0 10px 10px rgba(0, 0, 0, 0.22);
+  position: relative;
+  overflow: hidden;
+  width: 768px;
+  max-width: 100%;
+  height: 384px;
+  min-height: 480px;
+  .form-container {
+    position: relative;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .sign-in-container {
+      width: 50%;
+      height: 100%;
+    }
+    .sign-up-container {
+      width: 50%;
+      height: 100%;
+    }
+    form {
+      background-color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      padding: 0 50px;
+      height: 100%;
+      text-align: center;
+      input {
+        background-color: #eee;
+        border: none;
+        padding: 12px 15px;
+        margin: 8px 0;
+        width: 100%;
+      }
+      button {
+        border-radius: 20px;
+        border: 1px solid #ff4b2b;
+        background-color: #ff4b2b;
+        color: #ffffff;
+        font-size: 12px;
+        font-weight: bold;
+        padding: 12px 45px;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        transition: transform 80ms ease-in;
+        cursor: pointer;
+        margin-top: 15px;
+        margin-bottom: 15px;
+      }
+    }
+  }
+}
+
+.overlay-container {
+  position: absolute;
+  top: 0;
+  width: 50%;
+  height: 100%;
+  overflow: hidden;
+  transition: transform 0.6s ease-in-out;
+  z-index: 100;
+
+  .overlay-panel {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+  }
+  .overlay-left {
+    background: url("https://images.unsplash.com/photo-1497215728101-856f4ea42174?q=80&w=1000")
+      no-repeat center center;
+    background-size: cover;
+    transition: opacity 0.6s ease-in;
+    opacity: 0;
+  }
+  .overlay-right {
+    background: url("https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?q=80&w=1000")
+      no-repeat center center;
+    background-size: cover;
+    transition: opacity 0.6s ease-out;
+    opacity: 1;
+  }
+}
+.overlay-container.changed {
+  transform: translateX(100%);
+
+  .overlay-left {
+    transition: opacity 0.6s ease-out;
+    opacity: 1;
+  }
+  .overlay-right {
+    transition: opacity 0.6s ease-in;
+    opacity: 0;
+  }
+}
+
+.overlay-panel {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+}
