@@ -1,3 +1,10 @@
+<?php
+session_start();
+if (isset($_SESSION['user'])) {
+  header('Location: dashboard.php');
+  exit;
+}
+?>
 <!DOCTYPE html>
 <html lang="id">
 
@@ -6,6 +13,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Login & Register Slide</title>
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style/index.css">
 </head>
 
 <body>
@@ -47,7 +55,19 @@
     </div>
   </div>
 
-  <script src="script.js"></script>
+  <script>
+    const signUpButton = document.getElementById('signUp');
+    const signInButton = document.getElementById('signIn');
+    const overlaContainer = document.getElementById('overlay-container');
+
+    signUpButton.addEventListener('click', () => {
+      overlaContainer.classList.add("changed");
+    });
+
+    signInButton.addEventListener('click', () => {
+      overlaContainer.classList.remove("changed");
+    });
+  </script>
 </body>
 
 </html>
