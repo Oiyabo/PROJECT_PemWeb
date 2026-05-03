@@ -55,18 +55,16 @@ $title = $pageTitles[$page] ?? 'Dashboard';
     <?= htmlspecialchars($title) ?>
   </title>
   <script src="https://unpkg.com/lucide@latest"></script>
-  <link rel="stylesheet" href="style/dashboard.css">
-  <link rel="stylesheet" href="style/dashboard-content.css">
-  <link rel="stylesheet" href="style/buat-reservasi.css">
-  <link rel="stylesheet" href="style/riwayat.css">
-  <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="style/pelanggan.css">
   <link rel="stylesheet" href="style/dataservice.css">
+  <link rel="stylesheet" href="style/dashboard.css">
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
   <div id="main">
     <aside class="sidebar">
+
       <div class="sidebar-header">
         <div class="brand-container">
           <div class="brand-icon-wrapper">
@@ -118,6 +116,7 @@ $title = $pageTitles[$page] ?? 'Dashboard';
           </a>
         </div>
       </div>
+
     </aside>
 
     <div class="main-content-wrapper">
