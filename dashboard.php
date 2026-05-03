@@ -57,6 +57,8 @@ $title = $pageTitles[$page] ?? 'Dashboard';
   <script src="https://unpkg.com/lucide@latest"></script>
   <link rel="stylesheet" href="style/dashboard.css">
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style/pelanggan.css">
+  <link rel="stylesheet" href="style/dataservice.css">
 </head>
 
 <body>
