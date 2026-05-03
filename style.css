@@ -1,8 +1,8 @@
 :root {
   /* Primary Colors */
   --primary: #76c893ff;
-  --primary-light: #99d98cff;
-  --primary-dark: #b5e48cff;
+  --primary-dark: #99d98cff;
+  --primary-light: #b5e48cff;
 
   /* Secondary Colors */
   --secondary: #168aadff;
@@ -103,3 +103,57 @@ td {
   color: var(--text-dark);
   cursor: pointer;
 }
+
+.dashboard-container {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.welcome-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--secondary-light);
+  border-radius: 12px;
+  padding: 24px;
+  text-align: center;
+  margin: 50px auto;
+}
+
+.avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+
+  background: var(--primary);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text-dark);
+
+  margin: 0 auto 16px;
+}
+
+.welcome-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin-bottom: 8px;
+}
+
+.welcome-text {
+  font-size: 14px;
+  color: var(--text-light);
+  margin-bottom: 24px;
+}
+
+.card-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+

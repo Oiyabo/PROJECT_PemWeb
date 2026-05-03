@@ -57,7 +57,7 @@ body {
 
     .sidebar-header {
       padding: 20px 20px 16px;
-      border-bottom: 1px solid var(--primary-dark);
+      border-bottom: 1px solid var(--primary-light);
       display: flex;
       align-items: center;
       gap: 10px;
@@ -156,7 +156,7 @@ body {
         }
       }
       .nav-item.active {
-        background: var(--primary-dark);
+        background: var(--primary-light);
         color: var(--primary);
 
         .nav-icon-wrapper {
@@ -182,7 +182,7 @@ body {
 
     .user-profile-section {
       padding: 12px 8px;
-      border-top: 1px solid var(--primary-dark);
+      border-top: 1px solid var(--primary-light);
 
       .user-profile-container {
         display: flex;
