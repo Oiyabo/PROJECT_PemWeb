@@ -109,7 +109,7 @@ $title = $pageTitles[$page] ?? 'Dashboard';
             </div>
           </div>
           <a href="proses.php?logout=1" class="logout-btn">
-            <i data-lucide="log-out" color="var(--text-dark)" width="16" height="16"></i>
+            <i data-lucide="log-out" color="var(--text-light)" width="16" height="16"></i>
           </a>
         </div>
       </div>
