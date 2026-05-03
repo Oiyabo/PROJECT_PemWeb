@@ -60,6 +60,8 @@ $title = $pageTitles[$page] ?? 'Dashboard';
   <link rel="stylesheet" href="style/buat-reservasi.css">
   <link rel="stylesheet" href="style/riwayat.css">
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style/pelanggan.css">
+  <link rel="stylesheet" href="style/dataservice.css">
 </head>
 
 <body>
@@ -112,7 +114,7 @@ $title = $pageTitles[$page] ?? 'Dashboard';
             </div>
           </div>
           <a href="proses.php?logout=1" class="logout-btn">
-            <i data-lucide="log-out" color="var(--text-dark)" width="16" height="16"></i>
+            <i data-lucide="log-out" color="var(--text-light)" width="16" height="16"></i>
           </a>
         </div>
       </div>

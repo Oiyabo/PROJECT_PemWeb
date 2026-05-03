@@ -222,6 +222,11 @@ body {
           color: var(--error);
           display: flex;
           align-items: center;
+
+          svg {
+            color: var(--text-light);
+            stroke: var(--text-light);
+          }
         }
       }
     }
