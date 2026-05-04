@@ -1,0 +1,48 @@
+.container-reservasi {
+    padding: 20px;
+}
+
+.header-reservasi {
+    background: var(--light-green);
+    padding: 12px;
+    border-left: 5px solid var(--yale-blue); /* GARIS KIRI */
+    margin-bottom: 15px;
+}
+
+.header-reservasi h3 {
+    margin: 0;
+}
+
+.btn-reservasi {
+    background: var(--yale-blue);
+    color: white;
+    padding: 7px 12px;
+    border-radius: 6px;
+}
+
+.table-reservasi {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table-reservasi th {
+    background: var(--lime-cream);
+}
+
+.table-reservasi td {
+    border-bottom: 2px dashed #ddd; /* DASHED */
+    padding: 10px;
+}
+
+.status-proses {
+    color: white;
+    background: var(--ocean-mist);
+    padding: 4px 10px;
+    border-radius: 8px;
+}
+
+.status-selesai {
+    background: var(--light-green);
+    padding: 4px 10px;
+    border-radius: 8px;
+}
