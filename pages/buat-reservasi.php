@@ -128,7 +128,7 @@ $data = $_SESSION['reservasi'] ?? [];
                 <label class="form-label">Jenis Layanan <span class="required">*</span></label>
                 <select name="layanan" class="form-input" required>
                     <option value="">Pilih</option>
-                    <?php foreach(["Ganti Oli","Tune Up","Servis Berkala","Ganti Ban"] as $l): ?>
+                    <?php foreach(["Ganti Oli", "Tune Up", "Servis Berkala", "Ganti Ban", "AC Service", "Rem/Brake", "Kelistrikan", "Body Repair", "Lainnya"] as $l): ?>
                         <option <?= ($data['layanan'] ?? '') == $l ? 'selected' : '' ?>><?= $l ?></option>
                     <?php endforeach; ?>
                 </select>
