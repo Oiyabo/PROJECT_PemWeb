@@ -1,0 +1,58 @@
+.container-transaksi {
+    padding: 20px;
+}
+
+.header-transaksi {
+    background: linear-gradient(90deg, var(--bondi-blue), var(--cerulean));
+    color: white;
+    padding: 15px;
+    border-radius: 12px;
+    margin-bottom: 15px;
+}
+
+.header-transaksi h3 {
+    margin: 0;
+}
+
+.btn-transaksi {
+    background: white;
+    color: var(--bondi-blue);
+    padding: 6px 14px;
+    border-radius: 20px; /* BULAT */
+    border: none;
+}
+
+.table-transaksi {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+}
+
+.table-transaksi th {
+    background: var(--light-green);
+}
+
+.table-transaksi th,
+.table-transaksi td {
+    padding: 12px;
+}
+
+.status-lunas {
+    background: var(--light-green);
+    padding: 5px 12px;
+    border-radius: 50px; 
+}
+
+.status-belum {
+    background: #ffd6d6;
+    padding: 5px 12px;
+    border-radius: 50px;
+}
+
+.btn-delete-transaksi {
+    background: var(--cerulean);
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    color: white;
+}
