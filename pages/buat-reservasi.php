@@ -136,7 +136,7 @@ $data = $_SESSION['reservasi'] ?? [];
 
             <div class="form-group">
                 <label class="form-label">Catatan</label>
-                <textarea name="catatan" class="form-input form-textarea" placeholder="Keluhan atau informasi tambahan..."></textarea>><?= $data['catatan'] ?? '' ?></textarea>
+                <textarea name="catatan" class="form-input form-textarea" placeholder="Keluhan atau informasi tambahan..."></textarea><?= $data['catatan'] ?? '' ?></textarea>
             </div>
         </div>
 

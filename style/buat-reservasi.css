@@ -118,9 +118,9 @@
   box-sizing: border-box;
 }
 
-.textarea {
-  height: 80px;
-  resize: vertical;
+.form-textarea {
+  height: 120px;
+  resize: none;
 }
 
 
