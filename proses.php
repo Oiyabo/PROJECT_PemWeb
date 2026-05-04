@@ -25,25 +25,25 @@ if (isset($_POST['login'])) {
     if ($user['email'] === $email && $user['password'] === $password) {
       $_SESSION['user'] = $user;
       $login_success = true;
-      header('Location: dashboard.php');
+      header('Location: index.php');
       exit;
     }
   }
 
   if (!$login_success) {
-    echo "<script>alert('Email atau password salah!'); window.location='index.php';</script>";
+    echo "<script>alert('Email atau password salah!'); window.location='autentikasi.php';</script>";
     exit;
   }
 }
 
 if (isset($_POST['register'])) {
-  echo "<script>alert('Registrasi berhasil (Dummy). Silakan login!'); window.location='index.php';</script>";
+  echo "<script>alert('Registrasi berhasil (Dummy). Silakan login!'); window.location='autentikasi.php';</script>";
   exit;
 }
 
 if (isset($_GET['logout'])) {
   session_destroy();
-  header('Location: index.php');
+  header('Location: autentikasi.php');
   exit;
 }
 ?>
