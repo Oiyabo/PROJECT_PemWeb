@@ -14,10 +14,12 @@
 }
 
 .btn-reservasi {
-    background: var(--yale-blue);
-    color: white;
-    padding: 7px 12px;
-    border-radius: 6px;
+    background: white;
+    color: var(--baltic-blue);
+    border: 2px solid var(--tropical-teal);
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-weight: 600;
 }
 
 .table-reservasi {
