@@ -2,7 +2,6 @@
 
 <?php
 if ($role === 'Admin') {
-    // Admin Dashboard
     ?>
     <div id="admin-dashboard" class="admin-dashboard-container">
         <div id="admin-stats" class="admin-stats-grid">

@@ -4,7 +4,6 @@ $COLORS = [
     'amber' => '#f59e0b'
 ];
 
-// DATA DUMMY
 $mockReservasi = [
     [
         'id' => 'RSV001',
@@ -28,14 +27,6 @@ $mockReservasi = [
     ]
 ];
 
-// // BADGE
-// function renderBadge($status) {
-//     if ($status == 'Selesai') {
-//         return '<span class="badge" style="background:#dcfce7;color:#166534;">Selesai</span>';
-//     } else {
-//         return '<span class="badge" style="background:#fef9c3;color:#854d0e;">Pending</span>';
-//     }
-// }
 
 ?>
 
@@ -51,7 +42,6 @@ $mockReservasi = [
 
 <div class="container">
 
-    <!-- HEADER -->
     <div class="flex-between">
         <div class="flex">
             <button class="btn">
@@ -71,7 +61,7 @@ $mockReservasi = [
         </div>
     </div>
 
-    <!-- TABLE -->
+
     <div class="table-container">
         <div class="table-wrapper">
             <table>

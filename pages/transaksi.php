@@ -6,7 +6,6 @@ $COLORS = [
     'amber' => '#f59e0b'
 ];
 
-// DATA DUMMY
 $mockTransaksi = [
     [
         'id' => 'TRX001',
@@ -28,16 +27,6 @@ $mockTransaksi = [
     ]
 ];
 
-// BADGE STATUS
-// function renderBadge($status) {
-//     if ($status == 'Lunas') {
-//         return '<span class="badge" style="background:#dcfce7;color:#166534;">Lunas</span>';
-//     } else {
-//         return '<span class="badge" style="background:#fef9c3;color:#854d0e;">Pending</span>';
-//     }
-// }
-
-// HITUNG
 $total = array_reduce($mockTransaksi, fn($c,$i)=>$c+$i['total'], 0);
 $lunasCount = count(array_filter($mockTransaksi, fn($t)=>$t['status']=='Lunas'));
 $pendingCount = count(array_filter($mockTransaksi, fn($t)=>$t['status']=='Pending'));
@@ -56,7 +45,6 @@ $pendingCount = count(array_filter($mockTransaksi, fn($t)=>$t['status']=='Pendin
 
 <div class="container">
 
-    <!-- CARD -->
     <div class="card-grid">
         <div class="card">
             <div class="card-title">Total Pendapatan</div>
@@ -80,7 +68,6 @@ $pendingCount = count(array_filter($mockTransaksi, fn($t)=>$t['status']=='Pendin
         </div>
     </div>
 
-    <!-- HEADER -->
     <div class="flex-between">
         <div class="flex">
             <button class="btn">
@@ -98,7 +85,7 @@ $pendingCount = count(array_filter($mockTransaksi, fn($t)=>$t['status']=='Pendin
         </button>
     </div>
 
-    <!-- TABLE -->
+
     <div class="table-container">
         <div class="table-wrapper">
             <table>
