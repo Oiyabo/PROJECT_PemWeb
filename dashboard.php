@@ -62,6 +62,8 @@ $title = $pageTitles[$page] ?? 'Dashboard';
   <link rel="stylesheet" href="style/buat-reservasi.css">
   <link rel="stylesheet" href="style/riwayat.css">
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style/transaksi.css">
+  <link rel="stylesheet" href="style/reservasi.css">
 </head>
 
 <body>
