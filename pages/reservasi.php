@@ -1,49 +1,139 @@
 <?php
-$reservasi = [
-    ["id"=>"RSV-001","pelanggan"=>"Budi","tanggal"=>"2026-05-01","status"=>"Selesai"],
-    ["id"=>"RSV-002","pelanggan"=>"Siti","tanggal"=>"2026-05-02","status"=>"Proses"]
+
+$COLORS = [
+    'amber' => '#f59e0b'
 ];
+
+// DATA DUMMY
+$mockReservasi = [
+    [
+        'id' => 'RSV001',
+        'nama' => 'Andi',
+        'kendaraan' => 'Honda Beat',
+        'plat' => 'BE 1234 AA',
+        'tanggal' => '2024-05-10',
+        'jam' => '10:00',
+        'layanan' => 'Servis Ringan',
+        'status' => 'Pending'
+    ],
+    [
+        'id' => 'RSV002',
+        'nama' => 'Budi',
+        'kendaraan' => 'Yamaha NMAX',
+        'plat' => 'BE 5678 BB',
+        'tanggal' => '2024-05-11',
+        'jam' => '13:00',
+        'layanan' => 'Ganti Oli',
+        'status' => 'Selesai'
+    ]
+];
+
+// // BADGE
+// function renderBadge($status) {
+//     if ($status == 'Selesai') {
+//         return '<span class="badge" style="background:#dcfce7;color:#166534;">Selesai</span>';
+//     } else {
+//         return '<span class="badge" style="background:#fef9c3;color:#854d0e;">Pending</span>';
+//     }
+// }
+
 ?>
 
-<div class="container-reservasi">
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Reservasi</title>
+    <link rel="stylesheet" href="reservasi.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
 
-    <div class="header-reservasi">
-        <h3>Data Reservasi</h3>
-        <button class="btn-reservasi">+ Tambah</button>
+<body>
+
+<div class="container">
+
+    <!-- HEADER -->
+    <div class="flex-between">
+        <div class="flex">
+            <button class="btn">
+                <i data-lucide="filter"></i> Filter
+            </button>
+
+            <div class="input-search">
+                <i data-lucide="search"></i>
+                <input placeholder="Cari..." />
+            </div>
+        </div>
+
+        <div class="flex">
+            <a href="?page=buat-reservasi" class="btn btn-primary">
+                <i data-lucide="plus-circle"></i> Buat Reservasi
+            </a>
+        </div>
     </div>
 
-    <div class="box-reservasi">
-        <table class="table-reservasi">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Pelanggan</th>
-                    <th>Tanggal</th>
-                    <th>Status</th>
-                    <th>Aksi</th>
-                </tr>
-            </thead>
+    <!-- TABLE -->
+    <div class="table-container">
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Pelanggan</th>
+                        <th>Kendaraan</th>
+                        <th>Plat</th>
+                        <th>Tanggal</th>
+                        <th>Jam</th>
+                        <th>Layanan</th>
+                        <th>Status</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
 
-            <tbody>
-                <?php foreach($reservasi as $r): ?>
-                <tr>
-                    <td><?= $r['id'] ?></td>
-                    <td><?= $r['pelanggan'] ?></td>
-                    <td><?= $r['tanggal'] ?></td>
+                <tbody>
+                <?php foreach ($mockReservasi as $r): ?>
+                    <tr>
 
-                    <td>
-                        <span class="status-reservasi <?= strtolower($r['status']) ?>">
-                            <?= $r['status'] ?>
-                        </span>
-                    </td>
+                        <td class="mono" style="color: <?= $COLORS['amber'] ?>">
+                            <?= $r['id'] ?>
+                        </td>
 
-                    <td>
-                        <button class="btn-delete-reservasi">Hapus</button>
-                    </td>
-                </tr>
+                        <td class="text-primary">
+                            <?= $r['nama'] ?>
+                        </td>
+
+                        <td><?= $r['kendaraan'] ?></td>
+
+                        <td>
+                            <span class="plat"><?= $r['plat'] ?></span>
+                        </td>
+
+                        <td><?= $r['tanggal'] ?></td>
+                        <td><?= $r['jam'] ?></td>
+                        <td><?= $r['layanan'] ?></td>
+
+                        <td><?= renderBadge($r['status']) ?></td>
+
+                        <td>
+                            <div class="action-group">
+                                <button class="btn-action"><i data-lucide="eye"></i></button>
+                                <button class="btn-action"><i data-lucide="edit-2"></i></button>
+                                <button class="btn-action-danger"><i data-lucide="trash-2"></i></button>
+                            </div>
+                        </td>
+
+                    </tr>
                 <?php endforeach; ?>
-            </tbody>
-        </table>
+                </tbody>
+
+            </table>
+        </div>
     </div>
 
 </div>
+
+<script>
+lucide.createIcons();
+</script>
+
+</body>
+</html>

@@ -1,50 +1,148 @@
-.container-reservasi {
+body {
+    font-family: Arial, sans-serif;
+    background: #f8f9fa;
+}
+
+/* Container */
+.container {
     padding: 20px;
 }
 
-.header-reservasi {
-    background: var(--light-green);
-    padding: 12px;
-    border-left: 5px solid var(--yale-blue); /* GARIS KIRI */
-    margin-bottom: 15px;
+/* Layout */
+.flex-between {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+    gap: 8px;
 }
 
-.header-reservasi h3 {
-    margin: 0;
+.flex {
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
-.btn-reservasi {
-    background: white;
-    color: var(--baltic-blue);
-    border: 2px solid var(--tropical-teal);
-    padding: 8px 14px;
+/* Button */
+.btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 12px;
+    border: 1px solid #34a0a4;
     border-radius: 8px;
-    font-weight: 600;
+    background: #fff;
+    font-size: 12px;
+    color: #1e6091;
+    cursor: pointer;
+    text-decoration: none;
 }
 
-.table-reservasi {
+.btn-primary {
+    background: #1e6091;
+    color: white;
+    border: none;
+    text-decoration: none;
+}
+
+/* Search */
+.input-search {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 12px;
+    border: 1px solid #34a0a4;
+    border-radius: 8px;
+    background: #fff;
+    font-size: 12px;
+    color: #1e6091;
+}
+
+.input-search input {
+    border: none;
+    outline: none;
+    background: transparent;
+    width: 120px;
+}
+
+/* Table */
+.table-container {
+    background: #fff;
+    border: 1px solid #34a0a4;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.table-wrapper {
+    overflow-x: auto;
+}
+
+table {
     width: 100%;
     border-collapse: collapse;
 }
 
-.table-reservasi th {
-    background: var(--lime-cream);
-}
-
-.table-reservasi td {
-    border-bottom: 2px dashed #ddd; /* DASHED */
+th {
+    background: #f1f5f9;
     padding: 10px;
+    font-size: 12px;
+    text-align: left;
 }
 
-.status-proses {
-    color: white;
-    background: var(--ocean-mist);
-    padding: 4px 10px;
-    border-radius: 8px;
+td {
+    padding: 10px;
+    font-size: 13px;
 }
 
-.status-selesai {
-    background: var(--light-green);
-    padding: 4px 10px;
-    border-radius: 8px;
+/* Text */
+.text-primary {
+    color: #184e77;
+    font-weight: 600;
+}
+
+.mono {
+    font-family: monospace;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+/* Badge */
+.badge {
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+/* Plat */
+.plat {
+    background: #b5e48c;
+    color: #ffffff;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+/* Action */
+.action-group {
+    display: flex;
+    gap: 4px;
+}
+
+.btn-action {
+    padding: 5px;
+    border: none;
+    background: #e9ecef;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.btn-action-danger {
+    padding: 5px;
+    border: none;
+    background: #ffccd5;
+    border-radius: 5px;
+    cursor: pointer;
 }
