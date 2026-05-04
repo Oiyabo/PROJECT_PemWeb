@@ -5,6 +5,8 @@ $dataService = [
 ];
 ?>
 
+<link rel="stylesheet" href="style/dataservice.css">
+
 <div class="top-card">
     <h3>Data Service</h3>
     <button class="btn-primary">+ Tambah Service</button>

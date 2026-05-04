@@ -5,6 +5,8 @@ $pelanggan = [
 ];
 ?>
 
+<link rel="stylesheet" href="style/pelanggan.css">
+
 <div class="container">
     <h2>Data Pelanggan</h2>
 

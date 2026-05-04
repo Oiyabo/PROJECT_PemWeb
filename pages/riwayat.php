@@ -1,3 +1,5 @@
+<link rel="stylesheet" href="style/riwayat.css">
+
 <div class="history-container">
     <div class="profile-card">
         <div class="profile-header">

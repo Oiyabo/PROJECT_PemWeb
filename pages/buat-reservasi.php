@@ -12,6 +12,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 $data = $_SESSION['reservasi'] ?? [];
 ?>
 
+<link rel="stylesheet" href="style/buat-reservasi.css">
+
 <div class="reservation-container">
 
     <div class="step-card">

@@ -49,8 +49,8 @@
 
 .card-actions {
   display: flex;
-  gap: 30px;
-  justify-content: space-between;
+  gap: 50px;
+  justify-content: center;
 }
 
 .btn {

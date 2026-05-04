@@ -2,7 +2,9 @@
 if ($role === 'Pelanggan') {
 ?>
 
-<div class= "container">
+<link rel="stylesheet" href="style/dashboard-content.css">
+
+<div class= "dashboard-container">
     <div class = "welcome-card">
         <div class= "avatar">
             <?= substr($user['nama'], 0, 1) ?>
