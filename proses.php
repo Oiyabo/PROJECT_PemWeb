@@ -31,13 +31,13 @@ if (isset($_POST['login'])) {
   }
 
   if (!$login_success) {
-    echo "<script>alert('Email atau password salah!'); window.location='autentikasi.php';</script>";
+    echo "<script>alert('Email atau password salah!\\nSilakan login dengan salah satu akun berikut :\\n(admin@email.com; admin123)\\natau\\n(pelanggan@email.com; pelanggan123).'); window.location='autentikasi.php';</script>";
     exit;
   }
 }
 
 if (isset($_POST['register'])) {
-  echo "<script>alert('Registrasi berhasil (Dummy). Silakan login!'); window.location='autentikasi.php';</script>";
+  echo "<script>alert('Tidak bisa registrasi saat ini.\\nSilakan login dengan salah satu akun berikut :\\n(admin@email.com; admin123)\\natau\\n(pelanggan@email.com; pelanggan123).'); window.location='autentikasi.php';</script>";
   exit;
 }
 
