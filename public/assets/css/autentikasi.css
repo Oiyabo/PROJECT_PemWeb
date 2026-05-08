@@ -1,6 +1,7 @@
 * {
   box-sizing: border-box;
 }
+
 body {
   background: var(--bg-page);
   display: flex;
@@ -9,6 +10,10 @@ body {
   height: 100vh;
   margin: 0;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+input {
+  border-radius: 5px;
 }
 
 .container {
