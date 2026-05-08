@@ -3,12 +3,10 @@ body {
     background: #f8f9fa;
 }
 
-/* Container */
 .container {
     padding: 20px;
 }
 
-/* Layout */
 .flex-between {
     display: flex;
     justify-content: space-between;
@@ -24,7 +22,6 @@ body {
     gap: 8px;
 }
 
-/* Button */
 .btn {
     display: flex;
     align-items: center;
@@ -46,7 +43,6 @@ body {
     text-decoration: none;
 }
 
-/* Search */
 .input-search {
     display: flex;
     align-items: center;
@@ -66,7 +62,6 @@ body {
     width: 120px;
 }
 
-/* Table */
 .table-container {
     background: #fff;
     border: 1px solid #34a0a4;
@@ -95,7 +90,6 @@ td {
     font-size: 13px;
 }
 
-/* Text */
 .text-primary {
     color: #184e77;
     font-weight: 600;
@@ -107,7 +101,6 @@ td {
     font-weight: 600;
 }
 
-/* Badge */
 .badge {
     padding: 2px 8px;
     border-radius: 4px;
@@ -115,7 +108,6 @@ td {
     font-weight: 600;
 }
 
-/* Plat */
 .plat {
     background: #b5e48c;
     color: #ffffff;
@@ -125,7 +117,6 @@ td {
     font-weight: 600;
 }
 
-/* Action */
 .action-group {
     display: flex;
     gap: 4px;

@@ -1,12 +1,12 @@
 <?php
 
-// WARNA
+
 $COLORS = [
     'amber' => '#f59e0b',
     'amberDark' => '#b45309'
 ];
 
-// DATA DUMMY (biar langsung jalan)
+
 $mockPelanggan = [
     [
         'id' => 'PLG001',
@@ -45,10 +45,10 @@ $mockPelanggan = [
     <meta charset="UTF-8">
     <title>Data Pelanggan</title>
 
-    <!-- CSS -->
+   
     <link rel="stylesheet" href="pelanggan.css">
 
-    <!-- ICON -->
+   
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 
@@ -56,7 +56,7 @@ $mockPelanggan = [
 
 <div class="container">
 
-    <!-- HEADER -->
+  
     <div class="flex-between">
         <div class="flex">
             <button class="btn">
@@ -76,7 +76,7 @@ $mockPelanggan = [
         </div>
     </div>
 
-    <!-- TABLE -->
+    
     <div class="table-container">
         <div class="table-wrapper">
             <table>
@@ -96,7 +96,7 @@ $mockPelanggan = [
                 <?php foreach ($mockPelanggan as $p): ?>
                     <tr>
 
-                        <!-- Pelanggan -->
+                    
                         <td>
                             <div class="pelanggan-info">
                                 <div class="avatar" style="color: <?= $COLORS['amber'] ?>">
@@ -110,7 +110,7 @@ $mockPelanggan = [
                             </div>
                         </td>
 
-                        <!-- Telepon -->
+                
                         <td>
                             <div class="icon-text">
                                 <i data-lucide="phone"></i>
@@ -118,7 +118,7 @@ $mockPelanggan = [
                             </div>
                         </td>
 
-                        <!-- Email -->
+                
                         <td>
                             <div class="icon-text">
                                 <i data-lucide="mail"></i>
@@ -126,7 +126,7 @@ $mockPelanggan = [
                             </div>
                         </td>
 
-                        <!-- Kendaraan -->
+                       
                         <td>
                             <div class="icon-text">
                                 <i data-lucide="car"></i>
@@ -134,7 +134,7 @@ $mockPelanggan = [
                             </div>
                         </td>
 
-                        <!-- Total Service -->
+
                         <td>
                             <span class="badge"
                                   style="background: <?= $COLORS['amber'] ?>20; color: <?= $COLORS['amberDark'] ?>">
@@ -142,12 +142,11 @@ $mockPelanggan = [
                             </span>
                         </td>
 
-                        <!-- Bergabung -->
+                    
                         <td style="color:#52b69a;">
                             <?= $p['bergabung'] ?>
                         </td>
 
-                        <!-- Aksi -->
                         <td>
                             <div class="action-group">
                                 <button class="btn-action"><i data-lucide="eye"></i></button>
@@ -166,7 +165,6 @@ $mockPelanggan = [
 
 </div>
 
-<!-- INIT ICON -->
 <script>
     lucide.createIcons();
 </script>

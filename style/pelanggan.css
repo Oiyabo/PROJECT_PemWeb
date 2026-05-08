@@ -3,12 +3,10 @@ body {
     background: #f8f9fa;
 }
 
-/* Container */
 .container {
     padding: 20px;
 }
 
-/* Flex Layout */
 .flex-between {
     display: flex;
     justify-content: space-between;
@@ -24,7 +22,6 @@ body {
     gap: 8px;
 }
 
-/* Button */
 .btn {
     display: flex;
     align-items: center;
@@ -44,7 +41,6 @@ body {
     border: none;
 }
 
-/* Search */
 .input-search {
     display: flex;
     align-items: center;
@@ -65,7 +61,6 @@ body {
     width: 120px;
 }
 
-/* Table */
 .table-container {
     background: #fff;
     border: 1px solid #34a0a4;
@@ -94,7 +89,6 @@ td {
     font-size: 13px;
 }
 
-/* Pelanggan */
 .pelanggan-info {
     display: flex;
     align-items: center;
@@ -125,7 +119,6 @@ td {
     color: #52b69a;
 }
 
-/* Icon text */
 .icon-text {
     display: flex;
     align-items: center;
@@ -133,7 +126,6 @@ td {
     color: #1e6091;
 }
 
-/* Badge */
 .badge {
     padding: 2px 10px;
     border-radius: 20px;
@@ -141,7 +133,6 @@ td {
     font-weight: 600;
 }
 
-/* Action */
 .action-group {
     display: flex;
     gap: 4px;
