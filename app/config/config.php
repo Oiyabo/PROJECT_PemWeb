@@ -1,5 +1,5 @@
 <?php
-const BASEURL = 'http://localhost:8080/web-mvc';
+const BASEURL = 'http://localhost:8080/PROJECT_PemWeb';
 
 const DB_HOST = 'localhost';
 const DB_USER = 'root';
