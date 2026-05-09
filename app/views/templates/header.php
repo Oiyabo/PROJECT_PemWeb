@@ -9,8 +9,6 @@
     <link rel="stylesheet" href="<?= BASEURL ?>/public/assets/css/dashboard.css">
     <link rel="stylesheet" href="<?= BASEURL ?>/public/assets/css/dataservice.css">
     <link rel="stylesheet" href="<?= BASEURL ?>/public/assets/css/pelanggan.css">
-    <link rel="stylesheet" href="<?= BASEURL ?>/public/assets/css/reservasi.css">
-    <link rel="stylesheet" href="<?= BASEURL ?>/public/assets/css/riwayat.css">
     <link rel="stylesheet" href="https://unpkg.com/lucide@latest/dist/lucide.min.css">
 
     <script src="https://unpkg.com/lucide@latest"></script>

@@ -1,173 +1,85 @@
 <?php
+<link rel="stylesheet" href="public/assets/css/pelanggan.css">
 
-
-$COLORS = [
-    'amber' => '#f59e0b',
-    'amberDark' => '#b45309'
-];
-
-
-$mockPelanggan = [
-    [
-        'id' => 'PLG001',
-        'nama' => 'Andi Saputra',
-        'telepon' => '081234567890',
-        'email' => 'andi@gmail.com',
-        'kendaraan' => 'Honda Beat',
-        'totalService' => 5,
-        'bergabung' => '2023-01-10'
-    ],
-    [
-        'id' => 'PLG002',
-        'nama' => 'Budi Santoso',
-        'telepon' => '082233445566',
-        'email' => 'budi@gmail.com',
-        'kendaraan' => 'Yamaha NMAX',
-        'totalService' => 3,
-        'bergabung' => '2023-03-21'
-    ],
-    [
-        'id' => 'PLG003',
-        'nama' => 'Citra Dewi',
-        'telepon' => '085678912345',
-        'email' => 'citra@gmail.com',
-        'kendaraan' => 'Suzuki Satria',
-        'totalService' => 7,
-        'bergabung' => '2022-11-05'
-    ]
-];
-
+if (!isset($pelanggan) || empty($pelanggan)) {
+    $pelanggan = [
+        [
+            'id' => 1,
+            'nama' => 'Budi Santoso',
+            'email' => 'budi@gmail.com',
+            'role' => 'Pelanggan'
+        ],
+        [
+            'id' => 2,
+            'nama' => 'Siti Rahayu',
+            'email' => 'siti@gmail.com',
+            'role' => 'Pelanggan'
+        ],
+        [
+            'id' => 3,
+            'nama' => 'Agus Pratama',
+            'email' => 'agus@gmail.com',
+            'role' => 'Pelanggan'
+        ]
+    ];
+}
 ?>
-
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <title>Data Pelanggan</title>
-
-   
-    <link rel="stylesheet" href="pelanggan.css">
-
-   
-    <script src="https://unpkg.com/lucide@latest"></script>
-</head>
-
-<body>
-
 <div class="container">
 
-  
-    <div class="flex-between">
-        <div class="flex">
-            <button class="btn">
-                <i data-lucide="filter"></i> Filter
-            </button>
-
-            <div class="input-search">
-                <i data-lucide="search"></i>
-                <input placeholder="Cari..." />
-            </div>
-        </div>
-
-        <div class="flex">
-            <button class="btn-primary">
-                <i data-lucide="plus-circle"></i> Tambah Pelanggan
-            </button>
-        </div>
+  <div class="flex-between" style="margin-bottom: 1rem;">
+    <div class="input-search">
+      <i data-lucide="search"></i>
+      <input id="searchPelanggan" placeholder="Cari nama atau email..." />
     </div>
+  </div>
 
-    
-    <div class="table-container">
-        <div class="table-wrapper">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Pelanggan</th>
-                        <th>Telepon</th>
-                        <th>Email</th>
-                        <th>Kendaraan</th>
-                        <th>Total Service</th>
-                        <th>Bergabung</th>
-                        <th>Aksi</th>
-                    </tr>
-                </thead>
-
-                <tbody>
-                <?php foreach ($mockPelanggan as $p): ?>
-                    <tr>
-
-                    
-                        <td>
-                            <div class="pelanggan-info">
-                                <div class="avatar" style="color: <?= $COLORS['amber'] ?>">
-                                    <?= substr($p['nama'], 0, 1) ?>
-                                </div>
-
-                                <div>
-                                    <div class="nama"><?= $p['nama'] ?></div>
-                                    <div class="id"><?= $p['id'] ?></div>
-                                </div>
-                            </div>
-                        </td>
-
-                
-                        <td>
-                            <div class="icon-text">
-                                <i data-lucide="phone"></i>
-                                <?= $p['telepon'] ?>
-                            </div>
-                        </td>
-
-                
-                        <td>
-                            <div class="icon-text">
-                                <i data-lucide="mail"></i>
-                                <?= $p['email'] ?>
-                            </div>
-                        </td>
-
-                       
-                        <td>
-                            <div class="icon-text">
-                                <i data-lucide="car"></i>
-                                <?= $p['kendaraan'] ?>
-                            </div>
-                        </td>
-
-
-                        <td>
-                            <span class="badge"
-                                  style="background: <?= $COLORS['amber'] ?>20; color: <?= $COLORS['amberDark'] ?>">
-                                <?= $p['totalService'] ?>x
-                            </span>
-                        </td>
-
-                    
-                        <td style="color:#52b69a;">
-                            <?= $p['bergabung'] ?>
-                        </td>
-
-                        <td>
-                            <div class="action-group">
-                                <button class="btn-action"><i data-lucide="eye"></i></button>
-                                <button class="btn-action"><i data-lucide="edit-2"></i></button>
-                                <button class="btn-action-danger"><i data-lucide="trash-2"></i></button>
-                            </div>
-                        </td>
-
-                    </tr>
-                <?php endforeach; ?>
-                </tbody>
-
-            </table>
-        </div>
+  <div class="table-container">
+    <div class="table-wrapper">
+      <table id="pelangganTable">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nama</th>
+            <th>Email</th>
+            <th>Role</th>
+          </tr>
+        </thead>
+        <tbody>
+          <?php if (empty($pelanggan)): ?>
+            <tr>
+              <td colspan="4" style="text-align:center; color:var(--text-light); padding:2rem;">
+                Belum ada data pelanggan.
+              </td>
+            </tr>
+          <?php else: ?>
+            <?php foreach ($pelanggan as $p): ?>
+            <tr>
+              <td class="mono" style="color:var(--primary);">#<?= $p['id'] ?></td>
+              <td>
+                <div style="display:flex; align-items:center; gap:8px;">
+                  <div class="admin-reservation-avatar" style="width:32px;height:32px;font-size:14px;">
+                    <?= htmlspecialchars(substr($p['nama'], 0, 1)) ?>
+                  </div>
+                  <?= htmlspecialchars($p['nama']) ?>
+                </div>
+              </td>
+              <td><?= htmlspecialchars($p['email']) ?></td>
+              <td><span class="badge badge-info"><?= htmlspecialchars($p['role']) ?></span></td>
+            </tr>
+            <?php endforeach; ?>
+          <?php endif; ?>
+        </tbody>
+      </table>
     </div>
+  </div>
 
 </div>
 
 <script>
-    lucide.createIcons();
+document.getElementById('searchPelanggan').addEventListener('input', function() {
+  const keyword = this.value.toLowerCase();
+  document.querySelectorAll('#pelangganTable tbody tr').forEach(row => {
+    row.style.display = row.textContent.toLowerCase().includes(keyword) ? '' : 'none';
+  });
+});
 </script>
-
-</body>
-</html>
