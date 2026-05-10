@@ -1,15 +1,5 @@
 <?php
-/**
- * app/views/admin/dashboard.php
- * VIEW: Dashboard Admin — Statistik & Reservasi Terbaru
- *
- * Variabel yang tersedia dari Admin::index():
- *   $stats            — Array berisi total, aktif, selesai, pelanggan
- *   $reservasiTerbaru — Array 5 reservasi terbaru
- *   $user             — Data user yang login
- */
 
-// Fungsi helper untuk badge status (menggantikan renderBadge() dari data.php lama)
 function badgeStatus(string $status): string
 {
     $map = [
@@ -26,9 +16,10 @@ function badgeStatus(string $status): string
 }
 ?>
 
+<link rel="stylesheet" href="<?= BASEURL ?>/public/assets/css/dashboard.css">
+
 <div id="admin-dashboard" class="admin-dashboard-container">
 
-  <!-- Kartu Statistik -->
   <div id="admin-stats" class="admin-stats-grid">
 
     <div class="admin-stat-card">
@@ -92,9 +83,8 @@ function badgeStatus(string $status): string
       </div>
     </div>
 
-  </div><!-- /.admin-stats-grid -->
+  </div>
 
-  <!-- Konten Utama: Reservasi Terbaru -->
   <div id="admin-main-content" class="admin-main-grid">
     <div id="admin-reservations" class="admin-card">
       <div class="admin-card-header">
@@ -108,26 +98,33 @@ function badgeStatus(string $status): string
           </p>
         <?php else: ?>
           <?php foreach ($reservasiTerbaru as $r): ?>
-            <div class="admin-reservation-item">
-              <div class="admin-reservation-info">
+            <div class="admin-reservation-item" style="display: flex; justify-content: space-between; align-items: center;">
+              
+              <div class="admin-reservation-info" style="display: flex; align-items: center; gap: 12px;">
                 <div class="admin-reservation-avatar">
                   <?= htmlspecialchars(substr($r['nama'], 0, 1)) ?>
                 </div>
                 <div class="admin-reservation-text">
-                  <div class="admin-reservation-name"><?= htmlspecialchars($r['nama']) ?></div>
-                  <div class="admin-reservation-details">
-                    <?= htmlspecialchars($r['layanan']) ?> · <?= htmlspecialchars($r['jam']) ?>
+                  <div class="admin-reservation-name" style="font-weight: 600; color: var(--text-dark);"><?= htmlspecialchars($r['nama']) ?></div>
+                  <div class="admin-reservation-details" style="font-size: 11px; color: #94a3b8; margin-top: 2px;">
+                    <?= htmlspecialchars($r['layanan']) ?>
                   </div>
                 </div>
               </div>
-              <?= badgeStatus($r['status']) ?>
+
+              <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 6px; min-width: 80px;">
+                <span style="font-size: 11px; color: #94a3b8; font-weight: 500;">
+                  <?= htmlspecialchars($r['jam']) ?>
+                </span>
+                <?= badgeStatus($r['status']) ?>
+              </div>
+
             </div>
           <?php endforeach; ?>
         <?php endif; ?>
       </div>
     </div>
 
-    <!-- Status Bengkel Hari Ini -->
     <div id="admin-status" class="admin-card">
       <div class="admin-card-header">
         <h2 class="admin-card-title">Status Bengkel Hari Ini</h2>
@@ -153,6 +150,6 @@ function badgeStatus(string $status): string
         </div>
       <?php endforeach; ?>
     </div>
-  </div><!-- /.admin-main-grid -->
+  </div>
 
-</div><!-- /#admin-dashboard -->
+</div>

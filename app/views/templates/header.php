@@ -1,109 +1,133 @@
+<?php
+$navItems = [];
+if (isset($user)) {
+  if ($user['role'] === 'Admin') {
+    $navItems = [
+      ['url' => BASEURL . '/admin', 'label' => 'Dashboard', 'icon' => 'layout-dashboard'],
+      ['url' => BASEURL . '/admin/reservasi', 'label' => 'Reservasi', 'icon' => 'calendar'],
+      ['url' => BASEURL . '/admin/dataservice', 'label' => 'Data Service', 'icon' => 'wrench'],
+      ['url' => BASEURL . '/admin/pelanggan', 'label' => 'Pelanggan', 'icon' => 'users'],
+      ['url' => BASEURL . '/admin/transaksi', 'label' => 'Transaksi', 'icon' => 'credit-card'],
+    ];
+  } else {
+    $navItems = [
+      ['url' => BASEURL . '/pelanggan', 'label' => 'Dashboard', 'icon' => 'layout-dashboard'],
+      ['url' => BASEURL . '/pelanggan/buatreservasi', 'label' => 'Buat Reservasi', 'icon' => 'plus-circle'],
+      ['url' => BASEURL . '/pelanggan/riwayat', 'label' => 'Riwayat Service', 'icon' => 'clipboard-list'],
+    ];
+  }
+}
+
+$currentUrl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http')
+  . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+?>
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= htmlspecialchars($data['title'] ?? 'AutoFix') ?></title>
-
-    <link rel="stylesheet" href="<?= BASEURL ?>/public/assets/css/style.css">
-    <link rel="stylesheet" href="<?= BASEURL ?>/public/assets/css/dashboard.css">
-    <link rel="stylesheet" href="<?= BASEURL ?>/public/assets/css/dataservice.css">
-    <link rel="stylesheet" href="<?= BASEURL ?>/public/assets/css/pelanggan.css">
-    <link rel="stylesheet" href="https://unpkg.com/lucide@latest/dist/lucide.min.css">
-
-    <script src="https://unpkg.com/lucide@latest"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AutoFix - <?= htmlspecialchars($title ?? 'Dashboard') ?></title>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="<?= BASEURL ?>/assets/css/style.css">
+  <link rel="stylesheet" href="<?= BASEURL ?>/assets/css/dashboard.css">
+  <link rel="stylesheet" href="<?= BASEURL ?>/assets/css/reservasi.css">
+  <link rel="stylesheet" href="<?= BASEURL ?>/assets/css/dataservice.css">
+  <link rel="stylesheet" href="<?= BASEURL ?>/assets/css/pelanggan.css">
 </head>
+
 <body>
+  <div id="main">
+    <aside class="sidebar">
 
-<div id="main">
-    <aside class="sidebar" id="sidebar">
-        <div class="sidebar-header">
-            <div class="brand">
-                <div class="brand-icon">
-                    <i data-lucide="wrench"></i>
-                </div>
-                <div class="brand-text">
-                    <h2>AutoFix</h2>
-                    <p>Manajemen Bengkel</p>
-                </div>
-            </div>
-
-            <button id="sidebarClose" class="sidebar-close" type="button">
-                <i data-lucide="x"></i>
-            </button>
+      <div class="sidebar-header">
+        <div class="brand-container">
+          <div class="brand-icon-wrapper">
+            <i data-lucide="wrench" color="#2d6a4f" width="18" height="18"></i>
+          </div>
+          <div>
+            <div class="brand-title">AutoFix</div>
+            <div class="brand-subtitle">Manajemen Bengkel</div>
+          </div>
         </div>
+        <button id="sidebarClose" class="close-btn">
+          <i data-lucide="x" color="rgba(255,255,255,0.7)" width="20" height="20"></i>
+        </button>
+      </div>
 
-        <div class="sidebar-menu-title">Menu</div>
+      <nav class="sidebar-nav">
+        <div class="nav-section-title">MENU</div>
+        <?php foreach ($navItems as $nav):
+          $isActive = (trim($currentUrl, '/') == trim($nav['url'], '/'));
+          ?>
+          <a href="<?= $nav['url'] ?>" class="nav-item <?= $isActive ? 'active' : '' ?>">
+            <div class="nav-icon-wrapper">
+              <i data-lucide="<?= $nav['icon'] ?>" width="17" height="17"></i>
+            </div>
+            <span class="nav-label"><?= $nav['label'] ?></span>
+            <?php if ($isActive): ?>
+              <div class="active-indicator"></div>
+            <?php endif; ?>
+          </a>
+        <?php endforeach; ?>
+      </nav>
 
-        <nav class="sidebar-nav">
-            <a href="<?= BASEURL ?>/admin"
-               class="nav-item <?= ($_SERVER['REQUEST_URI'] === '/PROJECT_PemWeb-main/admin') ? 'active' : '' ?>">
-                <i data-lucide="layout-dashboard"></i>
-                <span>Dashboard</span>
-            </a>
-
-            <a href="<?= BASEURL ?>/admin/reservasi" class="nav-item">
-                <i data-lucide="calendar"></i>
-                <span>Reservasi</span>
-            </a>
-
-            <a href="<?= BASEURL ?>/admin/dataservice" class="nav-item">
-                <i data-lucide="wrench"></i>
-                <span>Data Service</span>
-            </a>
-
-            <a href="<?= BASEURL ?>/admin/pelanggan" class="nav-item">
-                <i data-lucide="users"></i>
-                <span>Pelanggan</span>
-            </a>
-
-            <a href="<?= BASEURL ?>/admin/transaksi" class="nav-item">
-                <i data-lucide="credit-card"></i>
-                <span>Transaksi</span>
-            </a>
-        </nav>
-
-        <div class="sidebar-footer">
+      <?php if (isset($user)): ?>
+        <div class="user-profile-section">
+          <div class="user-profile-container">
             <div class="user-avatar">
-                <?= htmlspecialchars(substr($data['user']['nama'] ?? 'A', 0, 1)) ?>
+              <?= strtoupper(htmlspecialchars(substr($user['nama'], 0, 1))) ?>
             </div>
-
             <div class="user-info">
-                <div class="user-name">
-                    <?= htmlspecialchars($data['user']['nama'] ?? 'Admin Bengkel') ?>
-                </div>
-                <div class="user-email">
-                    <?= htmlspecialchars($data['user']['email'] ?? 'admin@email.com') ?>
-                </div>
+              <div class="user-name"><?= htmlspecialchars($user['nama']) ?></div>
+              <div class="user-email"><?= htmlspecialchars($user['email']) ?></div>
             </div>
-
-            <a href="<?= BASEURL ?>/auth/logout" class="logout-btn">
-                <i data-lucide="log-out"></i>
+            <a href="<?= BASEURL ?>/auth/logout" class="logout-btn" title="Logout">
+              <i data-lucide="log-out" color="rgba(255,255,255,0.7)" width="16" height="16"></i>
             </a>
+          </div>
         </div>
+      <?php endif; ?>
+
     </aside>
 
     <div class="main-content-wrapper">
-        <header class="topbar">
-            <button id="sidebarToggle" class="menu-toggle" type="button">
-                <i data-lucide="menu"></i>
-            </button>
+      <header class="top-header">
+        <div class="header-left">
+          <button id="sidebarToggle" class="menu-btn">
+            <i data-lucide="menu" width="20" height="20"></i>
+          </button>
+          <div>
+            <h1 class="page-title"><?= htmlspecialchars($title ?? 'Dashboard') ?></h1>
+            <p class="page-date"><?= date('l, d M Y') ?></p>
+          </div>
+        </div>
+        <div class="header-right">
+          <div class="search-container">
+            <i data-lucide="search" width="14" height="14" class="search-icon"></i>
+            <input type="text" placeholder="Cari..." class="search-input">
+          </div>
+          <button class="notification-btn">
+            <i data-lucide="bell" color="var(--text-medium)" width="18" height="18"></i>
+            <span class="notification-badge"></span>
+          </button>
+        </div>
+      </header>
 
-            <div class="topbar-title">
-                <h1><?= htmlspecialchars($data['title'] ?? 'Dashboard Admin') ?></h1>
-                <p><?= date('l, d F Y') ?></p>
-            </div>
+      <?php if (isset($_SESSION['success'])): ?>
+        <div class="flash-message flash-success">
+          <i data-lucide="check-circle" width="16" height="16"></i>
+          <?= htmlspecialchars($_SESSION['success']) ?>
+        </div>
+        <?php unset($_SESSION['success']); ?>
+      <?php endif; ?>
 
-            <div class="topbar-actions">
-                <div class="search-box">
-                    <i data-lucide="search"></i>
-                    <input type="text" placeholder="Cari...">
-                </div>
+      <?php if (isset($_SESSION['error'])): ?>
+        <div class="flash-message flash-error">
+          <i data-lucide="alert-circle" width="16" height="16"></i>
+          <?= htmlspecialchars($_SESSION['error']) ?>
+        </div>
+        <?php unset($_SESSION['error']); ?>
+      <?php endif; ?>
 
-                <button class="notification-btn" type="button">
-                    <i data-lucide="bell"></i>
-                </button>
-            </div>
-        </header>
-
-        <main class="main-area">
+      <main class="main-area">

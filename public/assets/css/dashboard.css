@@ -1,328 +1,227 @@
-.dashboard-container {
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 50px;
-}
-
-.welcome-card {
-  background: var(--bg-surface);
-  border: 1px solid var(--secondary-light);
-  border-radius: 12px;
-  padding: 50px;
-  text-align: center;
-  max-width: 800px;
-  width: 100%;
-  margin: 20px auto;
-}
-
-.avatar {
-  width: 64px;
-  height: 64px;
-  border-radius: 50%;
-
-  background: var(--primary);
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  font-size: 24px;
-  font-weight: 700;
-  color: var(--text-dark);
-
-  margin: 0 auto 16px;
-}
-
-.welcome-title {
-  font-size: 20px;
-  font-weight: 700;
-  color: var(--text-dark);
-  margin-bottom: 8px;
-}
-
-.welcome-text {
-  font-size: 14px;
-  color: var(--text-light);
-  margin-bottom: 24px;
-}
-
-.card-actions {
-  display: flex;
-  gap: 50px;
-  justify-content: center;
-}
-
-.btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 10px 18px;
-  min-width: 180px;
-  background: var(--primary-light);
-  border: none;
-  border-radius: 8px;
-  font-size: 15px;
-  font-weight: 600;
-  color: var(--text-dark);
-  cursor: pointer;
-}
-
-/* Admin Dashboard Styles */
-#admin-dashboard {
-  /* Main Container ID */
-}
-
 .admin-dashboard-container {
-  padding: 20px;
   display: flex;
   flex-direction: column;
-  gap: 20px;
-}
-
-#admin-stats {
-  /* Stats Container ID */
+  gap: 15px;
+  height: 100%;
 }
 
 .admin-stats-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 16px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  flex-shrink: 0;
 }
 
 .admin-stat-card {
-  background: var(--bg-surface, #FFFFFF);
-  border: 1px solid var(--secondary-light, #34a0a4);
+  background: var(--white);
+  padding: 12px 15px;
   border-radius: 12px;
-  padding: 16px 20px;
+  border: 1px solid var(--border);
   display: flex;
   flex-direction: column;
-  gap: 12px;
-}
-
-.admin-stat-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
+  justify-content: center;
+  min-height: 95px;
 }
 
 .admin-stat-label {
-  font-size: 12px;
-  color: var(--text-light, #52b69a);
+  font-size: 11px;
+  color: var(--text-light);
   font-weight: 500;
-}
-
-.admin-stat-icon-wrapper {
-  width: 36px;
-  height: 36px;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.admin-stat-body {
-  /* Optional body wrapper */
 }
 
 .admin-stat-value {
-  font-size: 24px;
+  font-size: 22px;
   font-weight: 700;
-  color: var(--text-dark, #184e77);
+  color: var(--text-dark);
+  margin: 4px 0;
 }
 
-.admin-stat-trend-container {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  margin-top: 4px;
-}
-
-.admin-stat-trend-text {
-  font-size: 12px;
+.admin-stat-description {
+  font-size: 10px;
+  color: var(--accent);
   font-weight: 500;
 }
 
-.admin-stat-trend-text.trend-up {
-  color: var(--secondary);
-}
-
-.admin-stat-trend-text.trend-down {
-  color: var(--error);
-}
-
-.admin-stat-trend-subtext {
-  font-size: 11px;
-  color: var(--text-light, #52b69a);
-}
-
-#admin-main-content {
-  /* Main Content ID */
-}
-
-.admin-main-grid {
+.admin-dashboard-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 16px;
-}
-
-#admin-reservations {
-  /* Reservations Card ID */
-}
-
-#admin-status {
-  /* Status Card ID */
+  grid-template-columns: 1.6fr 1fr;
+  gap: 15px;
+  flex: 1;
+  min-height: 0;
 }
 
 .admin-card {
-  background: var(--bg-surface, #FFFFFF);
-  border: 1px solid var(--secondary-light, #34a0a4);
+  background: var(--white);
+  padding: 15px;
   border-radius: 12px;
-  padding: 20px;
+  border: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
 .admin-card-header {
+  margin-bottom: 12px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 16px;
+  flex-shrink: 0;
 }
 
 .admin-card-title {
   font-size: 14px;
   font-weight: 700;
-  color: var(--text-dark, #184e77);
-  margin: 0;
+  color: var(--text-dark);
 }
 
-.admin-card-action {
-  font-size: 12px;
-  color: var(--primary);
-  cursor: pointer;
-  font-weight: 500;
+.admin-card-link {
+  font-size: 11px;
+  color: var(--text-light);
+  text-decoration: none;
 }
 
-.admin-reservation-list {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+.admin-card-content {
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 5px;
 }
 
-.admin-reservation-item {
+.admin-card-content::-webkit-scrollbar {
+  width: 4px;
+}
+
+.admin-card-content::-webkit-scrollbar-thumb {
+  background: #e2e8f0;
+  border-radius: 10px;
+}
+
+.reservation-item {
   display: flex;
   align-items: center;
-  justify-content: space-between;
   padding: 10px 12px;
-  background: #f6f5f7;
-  border-radius: 8px;
-  gap: 8px;
-}
-
-.admin-reservation-info {
-  display: flex;
-  align-items: center;
+  background: #f8fafc;
+  border-radius: 10px;
+  margin-bottom: 8px;
   gap: 10px;
-  min-width: 0;
 }
 
 .admin-reservation-avatar {
-  width: 34px;
-  height: 34px;
+  width: 32px;
+  height: 32px;
+  background: var(--accent);
+  color: var(--primary);
   border-radius: 50%;
-  background: var(--primary-light, #b5e48c);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 12px;
   font-weight: 700;
-  color: var(--primary);
+  font-size: 12px;
   flex-shrink: 0;
 }
 
-.admin-reservation-text {
-  min-width: 0;
+.reservation-info {
+  flex: 1;
 }
 
-.admin-reservation-name {
-  font-size: 13px;
+.reservation-name {
+  font-size: 12px;
   font-weight: 600;
-  color: var(--text-dark, #184e77);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  color: var(--text-dark);
+  display: block;
 }
 
-.admin-reservation-details {
-  font-size: 11px;
-  color: var(--text-light, #52b69a);
+.reservation-service {
+  font-size: 10px;
+  color: var(--text-light);
 }
 
-.admin-card-date {
-  font-size: 11px;
-  color: var(--text-light, #52b69a);
+.status-badge {
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 10px;
+  font-weight: 600;
 }
 
-.admin-status-item {
-  margin-bottom: 16px;
+.status-waiting { background: #fef9c3; color: #854d0e; }
+.status-confirmed { background: #dbeafe; color: #1e40af; }
+.status-done { background: #dcfce7; color: #166534; }
+
+.progress-item {
+  margin-bottom: 12px;
 }
 
-.admin-status-header {
+.progress-header {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 6px;
+  margin-bottom: 5px;
 }
 
-.admin-status-label {
-  font-size: 12px;
-  color: #1e6091;
-  font-weight: 500;
+.progress-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-medium);
 }
 
-.admin-status-value {
-  font-size: 12px;
-  color: var(--text-light, #52b69a);
+.progress-value {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-dark);
 }
 
-.admin-status-bar-container {
-  height: 6px;
-  background: #eee;
-  border-radius: 3px;
-  overflow: hidden;
+.progress { 
+  width: 100% !important;
+  height: 6px !important; /* Diubah ke 6px agar lebih presisi dan elegan */
+  min-height: 6px !important;
+  max-height: 6px !important;
+  background-color: #edf2f7 !important; 
+  border-radius: 10px !important; 
+  overflow: hidden !important;
+  margin-top: 8px !important;
+  margin-bottom: 5px !important;
+  padding: 0 !important; /* Ini yang menghentikan bar membesar */
+  border: none !important;
+  box-sizing: border-box !important;
+  display: flex !important;
 }
 
-.admin-status-bar-progress {
-  height: 100%;
-  border-radius: 3px;
+.progress-bar { 
+  height: 100% !important; 
+  min-height: 100% !important;
+  max-height: 100% !important;
+  border-radius: 10px !important; 
+  padding: 0 !important; /* Menghapus spasi dalam */
+  margin: 0 !important;
+  display: block !important;
+  border: none !important;
+  box-sizing: border-box !important;
+  line-height: 0 !important; /* Mencegah adanya ruang teks tak terlihat */
 }
 
-#admin-metrics {
-  /* Metrics ID */
+.bg-primary { background-color: var(--primary); }
+.bg-secondary { background-color: var(--secondary); }
+.bg-accent { background-color: var(--accent); }
+
+.reservation-item {
+  justify-content: space-between !important;
 }
 
-.admin-metrics-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-  margin-top: 20px;
+.reservation-info {
+  flex: 1 !important; 
 }
 
-.admin-metric-card {
-  background: #f6f5f7;
-  border-radius: 8px;
-  padding: 10px 12px;
+/* Memaksa elemen paling kanan (wadah jam & status) untuk merapat ke ujung */
+.reservation-item > div:last-child {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-end !important;
+  text-align: right !important;
+  gap: 6px !important; /* Memberi jarak rapi antara jam dan badge status */
+  min-width: 80px; /* Menjaga agar ruangnya tidak terlalu sempit */
 }
 
-.admin-metric-label {
+.reservation-time, 
+.reservation-item > div:last-child span:first-child {
   font-size: 10px;
-  color: var(--text-light, #52b69a);
-  margin-bottom: 4px;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.admin-metric-value {
-  font-size: 18px;
-  font-weight: 700;
-  color: var(--text-dark, #184e77);
+  color: var(--text-light);
+  display: block;
 }

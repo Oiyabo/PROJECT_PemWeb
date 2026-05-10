@@ -1,4 +1,4 @@
-      </main>
+</main>
     </div>
   </div>
 
@@ -23,7 +23,7 @@
 
     document.addEventListener('click', (e) => {
       if (
-        window.matchMedia('(orientation: portrait)').matches &&
+        window.innerWidth <= 768 &&
         sidebar &&
         sidebar.classList.contains('toggled') &&
         !sidebar.contains(e.target) &&
@@ -35,16 +35,24 @@
     });
 
     const flashMessages = document.querySelectorAll('.flash-message');
-
     flashMessages.forEach(msg => {
       setTimeout(() => {
-        msg.style.transition = 'opacity 0.5s';
+        msg.style.transition = 'all 0.5s ease';
         msg.style.opacity = '0';
+        msg.style.transform = 'translateY(-20px)';
 
         setTimeout(() => {
           msg.remove();
         }, 500);
       }, 4000);
+    });
+
+    const navLinks = document.querySelectorAll('.nav-item');
+    navLinks.forEach(link => {
+      link.addEventListener('click', function() {
+        navLinks.forEach(l => l.classList.remove('active'));
+        this.classList.add('active');
+      });
     });
   </script>
 </body>
