@@ -1,6 +1,6 @@
 <?php
 
-define('BASEURL', 'http://localhost/PROJECT_PemWeb-main/public');
+define('BASEURL', 'http://localhost/PROJECT_PemWeb/public');
 
 define('DB_HOST', 'localhost');
 define('DB_USER', 'root');
