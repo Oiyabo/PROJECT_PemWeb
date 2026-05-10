@@ -34,6 +34,7 @@ $currentUrl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' 
   <link rel="stylesheet" href="<?= BASEURL ?>/assets/css/reservasi.css">
   <link rel="stylesheet" href="<?= BASEURL ?>/assets/css/dataservice.css">
   <link rel="stylesheet" href="<?= BASEURL ?>/assets/css/pelanggan.css">
+    <link rel="stylesheet" href="<?= BASEURL ?>/assets/css/transaksi.css">
 </head>
 
 <body>
