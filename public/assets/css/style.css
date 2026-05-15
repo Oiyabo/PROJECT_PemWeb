@@ -13,6 +13,34 @@
   --sidebar-width: 240px;
 }
 
+:root {
+  /* Primary Colors */
+  --primary: #76c893ff;
+  --primary-dark: #99d98cff;
+  --primary-light: #b5e48cff;
+
+  /* Secondary Colors */
+  --secondary: #168aadff;
+  --secondary-light: #34a0a4ff;
+  --secondary-lighter: #1a759fff;
+
+  /* Accent Colors */
+  --accent: #d9ed92ff;
+
+  /* Text Colors */
+  --text-dark: #184e77ff;
+  --text-medium: #1e6091ff;
+  --text-light: #52b69aff;
+
+  /* Neutral Colors */
+  --neutral-teal: #52b69aff;
+
+  /* Background Colors */
+  --bg-page: #f6f5f7;
+  --bg-surface: #ffffff;
+  --bg-input: #eee;
+}
+
 * {
   margin: 0;
   padding: 0;
