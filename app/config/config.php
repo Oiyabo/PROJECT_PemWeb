@@ -1,6 +1,9 @@
 <?php
 
-define('BASEURL', 'http://localhost/PROJECT_PemWeb-main/public');
+$protocol = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http");
+$host = $_SERVER['HTTP_HOST'];
+$project_path = str_replace('/public/index.php', '', $_SERVER['SCRIPT_NAME']);
+define('BASEURL', $protocol . "://" . $host . $project_path);
 
 define('DB_HOST', 'localhost');
 define('DB_USER', 'root');
@@ -14,9 +17,9 @@ function getDB(): PDO
     if ($pdo === null) {
         $dsn = 'mysql:host=' . DB_HOST . ';dbname=' . DB_NAME . ';charset=utf8mb4';
         $options = [
-            PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-            PDO::ATTR_EMULATE_PREPARES   => false,
+            PDO::ATTR_EMULATE_PREPARES => false,
         ];
 
         try {
