@@ -30,6 +30,7 @@ $currentUrl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' 
   <title>AutoFix - <?= htmlspecialchars($title ?? 'Dashboard') ?></title>
   <script src="https://unpkg.com/lucide@latest"></script>
   <link rel="stylesheet" href="<?= BASEURL ?>/assets/css/style.css">
+  <link rel="stylesheet" href="<?= BASEURL ?>/assets/css/index.css">
   <link rel="stylesheet" href="<?= BASEURL ?>/assets/css/dashboard.css">
   <link rel="stylesheet" href="<?= BASEURL ?>/assets/css/reservasi.css">
   <link rel="stylesheet" href="<?= BASEURL ?>/assets/css/dataservice.css">
@@ -53,9 +54,6 @@ $currentUrl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' 
             <div class="brand-subtitle">Manajemen Bengkel</div>
           </div>
         </div>
-        <button id="sidebarClose" class="close-btn">
-          <i data-lucide="x" color="rgba(255,255,255,0.7)" width="20" height="20"></i>
-        </button>
       </div>
 
       <nav class="sidebar-nav">
