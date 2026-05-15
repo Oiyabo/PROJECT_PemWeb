@@ -11,20 +11,6 @@
 
 <body>
 
-  <?php if (isset($_SESSION['error'])): ?>
-    <div class="flash-auth flash-error">
-      <?= htmlspecialchars($_SESSION['error']) ?>
-    </div>
-    <?php unset($_SESSION['error']); ?>
-  <?php endif; ?>
-
-  <?php if (isset($_SESSION['success'])): ?>
-    <div class="flash-auth flash-success">
-      <?= htmlspecialchars($_SESSION['success']) ?>
-    </div>
-    <?php unset($_SESSION['success']); ?>
-  <?php endif; ?>
-
   <div class="container" id="container">
     <div class="form-container">
 
@@ -41,6 +27,19 @@
       </div>
 
       <div class="sign-in-container">
+        <?php if (isset($_SESSION['error'])): ?>
+          <div class="flash-auth flash-error">
+            <?= htmlspecialchars($_SESSION['error']) ?>
+          </div>
+          <?php unset($_SESSION['error']); ?>
+        <?php endif; ?>
+
+        <?php if (isset($_SESSION['success'])): ?>
+          <div class="flash-auth flash-success">
+            <?= htmlspecialchars($_SESSION['success']) ?>
+          </div>
+          <?php unset($_SESSION['success']); ?>
+        <?php endif; ?>
         <form action="<?= BASEURL ?>/auth/login" method="POST">
           <h1>Masuk</h1>
           <span>Masuk dengan akun Anda</span>
