@@ -225,3 +225,134 @@
   color: var(--text-light);
   display: block;
 }
+
+.dashboard-container {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.welcome-card {
+  background: linear-gradient(135deg, #1e4b7a, #b5e48c);
+  border-radius: 18px;
+  padding: 32px;
+
+  min-height: 220px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.welcome-card .avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+
+.welcome-title {
+  font-size: 36px;
+  font-weight: 700;
+  margin-bottom: 10px;
+  color: white;
+}
+
+.welcome-text {
+  font-size: 15px;
+  color: rgba(255,255,255,0.85);
+  margin-bottom: 24px;
+}
+
+.card-actions {
+  display: flex;
+  gap: 40px;
+  flex-wrap: wrap;
+}
+
+.dashboard-btn {
+  backdrop-filter: blur(6px);
+
+  width: auto;
+  padding: 12px 18px;
+
+  background: var(--primary-light);
+  color: var(--text-dark);
+
+  border-radius: 8px;
+  border: none;
+
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+.dashboard-btn:hover {
+  opacity: 0.9;
+}
+
+.pelanggan-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.pelanggan-stat-card {
+  background: var(--white);
+  padding: 30px;
+  border-radius: 12px;
+  border: 1px solid var(--accent);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 150px;
+  box-shadow: inset 0 0 0 1px var(--accent);
+}
+
+.pelanggan-stat-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.pelanggan-stat-label {
+  font-size: 15px;
+  color: var(--text-light);
+  font-weight: 500;
+}
+
+.pelanggan-stat-icon-wrapper {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pelanggan-stat-body {
+  margin-top: 10px;
+}
+
+.pelanggan-stat-value {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text-dark);
+}
