@@ -35,15 +35,24 @@ class Pelanggan extends Controller
     // Form reservasi baru, hanya nampilin view form (GET)
     public function buatReservasi(): void
     {
+        $layanans = $this->reservasiModel->getLayanan();
+
+        $layananMap = [];
+
+        foreach ($layanans as $l) {
+            $layananMap[$l['layanan_id']] = $l['nama_layanan'];
+        }
+
         $data = [
             'title' => 'Buat Reservasi Baru',
             'user' => $_SESSION['user'],
+            'layanans' => $layanans,
+            'layananMap' => $layananMap
         ];
 
         $this->view('templates/header', $data);
         $this->view('pelanggan/buat-reservasi', $data);
         $this->view('templates/footer', $data);
-        
     }
 
     // Proses pengiriman form (POST)
@@ -54,30 +63,55 @@ class Pelanggan extends Controller
             exit;
         }
 
-        $userId    = (int)$_SESSION['user']['id'];
-        $kendaraan = trim($_POST['kendaraan'] ?? '');
-        $plat      = trim($_POST['plat'] ?? '');
-        $layanan   = trim($_POST['layanan'] ?? '');
-        $tanggal   = trim($_POST['tanggal'] ?? '');
-        $jam       = trim($_POST['jam'] ?? '');
-        $catatan   = trim($_POST['catatan'] ?? '');
+        $userId     = (int)$_SESSION['user']['id'];
+        $kendaraan  = trim($_POST['kendaraan'] ?? '');
+        $plat       = trim($_POST['plat'] ?? '');
+        $layananIds = $_POST['layanan_id'] ?? [];
+        $tanggal    = trim($_POST['tanggal'] ?? '');
+        $jam        = trim($_POST['jam'] ?? '');
+        $catatan    = trim($_POST['catatan'] ?? '');
 
-        if (empty($kendaraan) || empty($plat) || empty($layanan) || empty($tanggal) || empty($jam)) {
+        if (empty($kendaraan) || empty($plat) || empty($layananIds) || empty($tanggal) || empty($jam))
+        {
             $_SESSION['error'] = 'Semua field wajib diisi!';
-            header('Location: ' . BASEURL . '/pelanggan/buatreservasi');
+            header('Location: ' . BASEURL . '/pelanggan/buat-reservasi');
             exit;
         }
 
-        $berhasil = $this->reservasiModel->create($userId, $kendaraan, $plat, $layanan, $tanggal, $jam, $catatan);
+        $reservasiId = $this->reservasiModel->create(
+            $userId,
+            $kendaraan,
+            $plat,
+            $tanggal,
+            $jam,
+            $catatan
+        );
 
-        if ($berhasil) {
+        if ($reservasiId) {
+
+            foreach ($layananIds as $layananId) {
+
+                $this->reservasiModel->tambahLayanan(
+                    $reservasiId,
+                    $layananId
+                );
+            }
+
             unset($_SESSION['form_reservasi']);
-            $_SESSION['success'] = 'Reservasi berhasil dibuat! Kami akan segera mengkonfirmasi.';
+
+            $_SESSION['success'] =
+                'Reservasi berhasil dibuat! Kami akan segera mengkonfirmasi.';
+
             header('Location: ' . BASEURL . '/pelanggan/riwayat');
+
         } else {
-            $_SESSION['error'] = 'Gagal membuat reservasi. Silakan coba lagi.';
+
+            $_SESSION['error'] =
+                'Gagal membuat reservasi. Silakan coba lagi.';
+
             header('Location: ' . BASEURL . '/pelanggan/buatreservasi');
         }
+
         exit;
     }
 

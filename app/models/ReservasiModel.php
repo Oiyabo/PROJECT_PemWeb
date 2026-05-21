@@ -12,9 +12,10 @@ class ReservasiModel
     public function getAll(): array
     {
         $stmt = $this->db->prepare(
-            'SELECT r.*, u.nama, u.email
+            'SELECT r.*, u.nama, u.email, l.nama_layanan
              FROM reservasi r
              JOIN users u ON r.user_id = u.id
+             JOIN layanan l ON r.layanan_id = l.layanan_id
              ORDER BY r.tanggal DESC, r.jam ASC'
         );
         $stmt->execute();
@@ -24,31 +25,81 @@ class ReservasiModel
     public function getByUserId(int $userId): array
     {
         $stmt = $this->db->prepare(
-            'SELECT * FROM reservasi WHERE user_id = ? ORDER BY tanggal DESC, jam ASC'
+            'SELECT 
+                r.*,
+                GROUP_CONCAT(l.nama_layanan SEPARATOR ", ") AS layanan
+            FROM reservasi r
+
+            LEFT JOIN reservasi_layanan rl
+                ON r.id_reservasi = rl.id_reservasi
+
+            LEFT JOIN layanan l
+                ON rl.layanan_id = l.layanan_id
+
+            WHERE r.user_id = ?
+
+            GROUP BY r.id_reservasi
+
+            ORDER BY r.tanggal DESC, r.jam ASC'
         );
+
         $stmt->execute([$userId]);
-        return $stmt->fetchAll();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function getLayanan(): array
+    {
+        $stmt = $this->db->prepare(
+            "SELECT * FROM layanan ORDER BY nama_layanan ASC"
+        );
+
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     public function create(
         int    $userId,
         string $kendaraan,
         string $plat,
-        string $layanan,
         string $tanggal,
         string $jam,
         string $catatan = ''
-    ): bool {
+    ): int {
+
         $stmt = $this->db->prepare(
-            'INSERT INTO reservasi (user_id, kendaraan, plat, layanan, tanggal, jam, catatan)
-             VALUES (?, ?, ?, ?, ?, ?, ?)'
+            'INSERT INTO reservasi
+            (user_id, kendaraan, plat, tanggal, jam, catatan)
+            VALUES (?, ?, ?, ?, ?, ?)'
         );
-        return $stmt->execute([$userId, $kendaraan, $plat, $layanan, $tanggal, $jam, $catatan]);
+
+        $stmt->execute([
+            $userId,
+            $kendaraan,
+            $plat,
+            $tanggal,
+            $jam,
+            $catatan
+        ]);
+
+        return (int)$this->db->lastInsertId();
     }
 
-    public function updateStatus(int $id, string $status): bool
-    {
-        $stmt = $this->db->prepare('UPDATE reservasi SET status = ? WHERE id = ?');
-        return $stmt->execute([$status, $id]);
+    public function tambahLayanan(
+        int $reservasiId,
+        int $layananId
+    ): bool {
+
+        $stmt = $this->db->prepare(
+            'INSERT INTO reservasi_layanan
+            (id_reservasi, layanan_id)
+            VALUES (?, ?)'
+        );
+
+        return $stmt->execute([
+            $reservasiId,
+            $layananId
+        ]);
     }
 }

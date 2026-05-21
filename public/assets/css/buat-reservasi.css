@@ -221,6 +221,78 @@
   background: #dfeff3;
 }
 
+.service-grid{
+    width: 100%;
+    display: grid;
+
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: 14px;
+
+    margin-top: 15px;
+}
+
+.service-item{
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+
+    padding: 12px 14px;
+
+    border: 1px solid #dbe4ee;
+    border-radius: 10px;
+
+    background: #fff;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+.service-item:hover{
+    border-color: #76c893;
+    background: #f8fffb;
+}
+
+.service-item input{
+    margin: 0;
+    flex-shrink: 0;
+}
+
+.service-item input[type="checkbox"]{
+    accent-color: #76c893;
+}
+
+.service-item:has(input:checked){
+    border-color: #76c893;
+    background: #eafaf0;
+
+    box-shadow: 0 0 0 3px rgba(118, 200, 147, 0.15);
+}
+
+.service-text{
+    font-size: 14px;
+    line-height: 1.4;
+    color: var(--text-dark);
+}
+
+@media (max-width: 900px){
+
+    .service-grid{
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+}
+
+@media (max-width: 600px){
+
+    .service-grid{
+        grid-template-columns: 1fr;
+    }
+
+}
+
 @media (max-width: 768px) {
   .reservation-container {
     padding: 20px 16px;

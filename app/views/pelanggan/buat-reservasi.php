@@ -8,7 +8,16 @@ $data['nama'] = $data['nama'] ?? $user['nama'];
 
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $_SESSION['form_reservasi'] = array_merge($data, $_POST);
+
+    $newData = array_merge($data, $_POST);
+
+    if (!isset($newData['layanan_id'])) {
+        $newData['layanan_id'] = [];
+    }
+
+    $_SESSION['form_reservasi'] = $newData;
+
+    $data = $newData;
 }
 ?>
 
@@ -87,13 +96,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       </div>
 
       <div class="form-group">
-        <label class="form-label">Jenis Layanan <span class="required">*</span></label>
-        <select name="layanan" class="form-input" required>
-          <option value="">Pilih</option>
-          <?php foreach (["Ganti Oli","Tune Up","Servis Berkala","Ganti Ban","AC Service","Rem/Brake","Kelistrikan","Body Repair","Lainnya"] as $l): ?>
-            <option <?= ($data['layanan'] ?? '') == $l ? 'selected' : '' ?>><?= $l ?></option>
-          <?php endforeach; ?>
-        </select>
+
+          <label class="form-label">
+              Jenis Layanan <span class="required">*</span>
+          </label>
+
+          <div class="service-grid">
+
+              <?php foreach ($layanans as $layanan): ?>
+
+                  <label class="service-item">
+
+                      <input
+                          type="checkbox"
+                          name="layanan_id[]"
+                          value="<?= $layanan['layanan_id']; ?>"
+
+                          <?= in_array(
+                                $layanan['layanan_id'],
+                                $data['layanan_id'] ?? []
+                            ) ? 'checked' : '' ?>
+                      >
+
+                      <span class="service-text">
+                          <?= htmlspecialchars($layanan['nama_layanan']); ?>
+                      </span>
+
+                  </label>
+
+              <?php endforeach; ?>
+
+          </div>
+
       </div>
 
       <div class="form-group">
@@ -125,7 +159,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="confirmation-box">
       <div class="confirmation-item"><span>Kendaraan</span><span><?= htmlspecialchars($data['kendaraan'] ?? '-') ?></span></div>
       <div class="confirmation-item"><span>Plat Nomor</span><span><?= htmlspecialchars($data['plat'] ?? '-') ?></span></div>
-      <div class="confirmation-item"><span>Layanan</span><span><?= htmlspecialchars($data['layanan'] ?? '-') ?></span></div>
+      <div class="confirmation-item">
+          <span>Layanan</span>
+          <span>
+              <?php
+              if (!empty($data['layanan_id'])) {
+                  $selected = [];
+                  foreach ($layanans as $layanan) {
+                      if (in_array($layanan['layanan_id'], $data['layanan_id'])) {
+                          $selected[] = $layanan['nama_layanan'];
+                      }
+                  }
+                  echo htmlspecialchars(implode(', ', $selected));
+              } else {
+                  echo '-';
+              }
+              ?>
+          </span>
+      </div>
       <div class="confirmation-item"><span>Tanggal</span><span><?= htmlspecialchars($data['tanggal'] ?? '-') ?></span></div>
       <div class="confirmation-item"><span>Jam</span><span><?= htmlspecialchars($data['jam'] ?? '-') ?></span></div>
       <div class="confirmation-item"><span>Catatan</span><span><?= htmlspecialchars($data['catatan'] ?? '-') ?></span></div>
@@ -136,7 +187,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <input type="hidden" name="kendaraan" value="<?= htmlspecialchars($data['kendaraan'] ?? '') ?>">
     <input type="hidden" name="plat" value="<?= htmlspecialchars($data['plat'] ?? '') ?>">
-    <input type="hidden" name="layanan" value="<?= htmlspecialchars($data['layanan'] ?? '') ?>">
+    <?php if (!empty($data['layanan_id'])): ?>
+      <?php foreach ($data['layanan_id'] as $id): ?>
+          <input
+              type="hidden"
+              name="layanan_id[]"
+              value="<?= htmlspecialchars($id) ?>"
+          >
+
+      <?php endforeach; ?>
+
+  <?php endif; ?>
     <input type="hidden" name="tanggal" value="<?= htmlspecialchars($data['tanggal'] ?? '') ?>">
     <input type="hidden" name="jam" value="<?= htmlspecialchars($data['jam'] ?? '') ?>">
     <input type="hidden" name="catatan" value="<?= htmlspecialchars($data['catatan'] ?? '') ?>">
