@@ -1,12 +1,16 @@
 <?php
+/**
+ * Admin Dashboard View
+ * Menampilkan statistik dan ringkasan data terbaru
+ */
 $title = 'Dashboard Admin';
 ?>
 
-<link rel="stylesheet" href="<?= BASEURL; ?>/assets/css/dashboard.css">
-
 <div class="admin-dashboard-container">
 
+    <!-- Statistics Cards -->
     <div class="admin-stats-grid">
+        <!-- Total Reservasi -->
         <div class="admin-stat-card">
             <div class="admin-stat-header">
                 <div class="admin-stat-label">Total Reservasi</div>
@@ -18,6 +22,7 @@ $title = 'Dashboard Admin';
             <div class="admin-stat-description">Semua reservasi tercatat</div>
         </div>
 
+        <!-- Reservasi Aktif -->
         <div class="admin-stat-card">
             <div class="admin-stat-header">
                 <div class="admin-stat-label">Sedang Aktif</div>
@@ -29,6 +34,7 @@ $title = 'Dashboard Admin';
             <div class="admin-stat-description">Dalam proses service</div>
         </div>
 
+        <!-- Total Pelanggan -->
         <div class="admin-stat-card">
             <div class="admin-stat-header">
                 <div class="admin-stat-label">Pelanggan</div>
@@ -40,6 +46,7 @@ $title = 'Dashboard Admin';
             <div class="admin-stat-description">Pengguna terdaftar</div>
         </div>
 
+        <!-- Reservasi Selesai -->
         <div class="admin-stat-card">
             <div class="admin-stat-header">
                 <div class="admin-stat-label">Selesai</div>
@@ -52,94 +59,105 @@ $title = 'Dashboard Admin';
         </div>
     </div>
 
+    <!-- Main Grid: Reservasi Terbaru & Progress -->
     <div class="admin-dashboard-grid">
+        
+        <!-- Reservasi Terbaru -->
         <div class="admin-card">
             <div class="admin-card-header">
                 <h3 class="admin-card-title">Reservasi Terbaru</h3>
                 <a href="<?= BASEURL; ?>/admin/dataservice" class="admin-card-link">Lihat Semua</a>
             </div>
 
-            <?php foreach ($reservasiTerbaru as $r): ?>
-                <div class="reservation-item">
-                    <div style="display:flex; align-items:center; gap:12px;">
-                        <div class="admin-reservation-avatar">
-                            <?= strtoupper(substr($r['nama'], 0, 1)) ?>
-                        </div>
-                        <div>
-                            <div style="font-weight:700; color:var(--text-dark);">
-                                <?= htmlspecialchars($r['nama']) ?>
+            <div class="admin-card-content">
+                <?php foreach ($reservasiTerbaru as $r): ?>
+                    <div class="reservation-item">
+                        <div class="reservation-info">
+                            <div class="admin-reservation-avatar">
+                                <?= strtoupper(substr($r['nama'], 0, 1)) ?>
                             </div>
-                            <div style="font-size:12px; color:var(--text-light);">
-                                <?= htmlspecialchars($r['layanan']) ?>
+                            <div>
+                                <div class="reservation-name">
+                                    <?= htmlspecialchars($r['nama'] ?? '') ?>
+                                </div>
+                                <div class="reservation-service">
+                                    <?= htmlspecialchars($r['layanan'] ?? '-') ?>
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div style="text-align:right;">
-                        <div style="font-size:12px; color:var(--text-light);">
-                            <?= htmlspecialchars($r['jam']) ?>
+                        <div>
+                            <div class="reservation-time">
+                                <?= htmlspecialchars($r['jam']) ?>
+                            </div>
+                            <span class="badge <?=
+                                $r['status'] === 'Selesai'
+                                    ? 'badge-success'
+                                    : ($r['status'] === 'Konfirmasi'
+                                        ? 'badge-info'
+                                        : 'badge-warning')
+                            ?>">
+                                <?= htmlspecialchars($r['status']) ?>
+                            </span>
                         </div>
-                        <span class="badge <?=
-                            $r['status'] === 'Selesai'
-                                ? 'badge-success'
-                                : ($r['status'] === 'Konfirmasi'
-                                    ? 'badge-info'
-                                    : 'badge-warning')
-                        ?>">
-                            <?= htmlspecialchars($r['status']) ?>
-                        </span>
                     </div>
-                </div>
-            <?php endforeach; ?>
+                <?php endforeach; ?>
+            </div>
         </div>
 
+        <!-- Progress Summary -->
         <div class="admin-card">
             <div class="admin-card-header">
                 <h3 class="admin-card-title">Ringkasan Progress</h3>
             </div>
 
-            <div style="margin-bottom:18px;">
-                <div style="display:flex; justify-content:space-between; margin-bottom:6px;">
-                    <span style="font-size:13px; color:var(--text-medium);">Reservasi Aktif</span>
-                    <span style="font-size:13px; font-weight:600; color:var(--text-dark);">
-                        <?= $stats['aktif'] ?>/<?= $stats['total'] ?>
-                    </span>
-                </div>
-                <div class="progress">
-                    <div
-                        class="progress-bar"
-                        style="width: <?= $stats['total'] > 0 ? ($stats['aktif'] / $stats['total']) * 100 : 0 ?>%; background:#34a0a4;">
+            <div class="admin-card-content">
+                <!-- Reservasi Aktif -->
+                <div class="progress-item">
+                    <div class="progress-header">
+                        <span class="progress-label">Reservasi Aktif</span>
+                        <span class="progress-value">
+                            <?= $stats['aktif'] ?>/<?= $stats['total'] ?>
+                        </span>
+                    </div>
+                    <div class="progress">
+                        <div class="progress-bar bg-secondary" style="width: <?= $stats['total'] > 0 ? ($stats['aktif'] / $stats['total']) * 100 : 0 ?>%;"></div>
                     </div>
                 </div>
-            </div>
 
-            <div style="margin-bottom:18px;">
-                <div style="display:flex; justify-content:space-between; margin-bottom:6px;">
-                    <span style="font-size:13px; color:var(--text-medium);">Reservasi Selesai</span>
-                    <span style="font-size:13px; font-weight:600; color:var(--text-dark);">
-                        <?= $stats['selesai'] ?>/<?= $stats['total'] ?>
-                    </span>
-                </div>
-                <div class="progress">
-                    <div
-                        class="progress-bar"
-                        style="width: <?= $stats['total'] > 0 ? ($stats['selesai'] / $stats['total']) * 100 : 0 ?>%; background:#76c893;">
+                <!-- Reservasi Selesai -->
+                <div class="progress-item">
+                    <div class="progress-header">
+                        <span class="progress-label">Reservasi Selesai</span>
+                        <span class="progress-value">
+                            <?= $stats['selesai'] ?>/<?= $stats['total'] ?>
+                        </span>
+                    </div>
+                    <div class="progress">
+                        <div class="progress-bar bg-primary" style="width: <?= $stats['total'] > 0 ? ($stats['selesai'] / $stats['total']) * 100 : 0 ?>%;"></div>
                     </div>
                 </div>
-            </div>
 
-            <div>
-                <div style="display:flex; justify-content:space-between; margin-bottom:6px;">
-                    <span style="font-size:13px; color:var(--text-medium);">Total Pelanggan</span>
-                    <span style="font-size:13px; font-weight:600; color:var(--text-dark);">
-                        <?= $stats['pelanggan'] ?>
-                    </span>
-                </div>
-                <div class="progress">
-                    <div class="progress-bar" style="width:100%; background:#52b69a;"></div>
+                <!-- Total Pelanggan -->
+                <div class="progress-item">
+                    <div class="progress-header">
+                        <span class="progress-label">Total Pelanggan</span>
+                        <span class="progress-value">
+                            <?= $stats['pelanggan'] ?>
+                        </span>
+                    </div>
+                    <div class="progress">
+                        <div class="progress-bar bg-neutral-teal" style="width: 100%;"></div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
 </div>
+
+<style>
+    .bg-neutral-teal {
+        background-color: var(--neutral-teal);
+    }
+</style>

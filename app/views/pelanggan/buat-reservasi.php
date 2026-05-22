@@ -21,8 +21,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 ?>
 
-<link rel="stylesheet" href="<?= BASEURL ?>/assets/css/buat-reservasi.css">
-
 <div class="reservation-container">
   <div class="step-card">
     <?php
@@ -105,6 +103,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
               <?php foreach ($layanans as $layanan): ?>
 
+                  <?php
+                  $jenis = $data['jenisKendaraan'] ?? '';
+                  if ($jenis === 'Motor' && $layanan['harga_motor_full'] === null) {
+                      continue;
+                  }
+                  if ($jenis === 'Mobil' && $layanan['harga_mobil_full'] === null) {
+                      continue;
+                  }
+                  ?>
+
                   <label class="service-item">
 
                       <input
@@ -180,6 +188,46 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       <div class="confirmation-item"><span>Tanggal</span><span><?= htmlspecialchars($data['tanggal'] ?? '-') ?></span></div>
       <div class="confirmation-item"><span>Jam</span><span><?= htmlspecialchars($data['jam'] ?? '-') ?></span></div>
       <div class="confirmation-item"><span>Catatan</span><span><?= htmlspecialchars($data['catatan'] ?? '-') ?></span></div>
+    </div>
+
+    <div class="price-calculation">
+      <h3 style="margin-bottom: 12px; font-size: 16px; font-weight: 700;">Perhitungan Biaya</h3>
+      <table class="price-table" style="width: 100%; border-collapse: collapse;">
+        <thead>
+          <tr style="border-bottom: 2px solid #38a3a5;">
+            <th style="text-align: left; padding: 8px; font-weight: 700;">Layanan</th>
+            <th style="text-align: right; padding: 8px; font-weight: 700;">Harga DP</th>
+          </tr>
+        </thead>
+        <tbody>
+          <?php
+          $totalDP = 0;
+          $jenis = $data['jenisKendaraan'] ?? '';
+          $dpField = ($jenis === 'Motor') ? 'dp_motor' : 'dp_mobil';
+
+          if (!empty($data['layanan_id'])) {
+              foreach ($layanans as $layanan) {
+                  if (in_array($layanan['layanan_id'], $data['layanan_id'])) {
+                      $dp = $layanan[$dpField] ?? 0;
+                      $totalDP += $dp;
+                      ?>
+                      <tr style="border-bottom: 1px solid #e2e8f0;">
+                          <td style="padding: 12px 8px;"><?= htmlspecialchars($layanan['nama_layanan']) ?></td>
+                          <td style="text-align: right; padding: 12px 8px; font-weight: 600;">Rp <?= number_format($dp, 0, ',', '.') ?></td>
+                      </tr>
+                      <?php
+                  }
+              }
+          }
+          ?>
+        </tbody>
+        <tfoot>
+          <tr style="border-top: 2px solid #38a3a5; background-color: #f8fafc;">
+            <td style="padding: 12px 8px; font-weight: 700;">Total DP</td>
+            <td style="text-align: right; padding: 12px 8px; font-weight: 700; font-size: 16px; color: #38a3a5;">Rp <?= number_format($totalDP, 0, ',', '.') ?></td>
+          </tr>
+        </tfoot>
+      </table>
     </div>
   </div>
 

@@ -19,9 +19,7 @@ if (!function_exists('badgeStatus')) {
 }
 ?>
 
-<link rel="stylesheet" href="<?= BASEURL ?>/assets/css/riwayat.css">
-
-<div class="container">
+<div>
     <div class="riwayat-header">
         <a href="<?= BASEURL ?>/pelanggan/buat-reservasi"
            class="btn btn-primary">

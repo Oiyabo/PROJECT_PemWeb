@@ -12,14 +12,16 @@ class ReservasiModel
     public function getAll(): array
     {
         $stmt = $this->db->prepare(
-            'SELECT r.*, u.nama, u.email, l.nama_layanan
+            'SELECT r.*, u.nama, u.email, GROUP_CONCAT(l.nama_layanan SEPARATOR ", ") AS layanan
              FROM reservasi r
              JOIN users u ON r.user_id = u.id
-             JOIN layanan l ON r.layanan_id = l.layanan_id
+             LEFT JOIN reservasi_layanan rl ON r.id_reservasi = rl.id_reservasi
+             LEFT JOIN layanan l ON rl.layanan_id = l.layanan_id
+             GROUP BY r.id_reservasi
              ORDER BY r.tanggal DESC, r.jam ASC'
         );
         $stmt->execute();
-        return $stmt->fetchAll();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     public function getByUserId(int $userId): array
@@ -101,5 +103,14 @@ class ReservasiModel
             $reservasiId,
             $layananId
         ]);
+    }
+
+    public function updateStatus(int $reservasiId, string $status): bool
+    {
+        $stmt = $this->db->prepare(
+            'UPDATE reservasi SET status = ? WHERE id_reservasi = ?'
+        );
+
+        return $stmt->execute([$status, $reservasiId]);
     }
 }

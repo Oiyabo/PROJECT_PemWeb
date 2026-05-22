@@ -2,8 +2,6 @@
 $title = 'Data Service';
 ?>
 
-<link rel="stylesheet" href="<?= BASEURL; ?>/assets/css/dataservice.css">
-
 <div class="dataservice-container">
   <div class="page-header">
     <h2>Data Service</h2>
@@ -37,13 +35,13 @@ $title = 'Data Service';
             <?php foreach ($dataService as $index => $service): ?>
               <tr>
                 <td><?= $index + 1 ?></td>
-                <td><?= htmlspecialchars($service['nama']) ?></td>
-                <td><?= htmlspecialchars($service['kendaraan']) ?></td>
-                <td><?= htmlspecialchars($service['plat']) ?></td>
-                <td><?= htmlspecialchars($service['layanan']) ?></td>
-                <td><?= htmlspecialchars($service['tanggal']) ?></td>
-                <td><?= htmlspecialchars($service['jam']) ?></td>
-                <td><?= htmlspecialchars($service['catatan'] ?: '-') ?></td>
+                <td><?= htmlspecialchars($service['nama'] ?? '') ?></td>
+                <td><?= htmlspecialchars($service['kendaraan'] ?? '') ?></td>
+                <td><?= htmlspecialchars($service['plat'] ?? '') ?></td>
+                <td><?= htmlspecialchars($service['layanan'] ?? '-') ?></td>
+                <td><?= htmlspecialchars($service['tanggal'] ?? '') ?></td>
+                <td><?= htmlspecialchars($service['jam'] ?? '') ?></td>
+                <td><?= htmlspecialchars($service['catatan'] ?? '-') ?></td>
               </tr>
             <?php endforeach; ?>
           <?php else: ?>
