@@ -1758,3 +1758,120 @@ table {
     display: flex;
   }
 }
+
+/* ============================================
+   PAYMENT SECTION
+   ============================================ */
+
+.btn-info {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 22px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: #3b82f6;
+  color: white;
+
+  &:hover:not(:disabled) {
+    transform: translateY(-1px);
+    opacity: 0.95;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  @media (max-width: 768px) {
+    width: 100%;
+  }
+}
+
+.btn-small {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.payment-status {
+  margin-top: 16px;
+  padding: 12px;
+  border-radius: 6px;
+  background-color: #d4edda;
+  border: 1px solid #c3e6cb;
+
+  & p {
+    margin: 0;
+    color: #155724;
+    font-weight: 600;
+  }
+}
+
+.price-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 16px 0;
+
+  & thead {
+    background-color: #f8fafc;
+  }
+
+  & th {
+    padding: 12px;
+    text-align: left;
+    font-weight: 600;
+    color: #184e77;
+    border-bottom: 2px solid #38a3a5;
+  }
+
+  & td {
+    padding: 12px;
+    border-bottom: 1px solid #e2e8f0;
+  }
+
+  & tfoot td {
+    padding: 12px;
+    font-weight: 700;
+    border-top: 2px solid #38a3a5;
+    background-color: #f8fafc;
+  }
+}
+
+.page-header {
+  padding: 20px 0;
+  border-bottom: 1px solid #e2e8f0;
+  margin-bottom: 24px;
+
+  & h1 {
+    font-size: 28px;
+    font-weight: 700;
+    color: #184e77;
+    margin: 0 0 8px 0;
+  }
+
+  & .page-subtitle {
+    font-size: 14px;
+    color: #52b69a;
+    margin: 0;
+  }
+}
+
+.page-header + .container {
+  background: transparent;
+}

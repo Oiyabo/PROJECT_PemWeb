@@ -14,6 +14,7 @@ if (isset($user)) {
       ['url' => BASEURL . '/pelanggan', 'label' => 'Dashboard', 'icon' => 'layout-dashboard'],
       ['url' => BASEURL . '/pelanggan/buatreservasi', 'label' => 'Buat Reservasi', 'icon' => 'plus-circle'],
       ['url' => BASEURL . '/pelanggan/riwayat', 'label' => 'Riwayat Service', 'icon' => 'clipboard-list'],
+      ['url' => BASEURL . '/pelanggan/bayar', 'label' => 'Bayar', 'icon' => 'credit-card'],
     ];
   }
 }
@@ -30,6 +31,7 @@ $currentUrl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' 
   <title>AutoFix - <?= htmlspecialchars($title ?? 'Dashboard') ?></title>
   <script src="https://unpkg.com/lucide@latest"></script>
   <link rel="stylesheet" href="<?= BASEURL ?>/assets/css/style.css">
+  <script src="<?= BASEURL ?>/assets/js/buat-reservasi.js"></script>
 </head>
 
 <body>

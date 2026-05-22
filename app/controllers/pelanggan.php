@@ -132,6 +132,126 @@ class Pelanggan extends Controller
         $this->view('templates/footer', $data);
     }
 
+    // Halaman pembayaran sisa service
+    public function bayar(): void
+    {
+        $userId = (int)$_SESSION['user']['id'];
+        $pembayaranModel = $this->model('PembayaranModel');
+        
+        // Ambil semua reservasi dengan status selesai yang belum dibayar full
+        $reservasiSelesai = $pembayaranModel->getReservasiSelesaiUnpaidFull($userId);
+        
+        // Hitung total harga untuk setiap reservasi
+        foreach ($reservasiSelesai as &$r) {
+            $harga = $pembayaranModel->hitungTotalHarga($r['id_reservasi'], 'Motor');
+            
+            // Cek jenis kendaraan dari data reservasi (defaultnya Motor, tapi bisa jadi Mobil)
+            // Ambil dari field atau cek dari konteks - untuk sekarang asumsikan bisa dari metadata
+            // Kita hitung dulu untuk Motor, jika ada maka gunakan itu
+            if ($harga['total_full'] == 0) {
+                // Coba dengan Mobil
+                $harga = $pembayaranModel->hitungTotalHarga($r['id_reservasi'], 'Mobil');
+            }
+            
+            $r['total_full'] = $harga['total_full'];
+            $r['total_dp'] = $harga['total_dp'];
+            $r['total_sisa'] = $harga['total_sisa'];
+        }
+
+        $data = [
+            'title' => 'Pembayaran Sisanya',
+            'user' => $_SESSION['user'],
+            'reservasi' => $reservasiSelesai,
+        ];
+
+        $this->view('templates/header', $data);
+        $this->view('pelanggan/bayar', $data);
+        $this->view('templates/footer', $data);
+    }
+
+    // Proses pembayaran (DP atau FULL)
+    public function prosesPembayaran(): void
+    {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            http_response_code(400);
+            echo json_encode(['success' => false, 'message' => 'Invalid request method']);
+            exit;
+        }
+
+        $userId = (int)$_SESSION['user']['id'];
+        $idReservasi = (int)($_POST['id_reservasi'] ?? 0);
+        $tipePembayaran = trim($_POST['tipe_pembayaran'] ?? '');
+        $nominal = (int)($_POST['nominal'] ?? 0);
+        $metodePembayaran = trim($_POST['metode_pembayaran'] ?? '');
+
+        // Validasi
+        if (!$idReservasi || !$tipePembayaran || !$nominal) {
+            http_response_code(400);
+            echo json_encode(['success' => false, 'message' => 'Data pembayaran tidak lengkap']);
+            exit;
+        }
+
+        if (!in_array($tipePembayaran, ['DP', 'FULL'])) {
+            http_response_code(400);
+            echo json_encode(['success' => false, 'message' => 'Tipe pembayaran tidak valid']);
+            exit;
+        }
+
+        // Cek reservasi milik user ini
+        $db = getDB();
+        $stmt = $db->prepare('SELECT user_id FROM reservasi WHERE id_reservasi = ?');
+        $stmt->execute([$idReservasi]);
+        $reservasi = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (!$reservasi || $reservasi['user_id'] != $userId) {
+            http_response_code(403);
+            echo json_encode(['success' => false, 'message' => 'Akses ditolak']);
+            exit;
+        }
+
+        // Proses pembayaran
+        $pembayaranModel = $this->model('PembayaranModel');
+        
+        try {
+            // Buat record pembayaran
+            $idPembayaran = $pembayaranModel->buatPembayaran(
+                $idReservasi,
+                $tipePembayaran,
+                $nominal
+            );
+
+            // Update status pembayaran menjadi Selesai
+            $noTransaksi = 'TRX' . date('YmdHis') . $idPembayaran;
+            $pembayaranModel->updateStatusPembayaran(
+                $idPembayaran,
+                'Selesai',
+                $noTransaksi,
+                $metodePembayaran
+            );
+
+            // Jika pembayaran DP selesai, update status reservasi ke Konfirmasi
+            if ($tipePembayaran === 'DP') {
+                // Status bisa berubah dari Menunggu ke Konfirmasi
+                // Tapi logic ini mungkin bisa dikustomisasi sesuai kebutuhan
+            }
+
+            echo json_encode([
+                'success' => true,
+                'message' => 'Pembayaran berhasil diproses',
+                'id_pembayaran' => $idPembayaran,
+                'no_transaksi' => $noTransaksi
+            ]);
+        } catch (Exception $e) {
+            http_response_code(500);
+            echo json_encode([
+                'success' => false,
+                'message' => 'Terjadi kesalahan: ' . $e->getMessage()
+            ]);
+        }
+        
+        exit;
+    }
+
     /**
      * Helper cek role user login
      * @param string $role

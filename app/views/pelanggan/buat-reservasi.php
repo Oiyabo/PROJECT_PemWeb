@@ -229,6 +229,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </tfoot>
       </table>
     </div>
+
+    <!-- Status Pembayaran DP -->
+    <div id="dpPaymentStatus" class="payment-status" style="margin-top: 16px; display: none;">
+      <div style="padding: 12px; border-radius: 6px; background-color: #d4edda; border: 1px solid #c3e6cb;">
+        <p style="margin: 0; color: #155724; font-weight: 600;">
+          ✓ Pembayaran DP berhasil! Anda dapat mengirim reservasi.
+        </p>
+      </div>
+    </div>
   </div>
 
   <form id="formReservasi" action="<?= BASEURL ?>/pelanggan/simpanReservasi" method="POST">
@@ -249,14 +258,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <input type="hidden" name="tanggal" value="<?= htmlspecialchars($data['tanggal'] ?? '') ?>">
     <input type="hidden" name="jam" value="<?= htmlspecialchars($data['jam'] ?? '') ?>">
     <input type="hidden" name="catatan" value="<?= htmlspecialchars($data['catatan'] ?? '') ?>">
+    <input type="hidden" name="totalDP" id="totalDPInput" value="<?= $totalDP ?>">
 
     <div class="form-navigation">
       <a href="<?= BASEURL ?>/pelanggan/buatReservasi?step=2" class="btn-secondary">← Kembali</a>
-      <button type="button" class="btn-primary"  onclick="openConfirm()">✔ Kirim Reservasi</button>
+      
+      <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+        <button type="button" class="btn-info" id="btnBayarDP" onclick="openPaymentDP(<?= $totalDP ?>, '<?= htmlspecialchars($data['jenisKendaraan'] ?? '') ?>')">💳 Bayar DP - Rp <?= number_format($totalDP, 0, ',', '.') ?></button>
+        <button type="button" class="btn-primary" id="btnKirimReservasi" disabled onclick="openConfirm()">✔ Kirim Reservasi</button>
+      </div>
     </div>
   </form>
 
-  <div id="confirmPopup" class="popup-overlay">
+  <!-- Modal Pembayaran DP -->
+  <div id="paymentDPModal" class="popup-overlay" style="display: none;">
+    <div class="popup-box">
+      <h3>Pembayaran DP</h3>
+      <div style="margin: 16px 0;">
+        <p><strong>Total DP:</strong> <span id="totalDPAmount">Rp 0</span></p>
+        <p style="color: #666; margin-top: 8px; font-size: 14px;">Silakan lanjutkan pembayaran di halaman berikutnya</p>
+      </div>
+      <div class="popup-actions">
+        <button class="btn-secondary" onclick="closePaymentDP()">Batal</button>
+        <button class="btn-primary" onclick="submitPaymentDP()">Lanjut Pembayaran</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="confirmPopup" class="popup-overlay" style="display: none;">
     <div class="popup-box">
         <h3>Konfirmasi Reservasi</h3>
         <p>Yakin ingin mengirim reservasi ini?</p>
@@ -266,7 +295,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <button class="btn-primary" onclick="submitReservasi()">Ya, Kirim</button>
         </div>
     </div>
-    </div>
+  </div>
   <?php endif; ?>
 
 </div>
