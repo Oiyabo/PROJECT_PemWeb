@@ -31,7 +31,6 @@ $currentUrl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' 
   <title>AutoFix - <?= htmlspecialchars($title ?? 'Dashboard') ?></title>
   <script src="https://unpkg.com/lucide@latest"></script>
   <link rel="stylesheet" href="<?= BASEURL ?>/assets/css/style.css">
-  <script src="<?= BASEURL ?>/assets/js/buat-reservasi.js"></script>
 </head>
 
 <body>

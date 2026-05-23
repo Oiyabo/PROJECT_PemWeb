@@ -5,20 +5,6 @@ $step = max(1, min(3, $step));
 
 $data = $_SESSION['form_reservasi'] ?? [];
 $data['nama'] = $data['nama'] ?? $user['nama'];
-
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
-    $newData = array_merge($data, $_POST);
-
-    if (!isset($newData['layanan_id'])) {
-        $newData['layanan_id'] = [];
-    }
-
-    $_SESSION['form_reservasi'] = $newData;
-
-    $data = $newData;
-}
 ?>
 
 <div class="reservation-container">
@@ -201,49 +187,46 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </thead>
         <tbody>
           <?php
-          $totalDP = 0;
-          $jenis = $data['jenisKendaraan'] ?? '';
-          $dpField = ($jenis === 'Motor') ? 'dp_motor' : 'dp_mobil';
+          $ringkasan = $ringkasanHarga ?? ['items' => [], 'total_dp' => 0, 'total_full' => 0, 'total_sisa' => 0];
+          $totalDP = (int) $ringkasan['total_dp'];
+          $totalFull = (int) $ringkasan['total_full'];
+          $jenisLabel = htmlspecialchars($data['jenisKendaraan'] ?? '-');
 
-          if (!empty($data['layanan_id'])) {
-              foreach ($layanans as $layanan) {
-                  if (in_array($layanan['layanan_id'], $data['layanan_id'])) {
-                      $dp = $layanan[$dpField] ?? 0;
-                      $totalDP += $dp;
-                      ?>
-                      <tr style="border-bottom: 1px solid #e2e8f0;">
-                          <td style="padding: 12px 8px;"><?= htmlspecialchars($layanan['nama_layanan']) ?></td>
-                          <td style="text-align: right; padding: 12px 8px; font-weight: 600;">Rp <?= number_format($dp, 0, ',', '.') ?></td>
-                      </tr>
-                      <?php
-                  }
-              }
-          }
+          foreach ($ringkasan['items'] as $item):
           ?>
+                      <tr style="border-bottom: 1px solid #e2e8f0;">
+                          <td style="padding: 12px 8px;"><?= htmlspecialchars($item['nama_layanan']) ?></td>
+                          <td style="text-align: right; padding: 12px 8px; font-weight: 600;">Rp <?= number_format((int) $item['dp'], 0, ',', '.') ?></td>
+                      </tr>
+          <?php endforeach; ?>
         </tbody>
         <tfoot>
           <tr style="border-top: 2px solid #38a3a5; background-color: #f8fafc;">
-            <td style="padding: 12px 8px; font-weight: 700;">Total DP</td>
+            <td style="padding: 12px 8px; font-weight: 700;">Total DP (<?= $jenisLabel ?>)</td>
             <td style="text-align: right; padding: 12px 8px; font-weight: 700; font-size: 16px; color: #38a3a5;">Rp <?= number_format($totalDP, 0, ',', '.') ?></td>
+          </tr>
+          <tr style="background-color: #f8fafc;">
+            <td style="padding: 8px; font-weight: 600; color: #64748b;">Estimasi Harga Full (<?= $jenisLabel ?>)</td>
+            <td style="text-align: right; padding: 8px; font-weight: 600; color: #64748b;">Rp <?= number_format($totalFull, 0, ',', '.') ?></td>
+          </tr>
+          <tr style="background-color: #fff7ed;">
+            <td style="padding: 8px; font-weight: 600; color: #9a3412;">Sisa setelah DP</td>
+            <td style="text-align: right; padding: 8px; font-weight: 600; color: #9a3412;">Rp <?= number_format((int) $ringkasan['total_sisa'], 0, ',', '.') ?></td>
           </tr>
         </tfoot>
       </table>
     </div>
 
-    <!-- Status Pembayaran DP -->
-    <div id="dpPaymentStatus" class="payment-status" style="margin-top: 16px; display: none;">
-      <div style="padding: 12px; border-radius: 6px; background-color: #d4edda; border: 1px solid #c3e6cb;">
-        <p style="margin: 0; color: #155724; font-weight: 600;">
-          ✓ Pembayaran DP berhasil! Anda dapat mengirim reservasi.
-        </p>
-      </div>
-    </div>
   </div>
 
   <form id="formReservasi" action="<?= BASEURL ?>/pelanggan/simpanReservasi" method="POST">
 
     <input type="hidden" name="kendaraan" value="<?= htmlspecialchars($data['kendaraan'] ?? '') ?>">
     <input type="hidden" name="plat" value="<?= htmlspecialchars($data['plat'] ?? '') ?>">
+    <input type="hidden" name="jenisKendaraan" value="<?= htmlspecialchars($data['jenisKendaraan'] ?? '') ?>">
+    <input type="hidden" name="dp_paid" id="dpPaidInput" value="0">
+    <input type="hidden" name="metode_pembayaran_dp" id="metodeDpInput" value="">
+    <input type="hidden" name="midtrans_order_id" id="midtransOrderIdInput" value="">
     <?php if (!empty($data['layanan_id'])): ?>
       <?php foreach ($data['layanan_id'] as $id): ?>
           <input
@@ -262,42 +245,43 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <div class="form-navigation">
       <a href="<?= BASEURL ?>/pelanggan/buatReservasi?step=2" class="btn-secondary">← Kembali</a>
-      
-      <div style="display: flex; gap: 12px; flex-wrap: wrap;">
-        <button type="button" class="btn-info" id="btnBayarDP" onclick="openPaymentDP(<?= $totalDP ?>, '<?= htmlspecialchars($data['jenisKendaraan'] ?? '') ?>')">💳 Bayar DP - Rp <?= number_format($totalDP, 0, ',', '.') ?></button>
-        <button type="button" class="btn-primary" id="btnKirimReservasi" disabled onclick="openConfirm()">✔ Kirim Reservasi</button>
-      </div>
+
+      <button type="button" class="btn-primary" id="btnBayarDpSelesai" onclick="bayarDpDanSelesaikan()">
+        💳 Bayar DP dan Selesaikan — Rp <?= number_format($totalDP, 0, ',', '.') ?>
+      </button>
     </div>
+
+    <p style="margin-top: 12px; font-size: 13px; color: #64748b; max-width: 520px;">
+      Satu langkah: bayar DP via Midtrans, lalu reservasi dibuat otomatis setelah pembayaran terkonfirmasi.
+    </p>
   </form>
 
-  <!-- Modal Pembayaran DP -->
-  <div id="paymentDPModal" class="popup-overlay" style="display: none;">
-    <div class="popup-box">
-      <h3>Pembayaran DP</h3>
-      <div style="margin: 16px 0;">
-        <p><strong>Total DP:</strong> <span id="totalDPAmount">Rp 0</span></p>
-        <p style="color: #666; margin-top: 8px; font-size: 14px;">Silakan lanjutkan pembayaran di halaman berikutnya</p>
+  <!-- Modal sukses DP + reservasi -->
+  <div id="reservasiSuksesModal" class="popup-overlay" style="display: none;">
+    <div class="popup-box" style="max-width: 420px; text-align: center;">
+      <div style="font-size: 48px; margin-bottom: 8px;">✓</div>
+      <h3 style="margin: 0 0 12px; color: #155724;">Pembayaran Berhasil!</h3>
+      <p style="margin: 0 0 16px; color: #333; line-height: 1.5;">
+        Pembayaran DP Anda telah diterima dan reservasi berhasil dibuat.
+      </p>
+      <div style="margin: 16px 0; padding: 14px; background: #f8fafc; border-radius: 8px; text-align: left; font-size: 14px;">
+        <p style="margin: 6px 0;"><strong>No. Reservasi:</strong> <span id="suksesReservasiId">-</span></p>
+        <p style="margin: 6px 0;"><strong>Nominal DP:</strong> <span id="suksesDpNominal">-</span></p>
+        <p style="margin: 6px 0; color: #64748b; font-size: 13px;">Tim kami akan segera mengkonfirmasi jadwal service Anda.</p>
       </div>
-      <div class="popup-actions">
-        <button class="btn-secondary" onclick="closePaymentDP()">Batal</button>
-        <button class="btn-primary" onclick="submitPaymentDP()">Lanjut Pembayaran</button>
+      <div class="popup-actions" style="justify-content: center;">
+        <button type="button" class="btn-primary" onclick="tutupSuksesDanKeRiwayat()">Selesai</button>
       </div>
-    </div>
-  </div>
-
-  <div id="confirmPopup" class="popup-overlay" style="display: none;">
-    <div class="popup-box">
-        <h3>Konfirmasi Reservasi</h3>
-        <p>Yakin ingin mengirim reservasi ini?</p>
-
-        <div class="popup-actions">
-        <button class="btn-secondary" onclick="closeConfirm()">Batal</button>
-        <button class="btn-primary" onclick="submitReservasi()">Ya, Kirim</button>
-        </div>
     </div>
   </div>
   <?php endif; ?>
 
 </div>
 
+<script>
+  window.APP_BASEURL = <?= json_encode(BASEURL) ?>;
+  window.MIDTRANS_CLIENT_KEY = <?= json_encode($midtrans_client_key ?? '') ?>;
+  window.MIDTRANS_SNAP_SCRIPT = <?= json_encode($midtrans_snap_script ?? '') ?>;
+</script>
+<script src="<?= BASEURL ?>/assets/js/midtrans-payment.js"></script>
 <script src="<?= BASEURL ?>/assets/js/buat-reservasi.js"></script>

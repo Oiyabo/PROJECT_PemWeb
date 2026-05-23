@@ -1,14 +1,33 @@
 <?php
 
+// Load .env file
+$envFile = dirname(__DIR__, 2) . '/.env';
+if (file_exists($envFile)) {
+    $env = parse_ini_file($envFile);
+    foreach ($env as $key => $value) {
+        putenv("$key=$value");
+    }
+}
+
+// Helper function to get env variables
+function env($key, $default = null) {
+    return getenv($key) ?: $default;
+}
+
 $protocol = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http");
 $host = $_SERVER['HTTP_HOST'];
 $project_path = str_replace('/public/index.php', '', $_SERVER['SCRIPT_NAME']);
 define('BASEURL', $protocol . "://" . $host . $project_path);
 
-define('DB_HOST', 'localhost');
-define('DB_USER', 'root');
-define('DB_PASS', '');
-define('DB_NAME', 'bengkel_mvc');
+define('DB_HOST', env('DB_HOST', 'localhost'));
+define('DB_USER', env('DB_USER', 'root'));
+define('DB_PASS', env('DB_PASS', ''));
+define('DB_NAME', env('DB_NAME', 'bengkel_mvc'));
+
+// Midtrans Snap (sandbox — ganti dengan kunci production saat go-live)
+define('MIDTRANS_SERVER_KEY', env('MIDTRANS_SERVER_KEY'));
+define('MIDTRANS_CLIENT_KEY', env('MIDTRANS_CLIENT_KEY'));
+define('MIDTRANS_IS_PRODUCTION', env('MIDTRANS_IS_PRODUCTION'));
 
 function getDB(): PDO
 {
