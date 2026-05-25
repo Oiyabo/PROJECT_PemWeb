@@ -8,6 +8,7 @@ class MidtransService
 
     public function __construct()
     {
+        // echo MIDTRANS_IS_PRODUCTION ? "Mode Production" : "Mode Sandbox";
         $this->serverKey    = MIDTRANS_SERVER_KEY;
         $this->clientKey    = MIDTRANS_CLIENT_KEY;
         $this->isProduction = MIDTRANS_IS_PRODUCTION;

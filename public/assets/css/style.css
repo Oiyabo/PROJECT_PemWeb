@@ -1295,6 +1295,16 @@ table {
   text-align: center;
   transition: all 0.2s ease;
 
+  &.completed {
+    color: var(--text-dark);
+    font-weight: 600;
+
+    & .step-numbers {
+      background: var(--primary);
+      color: white;
+    }
+  }
+
   &.active {
     background: var(--accent);
     color: var(--text-dark);
@@ -1323,6 +1333,10 @@ table {
     font-size: 13px;
     line-height: 1.4;
   }
+}
+
+.form-step[hidden] {
+  display: none !important;
 }
 
 .reservation-form {
