@@ -8,7 +8,6 @@ class Admin extends Controller
     public function __construct()
     {
         $this->requireRole('Admin');
-
         $this->reservasiModel = $this->model('ReservasiModel');
         $this->userModel      = $this->model('UserModel');
     }

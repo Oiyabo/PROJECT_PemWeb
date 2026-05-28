@@ -15,7 +15,13 @@ class Auth extends Controller
             $this->redirectToDashboard();
         }
 
-        $this->view('auth/login');
+        $data = [
+            'session_expired' => $_SESSION['session_expired'] ?? false
+        ];
+
+        unset($_SESSION['session_expired']);
+
+        $this->view('auth/login', $data);
     }
 
     public function login(): void

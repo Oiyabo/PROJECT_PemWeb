@@ -10,7 +10,7 @@ class MidtransService
     {
         $this->serverKey    = MIDTRANS_SERVER_KEY;
         $this->clientKey    = MIDTRANS_CLIENT_KEY;
-        $this->isProduction = MIDTRANS_IS_PRODUCTION;
+        $this->isProduction = filter_var(env('MIDTRANS_IS_PRODUCTION'), FILTER_VALIDATE_BOOLEAN);
     }
 
     public function getClientKey(): string
