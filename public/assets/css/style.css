@@ -1912,8 +1912,8 @@ table {
 .service-filter-tags {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
-    margin-bottom: 12px;
+    gap: 15px;
+    margin-bottom: 8px;
 }
 .svc-ftag {
     padding: 4px 15px;
@@ -1940,6 +1940,7 @@ table {
     max-height: 320px;
     overflow-y: auto;
     padding: 2px;
+    margin-bottom: 12px;
 }
 
 .service-item {
