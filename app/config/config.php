@@ -27,7 +27,7 @@ define('DB_NAME', env('DB_NAME'));
 // Midtrans Snap (sandbox — ganti dengan kunci production saat go-live)
 define('MIDTRANS_SERVER_KEY', env('MIDTRANS_SERVER_KEY'));
 define('MIDTRANS_CLIENT_KEY', env('MIDTRANS_CLIENT_KEY'));
-define('MIDTRANS_IS_PRODUCTION', env('MIDTRANS_IS_PRODUCTION'));
+define('MIDTRANS_IS_PRODUCTION', filter_var(env('IS_PRODUCTION'), FILTER_VALIDATE_BOOLEAN));
 
 function getDB(): PDO
 {

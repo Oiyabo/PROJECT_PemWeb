@@ -32,10 +32,10 @@ class Pelanggan extends Controller
         $this->view('templates/footer', $data);
     }
 
-    // Form reservasi baru, hanya nampilin view form (GET)
     public function buatReservasi(): void
     {
-        // Handle POST request: update SESSION dengan data form yang baru
+        $ajax = $this->isAjaxRequest();
+
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $existingData = $_SESSION['form_reservasi'] ?? [];
             $newData = array_merge($existingData, $_POST);
@@ -43,6 +43,16 @@ class Pelanggan extends Controller
                 $newData['layanan_id'] = [];
             }
             $_SESSION['form_reservasi'] = $newData;
+
+            if ($ajax) {
+                $layanans = $this->reservasiModel->getLayanan();
+                $ringkasan = $this->buildRingkasanHarga($layanans, $newData);
+                $this->jsonResponse([
+                    'success'   => true,
+                    'data'      => $newData,
+                    'ringkasan' => $ringkasan,
+                ]);
+            }
         }
 
         $layanans = $this->reservasiModel->getLayanan();
@@ -59,14 +69,7 @@ class Pelanggan extends Controller
             'items' => [], 'total_dp' => 0, 'total_full' => 0, 'total_sisa' => 0,
         ];
 
-        if (!empty($formData['layanan_id']) && !empty($formData['jenisKendaraan'])) {
-            $pembayaranModel = $this->model('PembayaranModel');
-            $ringkasanHarga = $pembayaranModel->ringkasanHargaLayanan(
-                $layanans,
-                $formData['layanan_id'],
-                $formData['jenisKendaraan']
-            );
-        }
+        $ringkasanHarga = $this->buildRingkasanHarga($layanans, $formData);
 
         $data = [
             'title' => 'Buat Reservasi Baru',
@@ -114,7 +117,7 @@ class Pelanggan extends Controller
         $totalDp = (int) ($_POST['totalDP'] ?? 0);
 
         if ($dpSudahDibayar && $midtransOrderId === '') {
-            $this->respondSimpan($ajax, false, 'Data pembayaran DP tidak valid.', BASEURL . '/pelanggan/buatreservasi?step=3');
+            $this->respondSimpan($ajax, false, 'Data pembayaran DP tidak valid.', BASEURL . '/pelanggan/buatreservasi');
         }
 
         if ($dpSudahDibayar) {
@@ -124,13 +127,13 @@ class Pelanggan extends Controller
                     $ajax,
                     false,
                     'Pembayaran DP belum dikonfirmasi. Selesaikan pembayaran Midtrans terlebih dahulu.',
-                    BASEURL . '/pelanggan/buatreservasi?step=3'
+                    BASEURL . '/pelanggan/buatreservasi'
                 );
             }
         }
 
         if (!in_array($jenisKendaraan, ['Motor', 'Mobil'], true)) {
-            $this->respondSimpan($ajax, false, 'Jenis kendaraan wajib dipilih (Motor/Mobil).', BASEURL . '/pelanggan/buatreservasi?step=1');
+            $this->respondSimpan($ajax, false, 'Jenis kendaraan wajib dipilih (Motor/Mobil).', BASEURL . '/pelanggan/buatreservasi');
         }
 
         $reservasiId = $this->reservasiModel->create(
@@ -473,6 +476,22 @@ class Pelanggan extends Controller
         exit;
     }
 
+    private function buildRingkasanHarga(array $layanans, array $formData): array
+    {
+        $default = ['items' => [], 'total_dp' => 0, 'total_full' => 0, 'total_sisa' => 0];
+
+        if (empty($formData['layanan_id']) || empty($formData['jenisKendaraan'])) {
+            return $default;
+        }
+
+        $pembayaranModel = $this->model('PembayaranModel');
+        return $pembayaranModel->ringkasanHargaLayanan(
+            $layanans,
+            $formData['layanan_id'],
+            $formData['jenisKendaraan']
+        );
+    }
+
     private function isAjaxRequest(): bool
     {
         $xhr = $_SERVER['HTTP_X_REQUESTED_WITH'] ?? '';
@@ -518,5 +537,12 @@ class Pelanggan extends Controller
             header('Location: ' . BASEURL . '/admin');
             exit;
         }
+    }
+
+    public function batalReservasi(): void
+    {
+        unset($_SESSION['form_reservasi']);
+        header('Location: ' . BASEURL . '/pelanggan');
+        exit;
     }
 }

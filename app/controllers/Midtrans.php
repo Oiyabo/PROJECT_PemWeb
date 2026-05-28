@@ -61,7 +61,7 @@ class Midtrans extends Controller
             exit;
         }
 
-        header('Location: ' . BASEURL . '/pelanggan/buatreservasi?step=3&' . $qs);
+        header('Location: ' . BASEURL . '/pelanggan/buatreservasi?' . $qs);
         exit;
     }
 }
