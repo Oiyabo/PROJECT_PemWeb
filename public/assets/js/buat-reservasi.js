@@ -21,20 +21,7 @@ function initReservasiWizard() {
     wizard.panels = Array.from(wizard.el.querySelectorAll('.form-step'));
     wizard.indicators = Array.from(wizard.el.querySelectorAll('#stepIndicator .step-item'));
 
-    const initial = parseInt(wizard.el.dataset.initialStep || '1', 10);
-    const startStep = Math.max(1, Math.min(3, initial));
-    showStep(startStep, false);
-
-    if (startStep >= 2) {
-        filterLayananByJenis();
-    }
-
-    const params = new URLSearchParams(window.location.search);
-    const hasMidtransReturn = params.get('order_id') || sessionStorage.getItem('midtrans_dp_order');
-
-    if (startStep === 3 && !hasMidtransReturn) {
-        loadKonfirmasiFromSession();
-    }
+    showStep(1, false);
 
     wizard.el.addEventListener('click', (e) => {
         const btn = e.target.closest('[data-action]');
@@ -59,6 +46,10 @@ function initReservasiWizard() {
     const btnBayar = document.getElementById('btnBayarDpSelesai');
     if (btnBayar) {
         btnBayar.addEventListener('click', bayarDpDanSelesaikan);
+    }
+
+    if (!new URLSearchParams(window.location.search).get('order_id')) {
+        hidePaymentLoading();
     }
 
     handleMidtransReturn();
@@ -201,16 +192,6 @@ function goNext() {
         });
 }
 
-function loadKonfirmasiFromSession() {
-    return saveSessionToServer(3)
-        .then((res) => {
-            if (res.success) {
-                renderKonfirmasi(res.data, res.ringkasan);
-            }
-        })
-        .catch(() => {});
-}
-
 function goPrev() {
     if (currentStep === 3) {
         showStep(2);
@@ -235,17 +216,8 @@ function filterLayananByJenis() {
         if (!visible) {
             const cb = label.querySelector('input[type="checkbox"]');
             if (cb) cb.checked = false;
-            label.classList.remove('selected');
         }
     });
-
-    // Reset search dan filter tag saat jenis kendaraan berubah
-    const searchInput = document.getElementById('serviceSearchInput');
-    if (searchInput) searchInput.value = '';
-    activeKategori = 'all';
-    document.querySelectorAll('.svc-ftag').forEach((t, i) => t.classList.toggle('active', i === 0));
-
-    updateServiceCount();
 }
 
 function renderKonfirmasi(data, ringkasan) {
@@ -399,24 +371,29 @@ function bayarDpDanSelesaikan() {
     );
 }
 
+let verifikasiDpBerjalan = false;
+
 function startVerifikasiDanSimpan() {
-    if (!midtransOrderId) return;
+    if (!midtransOrderId || verifikasiDpBerjalan) return;
+    verifikasiDpBerjalan = true;
 
     afterSnapPaid(baseUrl, midtransOrderId, {
         maxAttempts: 25,
         verifyMessage: 'Memverifikasi pembayaran DP...',
         onPaid: simpanReservasiOtomatis,
         onTimeout: () => {
+            verifikasiDpBerjalan = false;
             const btn = document.getElementById('btnBayarDpSelesai');
             if (btn) btn.disabled = false;
             alert(
-                'Pembayaran masih diproses. Jika sudah bayar, tunggu sebentar lalu klik tombol lagi atau refresh halaman.'
+                'Pembayaran masih diproses. Jika sudah bayar, tunggu sebentar lalu klik tombol lagi.'
             );
         },
     });
 }
 
 function simpanReservasiOtomatis() {
+    verifikasiDpBerjalan = false;
     document.getElementById('dpPaidInput').value = '1';
     document.getElementById('metodeDpInput').value = 'midtrans';
     document.getElementById('midtransOrderIdInput').value = midtransOrderId;
@@ -496,78 +473,48 @@ function formatNumber(num) {
 
 function handleMidtransReturn() {
     const params = new URLSearchParams(window.location.search);
-    const payment = params.get('payment');
     const orderFromUrl = params.get('order_id');
+    const payment = (params.get('payment') || '').toLowerCase();
 
-    if (!orderFromUrl && !sessionStorage.getItem('midtrans_dp_order')) {
+    if (!orderFromUrl) {
+        sessionStorage.removeItem('midtrans_dp_order');
         return;
     }
 
-    if (orderFromUrl) {
-        midtransOrderId = orderFromUrl;
-        sessionStorage.setItem('midtrans_dp_order', orderFromUrl);
-    } else {
-        midtransOrderId = sessionStorage.getItem('midtrans_dp_order') || '';
+    midtransOrderId = orderFromUrl;
+    sessionStorage.setItem('midtrans_dp_order', orderFromUrl);
+
+    const gagal = ['deny', 'cancel', 'expire', 'failure'];
+    if (gagal.includes(payment)) {
+        sessionStorage.removeItem('midtrans_dp_order');
+        midtransOrderId = '';
+        alert('Pembayaran dibatalkan atau gagal. Silakan coba lagi dari halaman konfirmasi.');
+        return;
     }
 
-    if (
-        midtransOrderId &&
-        (payment === 'settlement' ||
-            payment === 'capture' ||
-            payment === 'pending' ||
-            payment === '' ||
-            payment === null)
-    ) {
-        saveSessionToServer(3)
-            .then((res) => {
-                if (res.success) {
-                    renderKonfirmasi(res.data, res.ringkasan);
-                    showStep(3, false);
-                }
-                const btn = document.getElementById('btnBayarDpSelesai');
-                if (btn) btn.disabled = true;
-                startVerifikasiDanSimpan();
-            })
-            .catch(() => {
-                showStep(3, false);
-                const btn = document.getElementById('btnBayarDpSelesai');
-                if (btn) btn.disabled = true;
-                startVerifikasiDanSimpan();
-            });
+    // Hanya lanjutkan untuk status sukses / menunggu / kosong (redirect finish Midtrans)
+    const bolehVerify = !payment || ['settlement', 'capture', 'pending'].includes(payment);
+    if (!bolehVerify) {
+        sessionStorage.removeItem('midtrans_dp_order');
+        return;
     }
-}
 
-let activeKategori = 'all';
-
-function filterLayanan(query) {
-    const items = document.querySelectorAll('#serviceGrid .service-item');
-    items.forEach(item => {
-        const namaMatch = item.dataset.nama.includes(query.toLowerCase());
-        const katMatch = activeKategori === 'all' || item.dataset.kategori === activeKategori;
-        // Jangan tampilkan kalau disembunyikan oleh filterLayananByJenis
-        const hiddenByJenis = item.style.display === 'none';
-        item.classList.toggle('hidden', !(namaMatch && katMatch) || hiddenByJenis);
-    });
-}
-
-function setKategori(el, kat) {
-    document.querySelectorAll('.svc-ftag').forEach(t => t.classList.remove('active'));
-    el.classList.add('active');
-    activeKategori = kat;
-    filterLayanan(document.getElementById('serviceSearchInput')?.value || '');
-}
-
-function toggleServiceItem(checkbox) {
-    checkbox.closest('.service-item').classList.toggle('selected', checkbox.checked);
-    updateServiceCount();
-}
-
-function updateServiceCount() {
-    const total = document.querySelectorAll('#serviceGrid input[name="layanan_id[]"]:checked').length;
-    const countEl = document.getElementById('serviceSelectedCount');
-    const numEl = document.getElementById('serviceCountNum');
-    if (numEl) numEl.textContent = total;
-    if (countEl) countEl.style.display = total > 0 ? 'flex' : 'none';
+    saveSessionToServer(3)
+        .then((res) => {
+            if (res.success) {
+                renderKonfirmasi(res.data, res.ringkasan);
+            }
+            showStep(3, false);
+            const btn = document.getElementById('btnBayarDpSelesai');
+            if (btn) btn.disabled = true;
+            startVerifikasiDanSimpan();
+        })
+        .catch(() => {
+            showStep(3, false);
+            const btn = document.getElementById('btnBayarDpSelesai');
+            if (btn) btn.disabled = true;
+            startVerifikasiDanSimpan();
+        });
 }
 
 document.addEventListener('DOMContentLoaded', initReservasiWizard);

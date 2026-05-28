@@ -15,6 +15,7 @@ if (isset($user)) {
       ['url' => BASEURL . '/pelanggan/buatreservasi', 'label' => 'Buat Reservasi', 'icon' => 'plus-circle'],
       ['url' => BASEURL . '/pelanggan/riwayat', 'label' => 'Riwayat Service', 'icon' => 'clipboard-list'],
       ['url' => BASEURL . '/pelanggan/bayar', 'label' => 'Bayar', 'icon' => 'credit-card'],
+      ['url' => BASEURL . '/pelanggan/riwayatpembayaran', 'label' => 'Riwayat Pembayaran', 'icon' => 'receipt'],
     ];
   }
 }

@@ -3,11 +3,13 @@ class Pelanggan extends Controller
 {
 
     private object $reservasiModel;
+    private object $pembayaranModel;
 
     public function __construct()
     {
         $this->requireRole('Pelanggan');
         $this->reservasiModel = $this->model('ReservasiModel');
+        $this->pembayaranModel = $this->model('PembayaranModel');
     }
 
     // Dashboard pelanggan
@@ -56,9 +58,6 @@ class Pelanggan extends Controller
         }
 
         $layanans = $this->reservasiModel->getLayanan();
-       
-        $kategoris = array_unique(array_column($layanans, 'kategori'));
-        sort($kategoris);
 
         $layananMap = [];
 
@@ -79,7 +78,6 @@ class Pelanggan extends Controller
             'user' => $_SESSION['user'],
             'layanans' => $layanans,
             'layananMap' => $layananMap,
-            'kategoris' => $kategoris,
             'ringkasanHarga' => $ringkasanHarga,
             'midtrans_client_key' => $midtrans->getClientKey(),
             'midtrans_snap_script' => $midtrans->getSnapScriptUrl(),
@@ -364,6 +362,65 @@ class Pelanggan extends Controller
         }
         echo json_encode(['paid' => $paid]);
         exit;
+    }
+
+    // Riwayat pembayaran yang sudah lunas (DP + full)
+    public function riwayatpembayaran(): void
+    {
+        $userId = (int) $_SESSION['user']['id'];
+        $transaksi = $this->pembayaranModel->getRiwayatLunasByUser($userId);
+
+        $data = [
+            'title'     => 'Riwayat Pembayaran',
+            'user'      => $_SESSION['user'],
+            'transaksi' => $transaksi,
+        ];
+
+        $this->view('templates/header', $data);
+        $this->view('pelanggan/riwayat-pembayaran', $data);
+        $this->view('templates/footer', $data);
+    }
+
+    // Detail transaksi (JSON, data dari view)
+    public function detailpembayaran(int $id = 0): void
+    {
+        header('Content-Type: application/json; charset=utf-8');
+
+        $userId = (int) $_SESSION['user']['id'];
+        $idReservasi = $id > 0 ? $id : (int) ($_GET['id'] ?? 0);
+
+        if ($idReservasi <= 0) {
+            $this->jsonResponse(['success' => false, 'message' => 'ID reservasi tidak valid'], 400);
+        }
+
+        $detail = $this->pembayaranModel->getRiwayatDetailByReservasi($idReservasi, $userId);
+
+        if (!$detail) {
+            $this->jsonResponse(['success' => false, 'message' => 'Transaksi tidak ditemukan'], 404);
+        }
+
+        $this->jsonResponse(['success' => true, 'data' => $detail]);
+    }
+
+    // Struk resmi per layanan (JSON, dari view v_struk_pembayaran)
+    public function strukpembayaran(int $id = 0): void
+    {
+        header('Content-Type: application/json; charset=utf-8');
+
+        $userId = (int) $_SESSION['user']['id'];
+        $idReservasi = $id > 0 ? $id : (int) ($_GET['id'] ?? 0);
+
+        if ($idReservasi <= 0) {
+            $this->jsonResponse(['success' => false, 'message' => 'ID reservasi tidak valid'], 400);
+        }
+
+        $struk = $this->pembayaranModel->getStrukByReservasi($idReservasi, $userId);
+
+        if (!$struk) {
+            $this->jsonResponse(['success' => false, 'message' => 'Struk tidak ditemukan'], 404);
+        }
+
+        $this->jsonResponse(['success' => true, 'data' => $struk]);
     }
 
     // Halaman pembayaran sisa service

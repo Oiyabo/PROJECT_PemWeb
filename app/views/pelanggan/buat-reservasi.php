@@ -1,17 +1,8 @@
 <?php
 $data = $_SESSION['form_reservasi'] ?? [];
-$initialStep = 1;
-if (!empty($data['kendaraan']) && !empty($data['plat']) && !empty($data['jenisKendaraan'])) {
-    if (!empty($data['tanggal']) && !empty($data['jam']) && !empty($data['layanan_id'])) {
-        $initialStep = 3;
-    } else {
-        $initialStep = 2;
-    }
-}
 ?>
 
 <div class="reservation-container" id="reservasiWizard"
-     data-initial-step="<?= (int) $initialStep ?>"
      data-save-url="<?= BASEURL ?>/pelanggan/buatreservasi">
 
   <div class="step-card" id="stepIndicator">
@@ -88,59 +79,22 @@ if (!empty($data['kendaraan']) && !empty($data['plat']) && !empty($data['jenisKe
 
       <div class="form-group">
         <label class="form-label">Jenis Layanan <span class="required">*</span></label>
-
-        <div class="service-search-box">
-            <i class="ti ti-search"></i>
-            <input type="text" id="serviceSearchInput"
-                  placeholder="Cari layanan..."
-                  oninput="filterLayanan(this.value)">
-        </div>
-
-        <div class="service-filter-tags">
-            <span class="svc-ftag active" onclick="setKategori(this, 'all')">Semua</span>
-            <?php
-            $labelKategori = [
-                'oli'       => 'Oli & Mesin',
-                'transmisi' => 'Transmisi & Rantai',
-                'rem'       => 'Rem & Suspensi',
-                'ban'       => 'Ban & Roda',
-                'ac'        => 'AC',
-                'listrik'   => 'Kelistrikan',
-                'body'      => 'Body & Kebersihan',
-                'lain'      => 'Lainnya',
-            ];
-            foreach ($kategoris as $kat): ?>
-                <span class="svc-ftag" onclick="setKategori(this, '<?= htmlspecialchars($kat) ?>')">
-                    <?= $labelKategori[$kat] ?? ucfirst($kat) ?>
-                </span>
-            <?php endforeach; ?>
-        </div>
-
         <div class="service-grid" id="serviceGrid">
-            <?php foreach ($layanans as $layanan):
-                $motorOk = $layanan['harga_motor_full'] !== null;
-                $mobilOk = $layanan['harga_mobil_full'] !== null;
-                $checked = in_array($layanan['layanan_id'], $data['layanan_id'] ?? [], false);
-            ?>
-                <label class="service-item <?= $checked ? 'selected' : '' ?>"
-                      data-layanan-id="<?= (int) $layanan['layanan_id'] ?>"
-                      data-motor="<?= $motorOk ? '1' : '0' ?>"
-                      data-mobil="<?= $mobilOk ? '1' : '0' ?>"
-                      data-kategori="<?= htmlspecialchars($layanan['kategori'] ?? 'lain') ?>"
-                      data-nama="<?= strtolower(htmlspecialchars($layanan['nama_layanan'])) ?>">
-                    <input type="checkbox"
-                          name="layanan_id[]"
-                          value="<?= (int) $layanan['layanan_id'] ?>"
-                          <?= $checked ? 'checked' : '' ?>
-                          onchange="toggleServiceItem(this)">
-                    <span class="service-text"><?= htmlspecialchars($layanan['nama_layanan']) ?></span>
-                </label>
-            <?php endforeach; ?>
-        </div>
-
-        <div class="service-selected-count" id="serviceSelectedCount" style="display:none;">
-            <i class="ti ti-check"></i>
-            <span id="serviceCountNum">0</span> layanan dipilih
+          <?php foreach ($layanans as $layanan):
+            $motorOk = $layanan['harga_motor_full'] !== null;
+            $mobilOk = $layanan['harga_mobil_full'] !== null;
+          ?>
+            <label class="service-item"
+                   data-layanan-id="<?= (int) $layanan['layanan_id'] ?>"
+                   data-motor="<?= $motorOk ? '1' : '0' ?>"
+                   data-mobil="<?= $mobilOk ? '1' : '0' ?>">
+              <input type="checkbox"
+                     name="layanan_id[]"
+                     value="<?= (int) $layanan['layanan_id'] ?>"
+                     <?= in_array($layanan['layanan_id'], $data['layanan_id'] ?? [], false) ? 'checked' : '' ?>>
+              <span class="service-text"><?= htmlspecialchars($layanan['nama_layanan']) ?></span>
+            </label>
+          <?php endforeach; ?>
         </div>
       </div>
 
