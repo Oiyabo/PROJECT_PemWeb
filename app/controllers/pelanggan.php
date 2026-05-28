@@ -56,6 +56,9 @@ class Pelanggan extends Controller
         }
 
         $layanans = $this->reservasiModel->getLayanan();
+       
+        $kategoris = array_unique(array_column($layanans, 'kategori'));
+        sort($kategoris);
 
         $layananMap = [];
 
@@ -76,6 +79,7 @@ class Pelanggan extends Controller
             'user' => $_SESSION['user'],
             'layanans' => $layanans,
             'layananMap' => $layananMap,
+            'kategoris' => $kategoris,
             'ringkasanHarga' => $ringkasanHarga,
             'midtrans_client_key' => $midtrans->getClientKey(),
             'midtrans_snap_script' => $midtrans->getSnapScriptUrl(),
