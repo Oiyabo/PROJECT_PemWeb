@@ -69,4 +69,23 @@ class ReservasiModel
         );
         return $stmt->execute([$status, $reservasiId]);
     }
+
+    /**
+     * Cek apakah slot tanggal + jam sudah dipesan (reservasi aktif, bukan Batal).
+     */
+    public function isJadwalTerisi(string $tanggal, string $jam): bool
+    {
+        $jamNormalized = strlen($jam) === 5 ? $jam . ':00' : $jam;
+
+        $stmt = $this->db->prepare(
+            'SELECT COUNT(*) FROM reservasi
+             WHERE tanggal = ?
+               AND jam = ?
+               AND status != ?
+             LIMIT 1'
+        );
+        $stmt->execute([$tanggal, $jamNormalized, 'Batal']);
+
+        return (int) $stmt->fetchColumn() > 0;
+    }
 }

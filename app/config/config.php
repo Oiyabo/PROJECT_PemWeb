@@ -20,7 +20,7 @@ $project_path = str_replace('/public/index.php', '', $_SERVER['SCRIPT_NAME']);
 define('BASEURL', $protocol . "://" . $host . $project_path);
 
 /** Durasi idle sebelum session dianggap habis (detik) */
-define('SESSION_TIMEOUT', 70);
+define('SESSION_TIMEOUT', 300);
 /** Tampilkan peringatan N detik sebelum session habis */
 define('SESSION_WARNING', 60);
 

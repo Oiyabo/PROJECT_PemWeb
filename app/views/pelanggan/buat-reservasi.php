@@ -3,7 +3,8 @@ $data = $_SESSION['form_reservasi'] ?? [];
 ?>
 
 <div class="reservation-container" id="reservasiWizard"
-     data-save-url="<?= BASEURL ?>/pelanggan/buatreservasi">
+     data-save-url="<?= BASEURL ?>/pelanggan/buatreservasi"
+     data-cek-jadwal-url="<?= BASEURL ?>/pelanggan/cekjadwal">
 
   <div class="step-card" id="stepIndicator">
     <?php
@@ -58,7 +59,7 @@ $data = $_SESSION['form_reservasi'] ?? [];
     <div class="form-section">
       <h2 class="form-title">Jadwal & Layanan</h2>
 
-      <div class="form-grid">
+      <div class="form-grid" id="jadwalFields">
         <div class="form-group">
           <label class="form-label">Tanggal Service <span class="required">*</span></label>
           <input name="tanggal" id="tanggal" type="date" class="form-input"
@@ -76,6 +77,8 @@ $data = $_SESSION['form_reservasi'] ?? [];
           </select>
         </div>
       </div>
+
+      <div id="jadwalStatus" class="jadwal-status" aria-live="polite" hidden></div>
 
       <div class="form-group">
         <label class="form-label">Jenis Layanan <span class="required">*</span></label>

@@ -1364,6 +1364,56 @@ table {
   margin-bottom: 6px;
 }
 
+.jadwal-status {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  font-size: 14px;
+  line-height: 1.45;
+  margin-top: -6px;
+}
+
+.jadwal-status.is-loading {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  color: #64748b;
+}
+
+.jadwal-status.is-available {
+  background: #ecfdf5;
+  border: 1px solid #a7f3d0;
+  color: #065f46;
+}
+
+.jadwal-status.is-unavailable {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #991b1b;
+}
+
+.jadwal-status-spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid #cbd5e1;
+  border-top-color: var(--primary);
+  border-radius: 50%;
+  animation: jadwal-spin 0.7s linear infinite;
+  flex-shrink: 0;
+}
+
+#jadwalFields.is-verifying .form-input {
+  opacity: 0.65;
+  pointer-events: none;
+}
+
+@keyframes jadwal-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 .form-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);

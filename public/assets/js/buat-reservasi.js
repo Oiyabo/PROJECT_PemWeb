@@ -6,9 +6,17 @@ const midtransSnapScript = window.MIDTRANS_SNAP_SCRIPT || '';
 const baseUrl = window.APP_BASEURL || '';
 const layananMap = window.RESERVASI_LAYANAN_MAP || {};
 
+const jadwalState = {
+    verifying: false,
+    available: null,
+    lastKey: '',
+    abortController: null,
+};
+
 const wizard = {
     el: null,
     saveUrl: '',
+    cekJadwalUrl: '',
     panels: [],
     indicators: [],
 };
@@ -18,8 +26,11 @@ function initReservasiWizard() {
     if (!wizard.el) return;
 
     wizard.saveUrl = wizard.el.dataset.saveUrl || baseUrl + '/pelanggan/buatreservasi';
+    wizard.cekJadwalUrl = wizard.el.dataset.cekJadwalUrl || baseUrl + '/pelanggan/cekjadwal';
     wizard.panels = Array.from(wizard.el.querySelectorAll('.form-step'));
     wizard.indicators = Array.from(wizard.el.querySelectorAll('#stepIndicator .step-item'));
+
+    initJadwalVerification();
 
     showStep(1, false);
 
@@ -109,9 +120,188 @@ function validateStep(step) {
             alert('Pilih minimal satu jenis layanan.');
             return false;
         }
+
+        const tanggal = document.getElementById('tanggal')?.value || '';
+        const jam = document.getElementById('jam')?.value || '';
+
+        if (jadwalState.verifying) {
+            alert('Mohon tunggu, jadwal sedang diverifikasi...');
+            return false;
+        }
+
+        if (!tanggal || !jam) {
+            return false;
+        }
+
+        const key = tanggal + '|' + jam;
+        if (jadwalState.available !== true || jadwalState.lastKey !== key) {
+            alert(
+                jadwalState.available === false
+                    ? 'Jadwal pada tanggal dan jam tersebut sudah dipesan. Silakan pilih waktu lain.'
+                    : 'Verifikasi jadwal belum selesai. Tunggu sebentar atau ubah tanggal/jam.'
+            );
+            if (jadwalState.lastKey !== key) {
+                verifyJadwal();
+            }
+            return false;
+        }
     }
 
     return true;
+}
+
+function initJadwalVerification() {
+    const tanggalEl = document.getElementById('tanggal');
+    const jamEl = document.getElementById('jam');
+
+    const onJadwalChange = () => {
+        resetJadwalState();
+        const tanggal = tanggalEl?.value || '';
+        const jam = jamEl?.value || '';
+        if (tanggal && jam) {
+            verifyJadwal();
+        } else {
+            hideJadwalStatus();
+        }
+    };
+
+    if (tanggalEl) tanggalEl.addEventListener('change', onJadwalChange);
+    if (jamEl) jamEl.addEventListener('change', onJadwalChange);
+
+    if (tanggalEl?.value && jamEl?.value) {
+        verifyJadwal();
+    }
+}
+
+function resetJadwalState() {
+    jadwalState.available = null;
+    jadwalState.lastKey = '';
+    if (jadwalState.abortController) {
+        jadwalState.abortController.abort();
+        jadwalState.abortController = null;
+    }
+}
+
+function setStep2NavDisabled(disabled) {
+    const panel = getStepPanel(2);
+    if (!panel) return;
+    panel.querySelectorAll('[data-action]').forEach((btn) => {
+        btn.disabled = disabled;
+    });
+}
+
+function showJadwalStatus(type, message) {
+    const el = document.getElementById('jadwalStatus');
+    const fields = document.getElementById('jadwalFields');
+    if (!el) return;
+
+    el.hidden = false;
+    el.className = 'jadwal-status';
+    if (type === 'loading') {
+        el.classList.add('is-loading');
+        el.innerHTML =
+            '<span class="jadwal-status-spinner" aria-hidden="true"></span><span>' +
+            escapeHtml(message) +
+            '</span>';
+    } else if (type === 'available') {
+        el.classList.add('is-available');
+        el.textContent = message;
+    } else {
+        el.classList.add('is-unavailable');
+        el.textContent = message;
+    }
+
+    if (fields) {
+        fields.classList.toggle('is-verifying', type === 'loading');
+    }
+}
+
+function hideJadwalStatus() {
+    const el = document.getElementById('jadwalStatus');
+    const fields = document.getElementById('jadwalFields');
+    if (el) {
+        el.hidden = true;
+        el.className = 'jadwal-status';
+        el.textContent = '';
+    }
+    if (fields) fields.classList.remove('is-verifying');
+}
+
+function verifyJadwal() {
+    const tanggal = document.getElementById('tanggal')?.value || '';
+    const jam = document.getElementById('jam')?.value || '';
+
+    if (!tanggal || !jam) {
+        hideJadwalStatus();
+        return Promise.resolve(false);
+    }
+
+    const key = tanggal + '|' + jam;
+
+    if (jadwalState.abortController) {
+        jadwalState.abortController.abort();
+    }
+    jadwalState.abortController = new AbortController();
+
+    jadwalState.verifying = true;
+    jadwalState.available = null;
+    jadwalState.lastKey = key;
+    setStep2NavDisabled(true);
+    showJadwalStatus('loading', 'Memverifikasi ketersediaan jadwal...');
+
+    const url =
+        wizard.cekJadwalUrl +
+        '?tanggal=' +
+        encodeURIComponent(tanggal) +
+        '&jam=' +
+        encodeURIComponent(jam);
+
+    return fetch(url, {
+        signal: jadwalState.abortController.signal,
+        headers: { 'X-Requested-With': 'XMLHttpRequest' },
+    })
+        .then((r) => r.json().then((data) => ({ ok: r.ok, data })))
+        .then(({ ok, data }) => {
+            if (jadwalState.lastKey !== key) return false;
+
+            if (!ok && !data.success) {
+                jadwalState.available = false;
+                showJadwalStatus('unavailable', data.message || 'Gagal memverifikasi jadwal.');
+                return false;
+            }
+
+            const available = data.available === true;
+            jadwalState.available = available;
+
+            if (available) {
+                showJadwalStatus('available', data.message || 'Jadwal tersedia.');
+            } else {
+                showJadwalStatus(
+                    'unavailable',
+                    data.message ||
+                        'Jadwal pada tanggal dan jam tersebut sudah dipesan. Silakan pilih waktu lain.'
+                );
+            }
+            return available;
+        })
+        .catch((err) => {
+            if (err.name === 'AbortError') return false;
+            if (jadwalState.lastKey !== key) return false;
+
+            jadwalState.available = false;
+            showJadwalStatus(
+                'unavailable',
+                'Gagal memverifikasi jadwal. Periksa koneksi lalu coba lagi.'
+            );
+            return false;
+        })
+        .finally(() => {
+            if (jadwalState.lastKey === key) {
+                jadwalState.verifying = false;
+                setStep2NavDisabled(false);
+            }
+            jadwalState.abortController = null;
+        });
 }
 
 function collectStepData(step) {
@@ -159,19 +349,36 @@ function saveSessionToServer(step) {
         method: 'POST',
         body: formData,
         headers: { 'X-Requested-With': 'XMLHttpRequest' },
-    }).then((r) => {
-        if (!r.ok) throw new Error('Gagal menyimpan data');
-        return r.json();
+    }).then(async (r) => {
+        const data = await r.json().catch(() => ({}));
+        if (!r.ok) {
+            if (data.jadwal_terisi) {
+                jadwalState.available = false;
+                showJadwalStatus(
+                    'unavailable',
+                    data.message ||
+                        'Jadwal pada tanggal dan jam tersebut sudah dipesan. Silakan pilih waktu lain.'
+                );
+            }
+            throw new Error(data.message || 'Gagal menyimpan data');
+        }
+        return data;
     });
 }
 
 function goNext() {
     if (!validateStep(currentStep)) return;
 
+    if (currentStep === 2 && jadwalState.verifying) {
+        alert('Mohon tunggu, jadwal sedang diverifikasi...');
+        return;
+    }
+
     const btn = wizard.el.querySelector(`.form-step[data-step="${currentStep}"] [data-action="next"]`);
     if (btn) btn.disabled = true;
 
-    saveSessionToServer(currentStep)
+    const proceed = () => {
+        saveSessionToServer(currentStep)
         .then((res) => {
             if (!res.success) {
                 alert(res.message || 'Gagal menyimpan data');
@@ -186,13 +393,45 @@ function goNext() {
                 showStep(3);
             }
         })
-        .catch(() => alert('Terjadi kesalahan saat menyimpan data. Silakan coba lagi.'))
+        .catch((err) => alert(err.message || 'Terjadi kesalahan saat menyimpan data. Silakan coba lagi.'))
         .finally(() => {
             if (btn) btn.disabled = false;
         });
+    };
+
+    if (currentStep === 2) {
+        const tanggal = document.getElementById('tanggal')?.value || '';
+        const jam = document.getElementById('jam')?.value || '';
+        const key = tanggal + '|' + jam;
+
+        if (jadwalState.available === true && jadwalState.lastKey === key) {
+            proceed();
+            return;
+        }
+
+        verifyJadwal().then((available) => {
+            if (!available) {
+                if (btn) btn.disabled = false;
+                return;
+            }
+            if (!validateStep(2)) {
+                if (btn) btn.disabled = false;
+                return;
+            }
+            proceed();
+        });
+        return;
+    }
+
+    proceed();
 }
 
 function goPrev() {
+    if (jadwalState.verifying) {
+        alert('Mohon tunggu, jadwal sedang diverifikasi...');
+        return;
+    }
+
     if (currentStep === 3) {
         showStep(2);
     } else if (currentStep === 2) {

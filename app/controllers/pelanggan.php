@@ -47,6 +47,19 @@ class Pelanggan extends Controller
             $_SESSION['form_reservasi'] = $newData;
 
             if ($ajax) {
+                $tanggal = trim($newData['tanggal'] ?? '');
+                $jam = trim($newData['jam'] ?? '');
+
+                if ($tanggal !== '' && $jam !== '') {
+                    if ($this->reservasiModel->isJadwalTerisi($tanggal, $jam)) {
+                        $this->jsonResponse([
+                            'success'       => false,
+                            'message'       => 'Jadwal pada tanggal dan jam tersebut sudah dipesan. Silakan pilih waktu lain.',
+                            'jadwal_terisi' => true,
+                        ], 409);
+                    }
+                }
+
                 $layanans = $this->reservasiModel->getLayanan();
                 $ringkasan = $this->buildRingkasanHarga($layanans, $newData);
                 $this->jsonResponse([
@@ -136,6 +149,15 @@ class Pelanggan extends Controller
 
         if (!in_array($jenisKendaraan, ['Motor', 'Mobil'], true)) {
             $this->respondSimpan($ajax, false, 'Jenis kendaraan wajib dipilih (Motor/Mobil).', BASEURL . '/pelanggan/buatreservasi');
+        }
+
+        if ($this->reservasiModel->isJadwalTerisi($tanggal, $jam)) {
+            $this->respondSimpan(
+                $ajax,
+                false,
+                'Jadwal pada tanggal dan jam tersebut sudah dipesan. Silakan pilih waktu lain.',
+                BASEURL . '/pelanggan/buatreservasi'
+            );
         }
 
         $reservasiId = $this->reservasiModel->create(
@@ -345,6 +367,56 @@ class Pelanggan extends Controller
             echo json_encode(['success' => false, 'message' => $e->getMessage()]);
         }
         exit;
+    }
+
+    /** Cek ketersediaan slot tanggal + jam (AJAX GET). */
+    public function cekjadwal(): void
+    {
+        header('Content-Type: application/json; charset=utf-8');
+
+        $tanggal = trim($_GET['tanggal'] ?? '');
+        $jam = trim($_GET['jam'] ?? '');
+
+        if ($tanggal === '' || $jam === '') {
+            $this->jsonResponse([
+                'success' => false,
+                'message' => 'Tanggal dan jam wajib diisi.',
+            ], 400);
+        }
+
+        if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $tanggal)) {
+            $this->jsonResponse([
+                'success' => false,
+                'message' => 'Format tanggal tidak valid.',
+            ], 400);
+        }
+
+        if (!preg_match('/^\d{2}:\d{2}$/', $jam)) {
+            $this->jsonResponse([
+                'success' => false,
+                'message' => 'Format jam tidak valid.',
+            ], 400);
+        }
+
+        if ($tanggal < date('Y-m-d')) {
+            $this->jsonResponse([
+                'success'       => false,
+                'available'     => false,
+                'jadwal_terisi' => true,
+                'message'       => 'Tanggal tidak boleh di masa lalu.',
+            ]);
+        }
+
+        $terisi = $this->reservasiModel->isJadwalTerisi($tanggal, $jam);
+
+        $this->jsonResponse([
+            'success'       => true,
+            'available'     => !$terisi,
+            'jadwal_terisi' => $terisi,
+            'message'       => $terisi
+                ? 'Jadwal pada tanggal dan jam tersebut sudah dipesan. Silakan pilih waktu lain.'
+                : 'Jadwal tersedia.',
+        ]);
     }
 
     public function cekpembayaran(): void
