@@ -125,7 +125,21 @@ $currentUrl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' 
         <?php unset($_SESSION['error']); ?>
       <?php endif; ?>
 
-      <main class="main-area">
+      <?php if (isset($user)): ?>
+        <div id="sessionTimeoutModal" class="popup-overlay session-timeout-overlay" aria-hidden="true" role="dialog" aria-labelledby="sessionTimeoutTitle">
+          <div class="popup-box session-timeout-box">
+            <div class="session-timeout-icon">
+              <i data-lucide="clock" width="28" height="28"></i>
+            </div>
+            <h3 id="sessionTimeoutTitle">Session akan habis</h3>
+            <p id="sessionTimeoutMessage">Sesi Anda akan berakhir. Perpanjang untuk tetap masuk atau keluar dari akun.</p>
+            <p id="sessionTimeoutCountdown" class="session-timeout-countdown" aria-live="polite"></p>
+            <div class="popup-actions">
+              <button type="button" id="sessionTimeoutLogout" class="btn-cancel">Keluar</button>
+              <button type="button" id="sessionTimeoutExtend" class="btn-confirm">Perpanjang</button>
+            </div>
+          </div>
+        </div>
+      <?php endif; ?>
 
-</body>
-</html>
+      <main class="main-area">

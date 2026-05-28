@@ -54,6 +54,12 @@
           <?php unset($_SESSION['success']); ?>
         <?php endif; ?>
 
+        <?php if (!empty($session_expired)): ?>
+          <div class="flash-auth flash-error">
+            Session habis. Silakan masuk kembali.
+          </div>
+        <?php endif; ?>
+
         <!-- Error Message -->
         <?php if (isset($_SESSION['error'])): ?>
           <div class="flash-auth flash-error">

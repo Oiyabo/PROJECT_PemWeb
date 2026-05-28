@@ -19,6 +19,11 @@ $host = $_SERVER['HTTP_HOST'];
 $project_path = str_replace('/public/index.php', '', $_SERVER['SCRIPT_NAME']);
 define('BASEURL', $protocol . "://" . $host . $project_path);
 
+/** Durasi idle sebelum session dianggap habis (detik) */
+define('SESSION_TIMEOUT', 70);
+/** Tampilkan peringatan N detik sebelum session habis */
+define('SESSION_WARNING', 60);
+
 define('DB_HOST', env('DB_HOST'));
 define('DB_USER', env('DB_USER'));
 define('DB_PASS', env('DB_PASS'));

@@ -100,6 +100,34 @@ class Auth extends Controller
         exit;
     }
 
+    /**
+     * Perpanjang session (dipanggil dari modal timeout di client).
+     */
+    public function extendSession(): void
+    {
+        header('Content-Type: application/json; charset=utf-8');
+
+        if (!isset($_SESSION['user'])) {
+            http_response_code(401);
+            echo json_encode([
+                'ok' => false,
+                'session_expired' => true,
+                'message' => 'Session habis',
+            ]);
+            exit;
+        }
+
+        $_SESSION['last_activity'] = time();
+        $expiresAt = time() + (int) SESSION_TIMEOUT;
+
+        echo json_encode([
+            'ok' => true,
+            'expires_at' => $expiresAt,
+            'timeout' => (int) SESSION_TIMEOUT,
+        ]);
+        exit;
+    }
+
     private function redirectToDashboard(): void
     {
         $role = $_SESSION['user']['role'] ?? '';
