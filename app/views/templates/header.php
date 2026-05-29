@@ -122,6 +122,7 @@ function isNavActive(array $nav, string $currentPath): bool
           <div class="brand-icon-wrapper">
             <i data-lucide="wrench" color="#2d6a4f" width="18" height="18"></i>
           </div>
+
           <div>
             <div class="brand-title">AutoFix</div>
             <div class="brand-subtitle">Manajemen Bengkel</div>
@@ -177,18 +178,13 @@ function isNavActive(array $nav, string $currentPath): bool
             <i data-lucide="menu" width="20" height="20"></i>
           </button>
 
-          <div>
+          <div class="page-heading">
             <h1 class="page-title"><?= htmlspecialchars($title ?? 'Dashboard') ?></h1>
             <p class="page-date"><?= date('l, d M Y') ?></p>
           </div>
         </div>
 
         <div class="header-right">
-          <div class="search-container">
-            <i data-lucide="search" width="14" height="14" class="search-icon"></i>
-            <input type="text" placeholder="Cari..." class="search-input">
-          </div>
-
           <button class="notification-btn">
             <i data-lucide="bell" color="var(--text-medium)" width="18" height="18"></i>
             <span class="notification-badge"></span>
@@ -213,7 +209,13 @@ function isNavActive(array $nav, string $currentPath): bool
       <?php endif; ?>
 
       <?php if (isset($user)): ?>
-        <div id="sessionTimeoutModal" class="popup-overlay session-timeout-overlay" aria-hidden="true" role="dialog" aria-labelledby="sessionTimeoutTitle">
+        <div
+          id="sessionTimeoutModal"
+          class="popup-overlay session-timeout-overlay"
+          aria-hidden="true"
+          role="dialog"
+          aria-labelledby="sessionTimeoutTitle"
+        >
           <div class="popup-box session-timeout-box">
             <div class="session-timeout-icon">
               <i data-lucide="clock" width="28" height="28"></i>

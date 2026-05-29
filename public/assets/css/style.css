@@ -285,11 +285,6 @@ input {
   flex-shrink: 0;
 }
 
-.header-left {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
 
 .menu-btn {
   background: transparent;
@@ -317,11 +312,6 @@ input {
   margin: 2px 0 0;
 }
 
-.header-right {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
 
 .search-container {
   height: 34px;
@@ -352,18 +342,6 @@ input {
   color: #94a3b8;
 }
 
-.notification-btn {
-  width: 36px;
-  height: 36px;
-  border: 1px solid var(--secondary-light);
-  border-radius: 8px;
-  background: var(--white);
-  cursor: pointer;
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
 
 .notification-badge {
   position: absolute;
@@ -1932,10 +1910,6 @@ tbody tr:last-child td {
     transform: translateX(0);
   }
 
-  .top-header {
-    padding: 0 14px;
-  }
-
   .search-container {
     min-width: 120px;
   }
@@ -2024,4 +1998,166 @@ tbody tr:last-child td {
   .admin-tabs {
     width: 100%;
   }
+}
+
+.top-header {
+  width: 100%;
+  height: 60px;
+  background: var(--white);
+  border-bottom: 1px solid var(--secondary-light);
+  padding: 0 20px;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 10;
+}
+
+.header-left {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px;
+  min-width: 0;
+}
+
+.page-heading {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.page-title {
+  color: var(--text-dark);
+  font-size: 17px;
+  font-weight: 800;
+  margin: 0;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.page-date {
+  color: var(--neutral-teal);
+  font-size: 11px;
+  margin: 2px 0 0;
+  line-height: 1.2;
+}
+
+.header-right {
+  margin-left: auto;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.search-container {
+  display: none !important;
+}
+
+.notification-btn {
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--secondary-light);
+  border-radius: 8px;
+  background: var(--white);
+  cursor: pointer;
+  position: relative;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex-shrink: 0;
+}
+
+.notification-badge {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 7px;
+  height: 7px;
+  background: var(--error);
+  border-radius: 50%;
+  border: 2px solid var(--white);
+}
+
+.main-content-wrapper {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.main-area {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+}
+
+.truncate-layanan {
+  display: inline-block;
+  max-width: 220px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  vertical-align: middle;
+  cursor: help;
+}
+
+.table-reservasi {
+  table-layout: fixed;
+  width: 100%;
+}
+
+.table-reservasi th:nth-child(7),
+.table-reservasi td:nth-child(7) {
+  width: 230px;
+  max-width: 230px;
+}
+
+.layanan-cell {
+  width: 230px;
+  max-width: 230px;
+}
+
+.truncate-layanan {
+  display: block;
+  width: 220px;
+  max-width: 220px;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  cursor: help;
+}
+
+.table-riwayat-pelanggan {
+  table-layout: fixed;
+  width: 100%;
+}
+
+.table-riwayat-pelanggan th:nth-child(5),
+.table-riwayat-pelanggan td:nth-child(5) {
+  width: 240px;
+  max-width: 240px;
+}
+
+.table-riwayat-pelanggan th,
+.table-riwayat-pelanggan td {
+  vertical-align: middle;
+}
+
+.layanan-cell {
+  width: 240px;
+  max-width: 240px;
+}
+
+.truncate-layanan {
+  display: block;
+  width: 230px;
+  max-width: 230px;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  cursor: help;
 }
