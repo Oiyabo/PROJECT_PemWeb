@@ -83,7 +83,7 @@
             placeholder="Password" 
             required 
           />
-          <a href="#">Lupa password?</a>
+          <a href="<?= BASEURL ?>/auth/lupaPassword">Lupa password?</a>
           <button type="submit">Masuk</button>
           <div class="textLink">
             Belum Punya Akun? <a id="signUp" href="#">Daftar Sekarang</a>

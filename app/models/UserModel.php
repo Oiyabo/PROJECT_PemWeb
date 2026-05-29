@@ -27,11 +27,26 @@ class UserModel
         $stmt = $this->db->prepare(
             'INSERT INTO users (nama, email, password, role) VALUES (?, ?, ?, ?)'
         );
+
         return $stmt->execute([
             $nama,
             $email,
             password_hash($password, PASSWORD_DEFAULT),
             'Pelanggan',
+        ]);
+    }
+
+    public function updatePasswordByEmail(string $email, string $password): bool
+    {
+        $hashPassword = password_hash($password, PASSWORD_DEFAULT);
+
+        $stmt = $this->db->prepare(
+            'UPDATE users SET password = ? WHERE email = ?'
+        );
+
+        return $stmt->execute([
+            $hashPassword,
+            $email
         ]);
     }
 }

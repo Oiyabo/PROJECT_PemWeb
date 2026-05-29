@@ -2259,3 +2259,143 @@ table {
   }
 }
 
+.forgot-wrapper {
+  min-height: 100vh;
+  width: 100%;
+  background: #f6f5f7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 30px;
+}
+
+.forgot-card {
+  width: 768px;
+  max-width: 100%;
+  height: 480px;
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.forgot-image {
+  width: 100%;
+  height: 100%;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.forgot-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.forgot-form {
+  width: 100%;
+  height: 100%;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 50px;
+}
+
+.forgot-form form {
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+}
+
+.forgot-form h1 {
+  font-size: 28px;
+  font-weight: 700;
+  color: #184e77;
+  margin-bottom: 8px;
+}
+
+.forgot-form span {
+  font-size: 15px;
+  color: #1e6091;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.forgot-form input {
+  width: 100%;
+  height: auto;
+  background: #eeeeee;
+  border: none;
+  border-radius: 5px;
+  padding: 12px 15px;
+  margin: 8px 0;
+  font-size: 14px;
+  color: #184e77;
+  outline: none;
+}
+
+.forgot-form button {
+  border-radius: 20px;
+  border: 1px solid #76c893;
+  background-color: #76c893;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: bold;
+  padding: 12px 45px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  cursor: pointer;
+  margin-top: 15px;
+  margin-bottom: 15px;
+  min-width: 0;
+  height: auto;
+}
+
+.forgot-form button:hover {
+  transform: scale(0.98);
+}
+
+.forgot-form .textLink {
+  margin-top: 0;
+  font-size: 14px;
+  color: #184e77;
+  text-align: center;
+}
+
+.forgot-form .textLink a {
+  color: #1e6091;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.forgot-form .textLink a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  .forgot-card {
+    width: 95%;
+    height: auto;
+    min-height: 480px;
+    grid-template-columns: 1fr;
+  }
+
+  .forgot-image {
+    display: none;
+  }
+
+  .forgot-form {
+    padding: 30px;
+  }
+}

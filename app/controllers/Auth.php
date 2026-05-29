@@ -91,6 +91,69 @@ class Auth extends Controller
         exit;
     }
 
+    public function lupaPassword(): void
+    {
+        if (isset($_SESSION['user'])) {
+            $this->redirectToDashboard();
+        }
+
+        $this->view('auth/lupa-password');
+    }
+
+    public function prosesLupaPassword(): void
+    {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            header('Location: ' . BASEURL . '/auth/lupaPassword');
+            exit;
+        }
+
+        $email = trim($_POST['email'] ?? '');
+        $password = trim($_POST['password'] ?? '');
+        $konfirmasiPassword = trim($_POST['konfirmasi_password'] ?? '');
+
+        if (empty($email) || empty($password) || empty($konfirmasiPassword)) {
+            $_SESSION['error'] = 'Semua field wajib diisi.';
+            header('Location: ' . BASEURL . '/auth/lupaPassword');
+            exit;
+        }
+
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $_SESSION['error'] = 'Format email tidak valid.';
+            header('Location: ' . BASEURL . '/auth/lupaPassword');
+            exit;
+        }
+
+        if (strlen($password) < 6) {
+            $_SESSION['error'] = 'Password minimal 6 karakter.';
+            header('Location: ' . BASEURL . '/auth/lupaPassword');
+            exit;
+        }
+
+        if ($password !== $konfirmasiPassword) {
+            $_SESSION['error'] = 'Konfirmasi password tidak sesuai.';
+            header('Location: ' . BASEURL . '/auth/lupaPassword');
+            exit;
+        }
+
+        $user = $this->userModel->findByEmail($email);
+
+        if (!$user) {
+            $_SESSION['error'] = 'Email tidak ditemukan.';
+            header('Location: ' . BASEURL . '/auth/lupaPassword');
+            exit;
+        }
+
+        if ($this->userModel->updatePasswordByEmail($email, $password)) {
+            $_SESSION['success'] = 'Password berhasil diubah. Silakan login.';
+            header('Location: ' . BASEURL . '/auth');
+            exit;
+        }
+
+        $_SESSION['error'] = 'Password gagal diubah. Silakan coba lagi.';
+        header('Location: ' . BASEURL . '/auth/lupaPassword');
+        exit;
+    }
+
     public function logout(): void
     {
         session_unset();
@@ -100,9 +163,6 @@ class Auth extends Controller
         exit;
     }
 
-    /**
-     * Perpanjang session (dipanggil dari modal timeout di client).
-     */
     public function extendSession(): void
     {
         header('Content-Type: application/json; charset=utf-8');
