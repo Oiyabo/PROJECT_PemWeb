@@ -278,7 +278,6 @@ $userId = $_SESSION['user']['id'];
 							data.snap_token,
 							data.client_key,
 							() => verifikasiPembayaranFull(data.order_id, data.nominal),
-							() => verifikasiPembayaranFull(data.order_id, data.nominal),
 							() => alert('Pembayaran gagal atau dibatalkan.')
 						);
 					}

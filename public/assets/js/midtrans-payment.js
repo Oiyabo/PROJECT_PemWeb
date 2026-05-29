@@ -1,8 +1,7 @@
 function ensurePaymentLoadingOverlay() {
   let el = document.getElementById("payment-loading-overlay");
-  if (el) {
-    return el;
-  }
+  if (el) return el;
+
   el = document.createElement("div");
   el.id = "payment-loading-overlay";
   el.setAttribute("role", "alertdialog");
@@ -18,31 +17,26 @@ function ensurePaymentLoadingOverlay() {
 }
 
 function showPaymentLoading(message) {
-  const overlay = ensurePaymentLoadingOverlay();
   const text = document.getElementById("payment-loading-text");
-  if (text) {
-    text.textContent = message || "Memproses...";
-  }
-  overlay.classList.add("is-active");
+  if (text) text.textContent = message || "Memproses...";
+  ensurePaymentLoadingOverlay().classList.add("is-active");
   document.body.style.overflow = "hidden";
 }
 
 function hidePaymentLoading() {
   const overlay = document.getElementById("payment-loading-overlay");
-  if (overlay) {
-    overlay.classList.remove("is-active");
-  }
+  if (overlay) overlay.classList.remove("is-active");
   document.body.style.overflow = "";
 }
 
 function loadMidtransSnap(scriptUrl, clientKey, callback) {
-  if (window.snap && typeof callback === "function") {
+  if (window.snap) {
     callback();
     return;
   }
   const existing = document.querySelector('script[data-midtrans-snap="1"]');
   if (existing) {
-    existing.addEventListener("load", callback);
+    existing.addEventListener("load", callback, { once: true });
     return;
   }
   const script = document.createElement("script");
@@ -57,38 +51,37 @@ function loadMidtransSnap(scriptUrl, clientKey, callback) {
   document.head.appendChild(script);
 }
 
-function openMidtransSnap(snapToken, clientKey, onSuccess, onPending, onError) {
+function openMidtransSnap(snapToken, clientKey, onDone, onError) {
   if (!window.snap) {
     hidePaymentLoading();
     alert("Midtrans belum siap. Coba lagi.");
     return;
   }
   hidePaymentLoading();
+  const done = typeof onDone === "function" ? onDone : function () {};
   window.snap.pay(snapToken, {
-    onSuccess: onSuccess || function () {},
-    onPending: onPending || function () {},
-    onError: function (result) {
+    onSuccess: done,
+    onPending: done,
+    onError: (result) => {
       hidePaymentLoading();
-      if (typeof onError === "function") {
-        onError(result);
-      }
+      if (typeof onError === "function") onError(result);
     },
-    onClose: function () {
-      hidePaymentLoading();
-    },
+    onClose: hidePaymentLoading,
   });
 }
 
-function pollPaymentStatus(
-  baseUrl,
-  orderId,
-  maxAttempts,
-  onPaid,
-  onTimeout,
-  loadingMessage,
-) {
-  showPaymentLoading(loadingMessage || "Memverifikasi pembayaran...");
+function pollPaymentStatus(baseUrl, orderId, opts) {
+  const maxAttempts = opts.maxAttempts || 20;
+  const onPaid = opts.onPaid || function () {};
+  const onTimeout =
+    opts.onTimeout ||
+    function () {
+      alert(
+        "Pembayaran masih diproses. Jika sudah bayar, tunggu 1–2 menit lalu refresh halaman.",
+      );
+    };
 
+  showPaymentLoading(opts.message || "Memverifikasi pembayaran...");
   let attempts = 0;
 
   function tick() {
@@ -128,53 +121,31 @@ function pollPaymentStatus(
 function requestMidtransSnap(baseUrl, formData, onTokenReady, onError) {
   showPaymentLoading("Menyiapkan pembayaran Midtrans...");
 
-  fetch(baseUrl + "/pelanggan/midtranssnap", {
-    method: "POST",
-    body: formData,
-  })
+  fetch(baseUrl + "/pelanggan/midtranssnap", { method: "POST", body: formData })
     .then((r) => r.json())
     .then((data) => {
       if (!data.success) {
         hidePaymentLoading();
-        if (typeof onError === "function") {
-          onError(data.message || "Gagal membuat pembayaran");
-        } else {
-          alert(data.message || "Gagal membuat pembayaran");
-        }
+        const msg = data.message || "Gagal membuat pembayaran";
+        if (typeof onError === "function") onError(msg);
+        else alert(msg);
         return;
       }
-      if (typeof onTokenReady === "function") {
-        onTokenReady(data);
-      }
+      if (typeof onTokenReady === "function") onTokenReady(data);
     })
     .catch(() => {
       hidePaymentLoading();
-      if (typeof onError === "function") {
-        onError("Terjadi kesalahan saat menghubungi server pembayaran.");
-      } else {
-        alert("Terjadi kesalahan saat menghubungi server pembayaran.");
-      }
+      const msg = "Terjadi kesalahan saat menghubungi server pembayaran.";
+      if (typeof onError === "function") onError(msg);
+      else alert(msg);
     });
 }
 
 function afterSnapPaid(baseUrl, orderId, options) {
-  const maxAttempts = options.maxAttempts || 20;
-  const verifyMsg = options.verifyMessage || "Memverifikasi pembayaran...";
-  const onPaid = options.onPaid || function () {};
-  const onTimeout =
-    options.onTimeout ||
-    function () {
-      alert(
-        "Pembayaran masih diproses. Jika sudah bayar, tunggu 1–2 menit lalu refresh halaman.",
-      );
-    };
-
-  pollPaymentStatus(
-    baseUrl,
-    orderId,
-    maxAttempts,
-    onPaid,
-    onTimeout,
-    verifyMsg,
-  );
+  pollPaymentStatus(baseUrl, orderId, {
+    maxAttempts: options.maxAttempts || 20,
+    message: options.verifyMessage,
+    onPaid: options.onPaid,
+    onTimeout: options.onTimeout,
+  });
 }

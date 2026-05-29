@@ -137,6 +137,28 @@ class PembayaranModel
 		return $stmt->fetch(PDO::FETCH_ASSOC);
 	}
 
+	public function orderMilikiUser(string $orderId, int $userId): bool
+	{
+		$pending = $this->getPendingByOrderId($orderId);
+		return $pending && (int) $pending['user_id'] === $userId;
+	}
+
+	public function dpPreBisaDihubungkan(string $orderId, int $userId): bool
+	{
+		if (!$this->orderMilikiUser($orderId, $userId)) {
+			return false;
+		}
+		$pending = $this->getPendingByOrderId($orderId);
+		if (!$pending || $pending['tipe'] !== 'DP_PRE') {
+			return false;
+		}
+		$dp = $this->getPembayaranDpByOrderId($orderId);
+		if (!$dp || !empty($dp['id_reservasi'])) {
+			return false;
+		}
+		return $this->isOrderPaid($orderId);
+	}
+
 
 
 	public function updatePendingSnapToken(string $orderId, string $snapToken): void
