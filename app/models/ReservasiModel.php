@@ -17,6 +17,37 @@ class ReservasiModel
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    public function searchAll(string $keyword): array
+    {
+        $keyword = '%' . $keyword . '%';
+
+        $stmt = $this->db->prepare(
+            'SELECT * FROM v_reservasi_detail
+             WHERE nama LIKE ?
+                OR email LIKE ?
+                OR kendaraan LIKE ?
+                OR plat LIKE ?
+                OR layanan LIKE ?
+                OR status LIKE ?
+                OR tanggal LIKE ?
+                OR jam LIKE ?
+             ORDER BY tanggal DESC, jam ASC'
+        );
+
+        $stmt->execute([
+            $keyword,
+            $keyword,
+            $keyword,
+            $keyword,
+            $keyword,
+            $keyword,
+            $keyword,
+            $keyword
+        ]);
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
     public function getByUserId(int $userId): array
     {
         $stmt = $this->db->prepare(
@@ -49,8 +80,19 @@ class ReservasiModel
             'INSERT INTO reservasi (user_id, kendaraan, plat, jenis_kendaraan, tanggal, jam, catatan)
              VALUES (?, ?, ?, ?, ?, ?, ?)'
         );
+
         $jenis = in_array($jenisKendaraan, ['Motor', 'Mobil'], true) ? $jenisKendaraan : null;
-        $stmt->execute([$userId, $kendaraan, $plat, $jenis, $tanggal, $jam, $catatan]);
+
+        $stmt->execute([
+            $userId,
+            $kendaraan,
+            $plat,
+            $jenis,
+            $tanggal,
+            $jam,
+            $catatan
+        ]);
+
         return (int) $this->db->lastInsertId();
     }
 
@@ -59,6 +101,7 @@ class ReservasiModel
         $stmt = $this->db->prepare(
             'INSERT INTO reservasi_layanan (id_reservasi, layanan_id) VALUES (?, ?)'
         );
+
         return $stmt->execute([$reservasiId, $layananId]);
     }
 
@@ -67,12 +110,10 @@ class ReservasiModel
         $stmt = $this->db->prepare(
             'UPDATE reservasi SET status = ? WHERE id_reservasi = ?'
         );
+
         return $stmt->execute([$status, $reservasiId]);
     }
 
-    /**
-     * Cek apakah slot tanggal + jam sudah dipesan (reservasi aktif, bukan Batal).
-     */
     public function isJadwalTerisi(string $tanggal, string $jam): bool
     {
         $jamNormalized = strlen($jam) === 5 ? $jam . ':00' : $jam;
@@ -84,6 +125,7 @@ class ReservasiModel
                AND status != ?
              LIMIT 1'
         );
+
         $stmt->execute([$tanggal, $jamNormalized, 'Batal']);
 
         return (int) $stmt->fetchColumn() > 0;

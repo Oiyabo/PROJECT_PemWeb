@@ -1,46 +1,69 @@
 <?php
-/**
- * Admin Reservasi View
- * Menampilkan daftar reservasi dengan status dan aksi
- */
-
 if (!function_exists('badgeStatus')) {
-    /**
-     * Generate status badge dengan warna sesuai status
-     * 
-     * @param string $status
-     * @return string HTML badge
-     */
     function badgeStatus(string $status): string {
         $statusMap = [
             'Menunggu'   => 'status-waiting',
             'Konfirmasi' => 'status-confirmed',
-            'Proses'     => 'status-waiting',
+            'Proses'     => 'status-process',
             'Selesai'    => 'status-done',
             'Batal'      => 'status-danger',
         ];
-        
+
         $class = $statusMap[$status] ?? 'status-waiting';
-        return '<span class="status-badge ' . $class . '">' . htmlspecialchars($status) . '</span>';
+
+        return '<span class="status-badge ' . $class . '">'
+            . htmlspecialchars($status) .
+            '</span>';
     }
 }
 
-$reservasiList = $data['reservasi'] ?? [];
+$statusTabs = $statusTabs ?? ['Menunggu', 'Konfirmasi', 'Proses', 'Selesai', 'Batal'];
+$statusAktif = $statusAktif ?? 'Menunggu';
+$jumlahStatus = $jumlahStatus ?? [];
+$keyword = $keyword ?? '';
+$reservasiList = $reservasi ?? [];
 ?>
 
 <div class="reservasi-container">
-    <!-- Search Bar -->
-    <div class="search-wrapper">
-        <div class="input-search">
-            <i data-lucide="search" width="16" height="16"></i>
-            <input id="searchInput" type="text" placeholder="Cari nama pelanggan...">
-        </div>
+
+    <div class="status-tabs">
+        <?php foreach ($statusTabs as $status): ?>
+            <a
+                href="<?= BASEURL ?>/admin/reservasi?status=<?= urlencode($status) ?>"
+                class="status-tab <?= $statusAktif === $status ? 'active' : '' ?>"
+            >
+                <?= htmlspecialchars($status) ?>
+                <span><?= $jumlahStatus[$status] ?? 0 ?></span>
+            </a>
+        <?php endforeach; ?>
     </div>
 
-    <!-- Reservasi Table -->
+    <form class="search-wrapper" method="GET" action="<?= BASEURL ?>/admin/reservasi">
+        <input type="hidden" name="status" value="<?= htmlspecialchars($statusAktif) ?>">
+
+        <div class="search-box">
+            <i data-lucide="search" color="#38a3a5" width="18" height="18"></i>
+            <input
+                type="text"
+                name="q"
+                placeholder="Cari pelanggan, kendaraan, plat, layanan..."
+                value="<?= htmlspecialchars($keyword) ?>"
+            >
+        </div>
+
+        <?php if (!empty($keyword)): ?>
+            <a
+                href="<?= BASEURL ?>/admin/reservasi?status=<?= urlencode($statusAktif) ?>"
+                class="btn-reset-search"
+            >
+                Reset
+            </a>
+        <?php endif; ?>
+    </form>
+
     <div class="table-container">
         <div class="table-wrapper">
-            <table class="table-reservasi" id="reservasiTable">
+            <table class="table-reservasi">
                 <thead>
                     <tr>
                         <th>ID</th>
@@ -54,31 +77,73 @@ $reservasiList = $data['reservasi'] ?? [];
                         <th>Aksi</th>
                     </tr>
                 </thead>
+
                 <tbody>
                     <?php if (empty($reservasiList)): ?>
-                        <tr class="table-empty">
-                            <td colspan="9">
-                                <div class="empty-state">
-                                    <p class="empty-text">Belum ada data reservasi</p>
-                                </div>
+                        <tr>
+                            <td colspan="9" class="empty-table">
+                                <?php if (!empty($keyword)): ?>
+                                    Data reservasi status <?= htmlspecialchars($statusAktif) ?> dengan kata kunci "<?= htmlspecialchars($keyword) ?>" tidak ditemukan.
+                                <?php else: ?>
+                                    Belum ada data reservasi dengan status <?= htmlspecialchars($statusAktif) ?>.
+                                <?php endif; ?>
                             </td>
                         </tr>
                     <?php else: ?>
                         <?php foreach ($reservasiList as $r): ?>
                             <tr>
-                                <td class="riwayat-id">#<?= htmlspecialchars($r['id_reservasi']) ?></td>
-                                <td class="text-primary"><?= htmlspecialchars($r['nama'] ?? 'Unknown') ?></td>
-                                <td><?= htmlspecialchars($r['kendaraan'] ?? '') ?></td>
-                                <td><span class="plat"><?= htmlspecialchars($r['plat'] ?? '') ?></span></td>
-                                <td><?= htmlspecialchars($r['tanggal'] ?? '') ?></td>
-                                <td><?= htmlspecialchars($r['jam'] ?? '') ?></td>
-                                <td><?= htmlspecialchars($r['layanan'] ?? '') ?></td>
-                                <td><?= badgeStatus($r['status'] ?? '') ?></td>
+                                <td class="riwayat-id">
+                                    #<?= htmlspecialchars($r['id_reservasi'] ?? '') ?>
+                                </td>
+
+                                <td class="text-primary">
+                                    <?= htmlspecialchars($r['nama'] ?? 'Unknown') ?>
+                                </td>
+
                                 <td>
-                                    <form action="<?= BASEURL ?>/admin/updatestatus/<?= $r['id_reservasi'] ?>" method="POST" class="status-form">
+                                    <?= htmlspecialchars($r['kendaraan'] ?? '-') ?>
+                                </td>
+
+                                <td>
+                                    <span class="plat">
+                                        <?= htmlspecialchars($r['plat'] ?? '-') ?>
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <?= htmlspecialchars($r['tanggal'] ?? '-') ?>
+                                </td>
+
+                                <td>
+                                    <?= htmlspecialchars($r['jam'] ?? '-') ?>
+                                </td>
+
+                                <td>
+                                    <?= htmlspecialchars($r['layanan'] ?? '-') ?>
+                                </td>
+
+                                <td>
+                                    <?= badgeStatus($r['status'] ?? 'Menunggu') ?>
+                                </td>
+
+                                <td>
+                                    <form
+                                        action="<?= BASEURL ?>/admin/updatestatus/<?= htmlspecialchars($r['id_reservasi'] ?? '') ?>"
+                                        method="POST"
+                                        class="status-form"
+                                    >
+                                        <input
+                                            type="hidden"
+                                            name="back"
+                                            value="<?= htmlspecialchars(BASEURL . '/admin/reservasi?status=' . urlencode($statusAktif) . (!empty($keyword) ? '&q=' . urlencode($keyword) : '')) ?>"
+                                        >
+
                                         <select name="status" class="form-input form-input-sm" onchange="this.form.submit()">
                                             <?php foreach (['Menunggu', 'Konfirmasi', 'Proses', 'Selesai', 'Batal'] as $statusOption): ?>
-                                                <option value="<?= $statusOption ?>" <?= ($r['status'] ?? '') === $statusOption ? 'selected' : '' ?>>
+                                                <option
+                                                    value="<?= $statusOption ?>"
+                                                    <?= ($r['status'] ?? '') === $statusOption ? 'selected' : '' ?>
+                                                >
                                                     <?= $statusOption ?>
                                                 </option>
                                             <?php endforeach; ?>
@@ -92,57 +157,5 @@ $reservasiList = $data['reservasi'] ?? [];
             </table>
         </div>
     </div>
+
 </div>
-
-<script>
-    document.getElementById('searchInput').addEventListener('input', function() {
-        const keyword = this.value.toLowerCase();
-        const tableRows = document.querySelectorAll('#reservasiTable tbody tr');
-        
-        tableRows.forEach(row => {
-            const isMatch = row.textContent.toLowerCase().includes(keyword);
-            row.style.display = isMatch ? '' : 'none';
-        });
-    });
-</script>
-
-<style>
-    .reservasi-container {
-        padding: 0;
-    }
-
-    .search-wrapper {
-        margin-bottom: 24px;
-    }
-
-    .table-reservasi {
-        width: 100%;
-        border-collapse: collapse;
-    }
-
-    .table-reservasi td:first-child {
-        width: 80px;
-    }
-
-    .table-empty td {
-        padding: 0 !important;
-        border-bottom: none !important;
-    }
-
-    .status-form {
-        display: flex;
-        gap: 6px;
-        align-items: center;
-        margin: 0;
-    }
-
-    .form-input-sm {
-        padding: 6px 8px;
-        font-size: 12px;
-        border: 1px solid var(--border);
-        border-radius: 6px;
-        background: var(--bg-surface);
-        color: var(--text-dark);
-        min-width: 80px;
-    }
-</style>

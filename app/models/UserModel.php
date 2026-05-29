@@ -22,6 +22,27 @@ class UserModel
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    public function searchPelanggan(string $keyword): array
+    {
+        $keyword = '%' . $keyword . '%';
+
+        $stmt = $this->db->prepare(
+            'SELECT * FROM v_pelanggan
+             WHERE nama LIKE ?
+                OR email LIKE ?
+                OR role LIKE ?
+             ORDER BY nama ASC'
+        );
+
+        $stmt->execute([
+            $keyword,
+            $keyword,
+            $keyword
+        ]);
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
     public function register(string $nama, string $email, string $password): bool
     {
         $stmt = $this->db->prepare(

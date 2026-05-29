@@ -11,6 +11,24 @@ $title = 'Data Service';
     </a>
   </div>
 
+  <form class="search-wrapper" method="GET" action="<?= BASEURL ?>/admin/dataservice">
+    <div class="search-box">
+      <i data-lucide="search" color="#38a3a5" width="18" height="18"></i>
+      <input
+        type="text"
+        name="q"
+        placeholder="Cari pelanggan, kendaraan, plat, layanan..."
+        value="<?= htmlspecialchars($keyword ?? '') ?>"
+      >
+    </div>
+
+    <?php if (!empty($keyword)): ?>
+      <a href="<?= BASEURL ?>/admin/dataservice" class="btn-reset-search">
+        Reset
+      </a>
+    <?php endif; ?>
+  </form>
+
   <div class="card">
     <div class="card-header">
       <h3>Daftar Service Kendaraan</h3>
@@ -30,6 +48,7 @@ $title = 'Data Service';
             <th>Catatan</th>
           </tr>
         </thead>
+
         <tbody>
           <?php if (!empty($dataService)): ?>
             <?php foreach ($dataService as $index => $service): ?>
@@ -46,7 +65,13 @@ $title = 'Data Service';
             <?php endforeach; ?>
           <?php else: ?>
             <tr>
-              <td colspan="8" class="text-center">Belum ada data service.</td>
+              <td colspan="8" class="text-center">
+                <?php if (!empty($keyword)): ?>
+                  Data service dengan kata kunci "<?= htmlspecialchars($keyword) ?>" tidak ditemukan.
+                <?php else: ?>
+                  Belum ada data service.
+                <?php endif; ?>
+              </td>
             </tr>
           <?php endif; ?>
         </tbody>
