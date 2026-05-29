@@ -2399,3 +2399,55 @@ table {
     padding: 30px;
   }
 }
+
+/* ============================================
+    MIDTRANS PAYMENT
+   ============================================ */
+
+#payment-loading-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  background: rgba(15, 23, 42, 0.65);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+#payment-loading-overlay.is-active {
+  display: flex;
+}
+.payment-loading-box {
+  background: #fff;
+  padding: 32px 40px;
+  border-radius: 12px;
+  text-align: center;
+  max-width: 360px;
+  width: 100%;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+}
+.payment-loading-spinner {
+  width: 48px;
+  height: 48px;
+  margin: 0 auto 20px;
+  border: 4px solid #e2e8f0;
+  border-top-color: #38a3a5;
+  border-radius: 50%;
+  animation: payment-spin 0.85s linear infinite;
+}
+.payment-loading-text {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #1e293b;
+  line-height: 1.5;
+}
+.payment-loading-hint {
+  margin: 10px 0 0;
+  font-size: 13px;
+  color: #64748b;
+}
+@keyframes payment-spin {
+  to { transform: rotate(360deg); }
+}
+
