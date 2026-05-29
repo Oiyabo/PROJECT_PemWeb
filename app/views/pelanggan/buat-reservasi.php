@@ -2,6 +2,8 @@
 $data = $_SESSION['form_reservasi'] ?? [];
 ?>
 
+<link rel="stylesheet" href="<?= BASEURL ?>/assets/css/style.css">
+
 <div class="reservation-container" id="reservasiWizard" data-save-url="<?= BASEURL ?>/pelanggan/buatreservasi"
 	data-cek-jadwal-url="<?= BASEURL ?>/pelanggan/cekjadwal">
 
@@ -123,14 +125,16 @@ $data = $_SESSION['form_reservasi'] ?? [];
 				</div>
 
 				<div class="price-calculation">
-					<h3 style="margin-bottom: 12px; font-size: 16px; font-weight: 700;">Perhitungan Biaya</h3>
-					<table class="price-table" style="width: 100%; border-collapse: collapse;">
+					<h3 class="price-title">Perhitungan Biaya</h3>
+
+					<table class="price-table">
 						<thead>
-							<tr style="border-bottom: 2px solid #38a3a5;">
-								<th style="text-align: left; padding: 8px; font-weight: 700;">Layanan</th>
-								<th style="text-align: right; padding: 8px; font-weight: 700;">Harga DP</th>
+							<tr class="price-table-head-row">
+								<th class="price-table-header">Layanan</th>
+								<th class="price-table-header-right">Harga DP</th>
 							</tr>
 						</thead>
+
 						<tbody id="priceTableBody"></tbody>
 						<tfoot id="priceTableFoot"></tfoot>
 					</table>
@@ -138,8 +142,9 @@ $data = $_SESSION['form_reservasi'] ?? [];
 			</div>
 		</div>
 
-		<form id="formReservasi" action="<?= BASEURL ?>/pelanggan/simpanReservasi" method="POST" class="reservation-form"
-			style="margin-top: 0; padding-top: 0; border-top: none; box-shadow: none;">
+		<form id="formReservasi" action="<?= BASEURL ?>/pelanggan/simpanReservasi" method="POST"
+			class="reservation-form reservation-form-no-style">
+
 			<div id="hiddenFieldsContainer"></div>
 
 			<input type="hidden" name="dp_paid" id="dpPaidInput" value="0">
@@ -149,35 +154,55 @@ $data = $_SESSION['form_reservasi'] ?? [];
 
 			<div class="form-navigation">
 				<button type="button" class="btn-secondary" data-action="prev">← Kembali</button>
+
 				<button type="button" class="btn-primary" id="btnBayarDpSelesai">
 					💳 Bayar DP dan Selesaikan — <span id="btnDpNominal">Rp 0</span>
 				</button>
 			</div>
 
-			<p style="margin-top: 12px; font-size: 13px; color: #64748b; max-width: 520px;">
+			<p class="payment-note">
 				Satu langkah: bayar DP via Midtrans, lalu reservasi dibuat otomatis setelah pembayaran terkonfirmasi.
 			</p>
 		</form>
 	</div>
 
 	<!-- Modal sukses DP + reservasi -->
-	<div id="reservasiSuksesModal" class="popup-overlay" style="display: none;">
-		<div class="popup-box" style="max-width: 420px; text-align: center;">
-			<div style="font-size: 48px; margin-bottom: 8px;">✓</div>
-			<h3 style="margin: 0 0 12px; color: #155724;">Pembayaran Berhasil!</h3>
-			<p style="margin: 0 0 16px; color: #333; line-height: 1.5;">
+	<div id="reservasiSuksesModal" class="popup-overlay popup-overlay-hidden">
+
+		<div class="popup-box popup-box-success">
+
+			<div class="popup-check-icon">✓</div>
+
+			<h3 class="popup-success-title">
+				Pembayaran Berhasil!
+			</h3>
+
+			<p class="popup-success-description">
 				Pembayaran DP Anda telah diterima dan reservasi berhasil dibuat.
 			</p>
-			<div
-				style="margin: 16px 0; padding: 14px; background: #f8fafc; border-radius: 8px; text-align: left; font-size: 14px;">
-				<p style="margin: 6px 0;"><strong>No. Reservasi:</strong> <span id="suksesReservasiId">-</span></p>
-				<p style="margin: 6px 0;"><strong>Nominal DP:</strong> <span id="suksesDpNominal">-</span></p>
-				<p style="margin: 6px 0; color: #64748b; font-size: 13px;">Tim kami akan segera mengkonfirmasi jadwal service
-					Anda.</p>
+
+			<div class="popup-info-box">
+				<p class="popup-info-text">
+					<strong>No. Reservasi:</strong>
+					<span id="suksesReservasiId">-</span>
+				</p>
+
+				<p class="popup-info-text">
+					<strong>Nominal DP:</strong>
+					<span id="suksesDpNominal">-</span>
+				</p>
+
+				<p class="popup-small-note">
+					Tim kami akan segera mengkonfirmasi jadwal service Anda.
+				</p>
 			</div>
-			<div class="popup-actions" style="justify-content: center;">
-				<button type="button" class="btn-primary" onclick="tutupSuksesDanKeRiwayat()">Selesai</button>
+
+			<div class="popup-actions popup-actions-center">
+				<button type="button" class="btn-primary" onclick="tutupSuksesDanKeRiwayat()">
+					Selesai
+				</button>
 			</div>
+
 		</div>
 	</div>
 </div>
@@ -188,5 +213,6 @@ $data = $_SESSION['form_reservasi'] ?? [];
 	window.MIDTRANS_SNAP_SCRIPT = <?= json_encode($midtrans_snap_script ?? '') ?>;
 	window.RESERVASI_LAYANAN_MAP = <?= json_encode($layananMap ?? []) ?>;
 </script>
+
 <script src="<?= BASEURL ?>/assets/js/midtrans-payment.js"></script>
 <script src="<?= BASEURL ?>/assets/js/buat-reservasi.js"></script>

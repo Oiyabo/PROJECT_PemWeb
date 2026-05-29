@@ -1567,6 +1567,95 @@ tbody tr:last-child td {
   }
 }
 
+.price-title {
+	margin-bottom: 12px;
+	font-size: 16px;
+	font-weight: 700;
+}
+
+.price-table {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+.price-table-head-row {
+	border-bottom: 2px solid #38a3a5;
+}
+
+.price-table-header {
+	text-align: left;
+	padding: 8px;
+	font-weight: 700;
+}
+
+.price-table-header-right {
+	text-align: right;
+	padding: 8px;
+	font-weight: 700;
+}
+
+.reservation-form-no-style {
+	margin-top: 0;
+	padding-top: 0;
+	border-top: none;
+	box-shadow: none;
+}
+
+.payment-note {
+	margin-top: 12px;
+	font-size: 13px;
+	color: #64748b;
+	max-width: 520px;
+}
+
+.popup-overlay-hidden {
+	display: none;
+}
+
+.popup-box-success {
+	max-width: 420px;
+	text-align: center;
+}
+
+.popup-check-icon {
+	font-size: 48px;
+	margin-bottom: 8px;
+}
+
+.popup-success-title {
+	margin: 0 0 12px;
+	color: #155724;
+}
+
+.popup-success-description {
+	margin: 0 0 16px;
+	color: #333;
+	line-height: 1.5;
+}
+
+.popup-info-box {
+	margin: 16px 0;
+	padding: 14px;
+	background: #f8fafc;
+	border-radius: 8px;
+	text-align: left;
+	font-size: 14px;
+}
+
+.popup-info-text {
+	margin: 6px 0;
+}
+
+.popup-small-note {
+	margin: 6px 0;
+	color: #64748b;
+	font-size: 13px;
+}
+
+.popup-actions-center {
+	justify-content: center;
+}
+
 /* ============================================
    RESPONSIVE DESIGN
    ============================================ */
