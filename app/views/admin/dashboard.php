@@ -1,8 +1,4 @@
 <?php
-/**
- * Admin Dashboard View
- * Menampilkan statistik dan ringkasan data terbaru
- */
 $title = 'Dashboard Admin';
 ?>
 
@@ -61,7 +57,7 @@ $title = 'Dashboard Admin';
 
     <!-- Main Grid: Reservasi Terbaru & Progress -->
     <div class="admin-dashboard-grid">
-        
+
         <!-- Reservasi Terbaru -->
         <div class="admin-card">
             <div class="admin-card-header">
@@ -92,11 +88,11 @@ $title = 'Dashboard Admin';
                             </div>
                             <span class="badge <?=
                                 $r['status'] === 'Selesai'
-                                    ? 'badge-success'
-                                    : ($r['status'] === 'Konfirmasi'
-                                        ? 'badge-info'
-                                        : 'badge-warning')
-                            ?>">
+                                ? 'badge-success'
+                                : ($r['status'] === 'Konfirmasi'
+                                    ? 'badge-info'
+                                    : 'badge-warning')
+                                ?>">
                                 <?= htmlspecialchars($r['status']) ?>
                             </span>
                         </div>
@@ -121,7 +117,9 @@ $title = 'Dashboard Admin';
                         </span>
                     </div>
                     <div class="progress">
-                        <div class="progress-bar bg-secondary" style="width: <?= $stats['total'] > 0 ? ($stats['aktif'] / $stats['total']) * 100 : 0 ?>%;"></div>
+                        <div class="progress-bar bg-secondary"
+                            style="width: <?= $stats['total'] > 0 ? ($stats['aktif'] / $stats['total']) * 100 : 0 ?>%;">
+                        </div>
                     </div>
                 </div>
 
@@ -134,7 +132,9 @@ $title = 'Dashboard Admin';
                         </span>
                     </div>
                     <div class="progress">
-                        <div class="progress-bar bg-primary" style="width: <?= $stats['total'] > 0 ? ($stats['selesai'] / $stats['total']) * 100 : 0 ?>%;"></div>
+                        <div class="progress-bar bg-primary"
+                            style="width: <?= $stats['total'] > 0 ? ($stats['selesai'] / $stats['total']) * 100 : 0 ?>%;">
+                        </div>
                     </div>
                 </div>
 
@@ -155,9 +155,3 @@ $title = 'Dashboard Admin';
     </div>
 
 </div>
-
-<style>
-    .bg-neutral-teal {
-        background-color: var(--neutral-teal);
-    }
-</style>
