@@ -2,153 +2,156 @@
 
 class Admin extends Controller
 {
-	private object $reservasiModel;
-	private object $userModel;
+    private object $reservasiModel;
+    private object $userModel;
 
-	public function __construct()
-	{
-		$this->requireRole('Admin');
-		$this->reservasiModel = $this->model('ReservasiModel');
-		$this->userModel = $this->model('UserModel');
-	}
+    public function __construct()
+    {
+        $this->requireRole('Admin');
+        $this->reservasiModel = $this->model('ReservasiModel');
+        $this->userModel = $this->model('UserModel');
+    }
 
-	public function index(): void
-	{
-		$reservasi = $this->reservasiModel->getAll();
+    public function index(): void
+    {
+        $reservasi = $this->reservasiModel->getAll();
 
-		$totalReservasi = count($reservasi);
-		$aktif = count(array_filter($reservasi, fn($r) => in_array($r['status'], ['Konfirmasi', 'Proses'])));
-		$selesai = count(array_filter($reservasi, fn($r) => $r['status'] === 'Selesai'));
+        $totalReservasi = count($reservasi);
+        $aktif = count(array_filter($reservasi, fn($r) => in_array($r['status'], ['Konfirmasi', 'Proses'])));
+        $selesai = count(array_filter($reservasi, fn($r) => $r['status'] === 'Selesai'));
 
-		$data = [
-			'title' => 'Dashboard Admin',
-			'user' => $_SESSION['user'],
-			'reservasiTerbaru' => array_slice($reservasi, 0, 5),
-			'stats' => [
-				'total' => $totalReservasi,
-				'aktif' => $aktif,
-				'selesai' => $selesai,
-				'pelanggan' => count($this->userModel->getAllPelanggan()),
-			],
-		];
+        $data = [
+            'title' => 'Dashboard Admin',
+            'user' => $_SESSION['user'],
+            'reservasiTerbaru' => array_slice($reservasi, 0, 5),
+            'stats' => [
+                'total' => $totalReservasi,
+                'aktif' => $aktif,
+                'selesai' => $selesai,
+                'pelanggan' => count($this->userModel->getAllPelanggan()),
+            ],
+        ];
 
-		$this->view('templates/header', $data);
-		$this->view('admin/dashboard', $data);
-		$this->view('templates/footer', $data);
-	}
+        $this->view('templates/header', $data);
+        $this->view('admin/dashboard', $data);
+        $this->view('templates/footer', $data);
+    }
 
-	public function reservasi(): void
-	{
-		$keyword = trim($_GET['q'] ?? '');
+    public function reservasi(): void
+    {
+        $keyword = trim($_GET['q'] ?? '');
+        $statusAktif = trim($_GET['status'] ?? 'Semua');
 
-		$reservasi = $keyword !== ''
-			? $this->reservasiModel->searchAll($keyword)
-			: $this->reservasiModel->getAll();
+        $statusTabs = ['Semua', 'Menunggu', 'Konfirmasi', 'Proses', 'Selesai', 'Batal'];
 
-		$data = [
-			'title' => 'Manajemen Reservasi',
-			'user' => $_SESSION['user'],
-			'reservasi' => $reservasi,
-			'keyword' => $keyword,
-		];
+        if (!in_array($statusAktif, $statusTabs, true)) {
+            $statusAktif = 'Semua';
+        }
 
-		$this->view('templates/header', $data);
-		$this->view('admin/reservasi', $data);
-		$this->view('templates/footer', $data);
-	}
+        $semuaReservasiAwal = $this->reservasiModel->getAll();
 
-	public function dataservice(): void
-	{
-		$keyword = trim($_GET['q'] ?? '');
+        $semuaReservasi = $keyword !== ''
+            ? $this->reservasiModel->searchAll($keyword)
+            : $semuaReservasiAwal;
 
-		$semuaReservasi = $keyword !== ''
-			? $this->reservasiModel->searchAll($keyword)
-			: $this->reservasiModel->getAll();
+        $jumlahStatus = [];
 
-		$dataService = array_filter($semuaReservasi, fn($r) => $r['status'] === 'Proses');
+        foreach ($statusTabs as $status) {
+            if ($status === 'Semua') {
+                $jumlahStatus[$status] = count($semuaReservasiAwal);
+            } else {
+                $jumlahStatus[$status] = count(array_filter(
+                    $semuaReservasiAwal,
+                    fn($r) => ($r['status'] ?? '') === $status
+                ));
+            }
+        }
 
-		$data = [
-			'title' => 'Data Service',
-			'user' => $_SESSION['user'],
-			'dataService' => array_values($dataService),
-			'keyword' => $keyword,
-		];
+        if ($statusAktif === 'Semua') {
+            $reservasi = $semuaReservasi;
+        } else {
+            $reservasi = array_values(array_filter(
+                $semuaReservasi,
+                fn($r) => ($r['status'] ?? '') === $statusAktif
+            ));
+        }
 
-		$this->view('templates/header', $data);
-		$this->view('admin/dataservice', $data);
-		$this->view('templates/footer', $data);
-	}
+        $data = [
+            'title' => 'Manajemen Reservasi',
+            'user' => $_SESSION['user'],
+            'reservasi' => $reservasi,
+            'keyword' => $keyword,
+            'statusAktif' => $statusAktif,
+            'statusTabs' => $statusTabs,
+            'jumlahStatus' => $jumlahStatus,
+        ];
 
-	public function pelanggan(): void
-	{
-		$keyword = trim($_GET['q'] ?? '');
+        $this->view('templates/header', $data);
+        $this->view('admin/reservasi', $data);
+        $this->view('templates/footer', $data);
+    }
 
-		$pelanggan = $keyword !== ''
-			? $this->userModel->searchPelanggan($keyword)
-			: $this->userModel->getAllPelanggan();
+    public function dataservice(): void
+    {
+        header('Location: ' . BASEURL . '/admin/reservasi?status=Proses');
+        exit;
+    }
 
-		$data = [
-			'title' => 'Data Pelanggan',
-			'user' => $_SESSION['user'],
-			'pelanggan' => $pelanggan,
-			'keyword' => $keyword,
-		];
+    public function transaksi(): void
+    {
+        header('Location: ' . BASEURL . '/admin/reservasi?status=Selesai');
+        exit;
+    }
 
-		$this->view('templates/header', $data);
-		$this->view('admin/pelanggan', $data);
-		$this->view('templates/footer', $data);
-	}
+    public function pelanggan(): void
+    {
+        $keyword = trim($_GET['q'] ?? '');
 
-	public function transaksi(): void
-	{
-		$keyword = trim($_GET['q'] ?? '');
+        $pelanggan = $keyword !== ''
+            ? $this->userModel->searchPelanggan($keyword)
+            : $this->userModel->getAllPelanggan();
 
-		$semuaReservasi = $keyword !== ''
-			? $this->reservasiModel->searchAll($keyword)
-			: $this->reservasiModel->getAll();
+        $data = [
+            'title' => 'Data Pelanggan',
+            'user' => $_SESSION['user'],
+            'pelanggan' => $pelanggan,
+            'keyword' => $keyword,
+        ];
 
-		$transaksi = array_filter($semuaReservasi, fn($r) => $r['status'] === 'Selesai');
+        $this->view('templates/header', $data);
+        $this->view('admin/pelanggan', $data);
+        $this->view('templates/footer', $data);
+    }
 
-		$data = [
-			'title' => 'Transaksi & Pembayaran',
-			'user' => $_SESSION['user'],
-			'transaksi' => array_values($transaksi),
-			'keyword' => $keyword,
-		];
+    public function updatestatus(string $id): void
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $status = $_POST['status'] ?? '';
+            $validStatuses = ['Menunggu', 'Konfirmasi', 'Proses', 'Selesai', 'Batal'];
 
-		$this->view('templates/header', $data);
-		$this->view('admin/transaksi', $data);
-		$this->view('templates/footer', $data);
-	}
+            if (in_array($status, $validStatuses, true)) {
+                $this->reservasiModel->updateStatus((int) $id, $status);
+                $_SESSION['success'] = 'Status reservasi berhasil diperbarui.';
+            } else {
+                $_SESSION['error'] = 'Status tidak valid.';
+            }
+        }
 
-	public function updatestatus(string $id): void
-	{
-		if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-			$status = $_POST['status'] ?? '';
-			$validStatuses = ['Menunggu', 'Konfirmasi', 'Proses', 'Selesai', 'Batal'];
+        $back = $_POST['back'] ?? BASEURL . '/admin/reservasi';
+        header('Location: ' . $back);
+        exit;
+    }
 
-			if (in_array($status, $validStatuses)) {
-				$this->reservasiModel->updateStatus((int) $id, $status);
-				$_SESSION['success'] = 'Status reservasi berhasil diperbarui.';
-			} else {
-				$_SESSION['error'] = 'Status tidak valid.';
-			}
-		}
+    private function requireRole(string $role): void
+    {
+        if (!isset($_SESSION['user'])) {
+            header('Location: ' . BASEURL . '/auth');
+            exit;
+        }
 
-		header('Location: ' . BASEURL . '/admin/reservasi');
-		exit;
-	}
-
-	private function requireRole(string $role): void
-	{
-		if (!isset($_SESSION['user'])) {
-			header('Location: ' . BASEURL . '/auth');
-			exit;
-		}
-
-		if ($_SESSION['user']['role'] !== $role) {
-			header('Location: ' . BASEURL . '/pelanggan');
-			exit;
-		}
-	}
+        if ($_SESSION['user']['role'] !== $role) {
+            header('Location: ' . BASEURL . '/pelanggan');
+            exit;
+        }
+    }
 }

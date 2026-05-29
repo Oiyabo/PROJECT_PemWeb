@@ -11,20 +11,6 @@ $title = 'Data Service';
     </a>
   </div>
 
-  <form class="search-wrapper" method="GET" action="<?= BASEURL ?>/admin/dataservice">
-    <div class="search-box">
-      <i data-lucide="search" color="#38a3a5" width="18" height="18"></i>
-      <input type="text" name="q" placeholder="Cari pelanggan, kendaraan, plat, layanan..."
-        value="<?= htmlspecialchars($keyword ?? '') ?>">
-    </div>
-
-    <?php if (!empty($keyword)): ?>
-      <a href="<?= BASEURL ?>/admin/dataservice" class="btn-reset-search">
-        Reset
-      </a>
-    <?php endif; ?>
-  </form>
-
   <div class="card">
     <div class="card-header">
       <h3>Daftar Service Kendaraan</h3>
