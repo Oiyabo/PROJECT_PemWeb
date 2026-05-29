@@ -9,7 +9,7 @@ class Admin extends Controller
     {
         $this->requireRole('Admin');
         $this->reservasiModel = $this->model('ReservasiModel');
-        $this->userModel      = $this->model('UserModel');
+        $this->userModel = $this->model('UserModel');
     }
 
     public function index(): void
@@ -21,13 +21,13 @@ class Admin extends Controller
         $selesai = count(array_filter($reservasi, fn($r) => $r['status'] === 'Selesai'));
 
         $data = [
-            'title'          => 'Dashboard Admin',
-            'user'           => $_SESSION['user'],
+            'title' => 'Dashboard Admin',
+            'user' => $_SESSION['user'],
             'reservasiTerbaru' => array_slice($reservasi, 0, 5),
-            'stats'          => [
-                'total'     => $totalReservasi,
-                'aktif'     => $aktif,
-                'selesai'   => $selesai,
+            'stats' => [
+                'total' => $totalReservasi,
+                'aktif' => $aktif,
+                'selesai' => $selesai,
                 'pelanggan' => count($this->userModel->getAllPelanggan()),
             ],
         ];
@@ -39,10 +39,17 @@ class Admin extends Controller
 
     public function reservasi(): void
     {
+        $keyword = trim($_GET['q'] ?? '');
+
+        $reservasi = $keyword !== ''
+            ? $this->reservasiModel->searchAll($keyword)
+            : $this->reservasiModel->getAll();
+
         $data = [
-            'title'     => 'Manajemen Reservasi',
-            'user'      => $_SESSION['user'],
-            'reservasi' => $this->reservasiModel->getAll(),
+            'title' => 'Manajemen Reservasi',
+            'user' => $_SESSION['user'],
+            'reservasi' => $reservasi,
+            'keyword' => $keyword,
         ];
 
         $this->view('templates/header', $data);
@@ -52,13 +59,19 @@ class Admin extends Controller
 
     public function dataservice(): void
     {
-        $semuaReservasi = $this->reservasiModel->getAll();
+        $keyword = trim($_GET['q'] ?? '');
+
+        $semuaReservasi = $keyword !== ''
+            ? $this->reservasiModel->searchAll($keyword)
+            : $this->reservasiModel->getAll();
+
         $dataService = array_filter($semuaReservasi, fn($r) => $r['status'] === 'Proses');
 
         $data = [
-            'title'       => 'Data Service',
-            'user'        => $_SESSION['user'],
+            'title' => 'Data Service',
+            'user' => $_SESSION['user'],
             'dataService' => array_values($dataService),
+            'keyword' => $keyword,
         ];
 
         $this->view('templates/header', $data);
@@ -68,10 +81,17 @@ class Admin extends Controller
 
     public function pelanggan(): void
     {
+        $keyword = trim($_GET['q'] ?? '');
+
+        $pelanggan = $keyword !== ''
+            ? $this->userModel->searchPelanggan($keyword)
+            : $this->userModel->getAllPelanggan();
+
         $data = [
-            'title'     => 'Data Pelanggan',
-            'user'      => $_SESSION['user'],
-            'pelanggan' => $this->userModel->getAllPelanggan(),
+            'title' => 'Data Pelanggan',
+            'user' => $_SESSION['user'],
+            'pelanggan' => $pelanggan,
+            'keyword' => $keyword,
         ];
 
         $this->view('templates/header', $data);
@@ -80,20 +100,26 @@ class Admin extends Controller
     }
 
     public function transaksi(): void
-    {
-        $semuaReservasi = $this->reservasiModel->getAll();
-        $transaksi = array_filter($semuaReservasi, fn($r) => $r['status'] === 'Selesai');
+{
+    $keyword = trim($_GET['q'] ?? '');
 
-        $data = [
-            'title'     => 'Transaksi & Pembayaran',
-            'user'      => $_SESSION['user'],
-            'transaksi' => array_values($transaksi),
-        ];
+    $semuaReservasi = $keyword !== ''
+        ? $this->reservasiModel->searchAll($keyword)
+        : $this->reservasiModel->getAll();
 
-        $this->view('templates/header', $data);
-        $this->view('admin/transaksi', $data);
-        $this->view('templates/footer', $data);
-    }
+    $transaksi = array_filter($semuaReservasi, fn($r) => $r['status'] === 'Selesai');
+
+    $data = [
+        'title'     => 'Transaksi & Pembayaran',
+        'user'      => $_SESSION['user'],
+        'transaksi' => array_values($transaksi),
+        'keyword'   => $keyword,
+    ];
+
+    $this->view('templates/header', $data);
+    $this->view('admin/transaksi', $data);
+    $this->view('templates/footer', $data);
+}
 
     public function updatestatus(string $id): void
     {
@@ -102,7 +128,7 @@ class Admin extends Controller
             $validStatuses = ['Menunggu', 'Konfirmasi', 'Proses', 'Selesai', 'Batal'];
 
             if (in_array($status, $validStatuses)) {
-                $this->reservasiModel->updateStatus((int)$id, $status);
+                $this->reservasiModel->updateStatus((int) $id, $status);
                 $_SESSION['success'] = 'Status reservasi berhasil diperbarui.';
             } else {
                 $_SESSION['error'] = 'Status tidak valid.';
