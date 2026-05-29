@@ -4,17 +4,57 @@ $navItems = [];
 if (isset($user)) {
   if ($user['role'] === 'Admin') {
     $navItems = [
-      ['url' => BASEURL . '/admin', 'label' => 'Dashboard', 'icon' => 'layout-dashboard', 'key' => 'dashboard'],
-      ['url' => BASEURL . '/admin/reservasi', 'label' => 'Reservasi', 'icon' => 'calendar', 'key' => 'reservasi'],
-      ['url' => BASEURL . '/admin/pelanggan', 'label' => 'Pelanggan', 'icon' => 'users', 'key' => 'pelanggan'],
+      [
+        'url' => BASEURL . '/admin',
+        'label' => 'Dashboard',
+        'icon' => 'layout-dashboard',
+        'key' => 'dashboard'
+      ],
+      [
+        'url' => BASEURL . '/admin/reservasi',
+        'label' => 'Reservasi',
+        'icon' => 'calendar',
+        'key' => 'reservasi'
+      ],
+      [
+        'url' => BASEURL . '/admin/pelanggan',
+        'label' => 'Pelanggan',
+        'icon' => 'users',
+        'key' => 'pelanggan'
+      ],
     ];
   } else {
     $navItems = [
-      ['url' => BASEURL . '/pelanggan', 'label' => 'Dashboard', 'icon' => 'layout-dashboard', 'key' => 'dashboard'],
-      ['url' => BASEURL . '/pelanggan/buatreservasi', 'label' => 'Buat Reservasi', 'icon' => 'plus-circle', 'key' => 'buatreservasi'],
-      ['url' => BASEURL . '/pelanggan/riwayat', 'label' => 'Riwayat Service', 'icon' => 'clipboard-list', 'key' => 'riwayat'],
-      ['url' => BASEURL . '/pelanggan/bayar', 'label' => 'Bayar', 'icon' => 'credit-card', 'key' => 'bayar'],
-      ['url' => BASEURL . '/pelanggan/riwayatpembayaran', 'label' => 'Riwayat Pembayaran', 'icon' => 'receipt', 'key' => 'riwayatpembayaran'],
+      [
+        'url' => BASEURL . '/pelanggan',
+        'label' => 'Dashboard',
+        'icon' => 'layout-dashboard',
+        'key' => 'dashboard'
+      ],
+      [
+        'url' => BASEURL . '/pelanggan/buatreservasi',
+        'label' => 'Buat Reservasi',
+        'icon' => 'plus-circle',
+        'key' => 'buatreservasi'
+      ],
+      [
+        'url' => BASEURL . '/pelanggan/riwayat',
+        'label' => 'Riwayat Service',
+        'icon' => 'clipboard-list',
+        'key' => 'riwayat'
+      ],
+      [
+        'url' => BASEURL . '/pelanggan/bayar',
+        'label' => 'Bayar',
+        'icon' => 'credit-card',
+        'key' => 'bayar'
+      ],
+      [
+        'url' => BASEURL . '/pelanggan/riwayatpembayaran',
+        'label' => 'Riwayat Pembayaran',
+        'icon' => 'receipt',
+        'key' => 'riwayatpembayaran'
+      ],
     ];
   }
 }
@@ -100,7 +140,7 @@ function isNavActive(array $nav, string $currentPath): bool
               <i data-lucide="<?= $nav['icon'] ?>" width="17" height="17"></i>
             </div>
 
-            <span class="nav-label"><?= $nav['label'] ?></span>
+            <span class="nav-label"><?= htmlspecialchars($nav['label']) ?></span>
 
             <?php if ($isActive): ?>
               <div class="active-indicator"></div>

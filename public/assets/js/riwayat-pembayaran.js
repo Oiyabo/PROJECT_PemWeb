@@ -1,85 +1,85 @@
 (function () {
-  const baseUrl = window.APP_BASEURL || '';
-  const modal = document.getElementById('detailPembayaranModal');
-  const loadingEl = document.getElementById('detailPembayaranLoading');
-  const contentEl = document.getElementById('detailPembayaranContent');
-  const strukEl = document.getElementById('strukPembayaranContent');
-  const titleEl = document.getElementById('detailPembayaranTitle');
-  const btnStruk = document.getElementById('btnStrukPembayaran');
-  const btnKembali = document.getElementById('btnKembaliDetailPembayaran');
-  const btnTutup = document.getElementById('btnTutupDetailPembayaran');
+  const baseUrl = window.APP_BASEURL || "";
+  const modal = document.getElementById("detailPembayaranModal");
+  const loadingEl = document.getElementById("detailPembayaranLoading");
+  const contentEl = document.getElementById("detailPembayaranContent");
+  const strukEl = document.getElementById("strukPembayaranContent");
+  const titleEl = document.getElementById("detailPembayaranTitle");
+  const btnStruk = document.getElementById("btnStrukPembayaran");
+  const btnKembali = document.getElementById("btnKembaliDetailPembayaran");
+  const btnTutup = document.getElementById("btnTutupDetailPembayaran");
 
   if (!modal) return;
 
   let currentReservasiId = null;
 
   function formatRupiah(num) {
-    return 'Rp ' + new Intl.NumberFormat('id-ID').format(Number(num) || 0);
+    return "Rp " + new Intl.NumberFormat("id-ID").format(Number(num) || 0);
   }
 
   function formatTanggal(dateStr) {
-    if (!dateStr) return '-';
+    if (!dateStr) return "-";
     const d = new Date(dateStr);
     if (Number.isNaN(d.getTime())) return dateStr;
-    return d.toLocaleDateString('id-ID', {
-      day: '2-digit',
-      month: 'short',
-      year: 'numeric',
+    return d.toLocaleDateString("id-ID", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
     });
   }
 
   function formatDateTime(dateStr) {
-    if (!dateStr) return '-';
+    if (!dateStr) return "-";
     const d = new Date(dateStr);
     if (Number.isNaN(d.getTime())) return dateStr;
-    return d.toLocaleString('id-ID', {
-      day: '2-digit',
-      month: 'short',
-      year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
+    return d.toLocaleString("id-ID", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
     });
   }
 
   function escapeHtml(str) {
-    const div = document.createElement('div');
-    div.textContent = str ?? '';
+    const div = document.createElement("div");
+    div.textContent = str ?? "";
     return div.innerHTML;
   }
 
   function refreshIcons() {
-    if (typeof lucide !== 'undefined') {
+    if (typeof lucide !== "undefined") {
       lucide.createIcons();
     }
   }
 
   function setFooterMode(mode) {
-    if (mode === 'detail') {
-      btnStruk.style.display = currentReservasiId ? 'inline-flex' : 'none';
-      btnKembali.style.display = 'none';
-    } else if (mode === 'struk') {
-      btnStruk.style.display = 'none';
-      btnKembali.style.display = 'inline-flex';
+    if (mode === "detail") {
+      btnStruk.style.display = currentReservasiId ? "inline-flex" : "none";
+      btnKembali.style.display = "none";
+    } else if (mode === "struk") {
+      btnStruk.style.display = "none";
+      btnKembali.style.display = "inline-flex";
     } else {
-      btnStruk.style.display = 'none';
-      btnKembali.style.display = 'none';
+      btnStruk.style.display = "none";
+      btnKembali.style.display = "none";
     }
   }
 
   function renderDetail(data) {
-    const jam = (data.jam || '').toString().substring(0, 5);
-    titleEl.textContent = 'Detail Pembayaran #' + data.id_reservasi;
+    const jam = (data.jam || "").toString().substring(0, 5);
+    titleEl.textContent = "Detail Pembayaran #" + data.id_reservasi;
 
     contentEl.innerHTML = `
       <section class="detail-section">
         <h4>Reservasi</h4>
         <dl class="detail-dl">
-          <dt>Kendaraan</dt><dd>${escapeHtml(data.kendaraan)} (${escapeHtml(data.jenis_kendaraan || '-')})</dd>
+          <dt>Kendaraan</dt><dd>${escapeHtml(data.kendaraan)} (${escapeHtml(data.jenis_kendaraan || "-")})</dd>
           <dt>Plat</dt><dd>${escapeHtml(data.plat)}</dd>
           <dt>Tanggal & Jam</dt><dd>${formatTanggal(data.tanggal)} · ${escapeHtml(jam)}</dd>
           <dt>Status Service</dt><dd>${escapeHtml(data.status_reservasi)}</dd>
-          <dt>Layanan</dt><dd>${escapeHtml(data.layanan || '-')}</dd>
-          <dt>Catatan</dt><dd>${escapeHtml(data.catatan || '-')}</dd>
+          <dt>Layanan</dt><dd>${escapeHtml(data.layanan || "-")}</dd>
+          <dt>Catatan</dt><dd>${escapeHtml(data.catatan || "-")}</dd>
         </dl>
       </section>
       <section class="detail-section">
@@ -94,9 +94,9 @@
         <h4>Pembayaran DP</h4>
         <dl class="detail-dl">
           <dt>Nominal dibayar</dt><dd>${formatRupiah(data.nominal_dp)}</dd>
-          <dt>No. Transaksi</dt><dd class="mono">${escapeHtml(data.no_transaksi_dp || '-')}</dd>
-          <dt>Order ID</dt><dd class="mono">${escapeHtml(data.order_id_dp || '-')}</dd>
-          <dt>Metode</dt><dd>${escapeHtml(data.metode_dp || '-')} ${data.channel_dp ? '(' + escapeHtml(data.channel_dp) + ')' : ''}</dd>
+          <dt>No. Transaksi</dt><dd class="mono">${escapeHtml(data.no_transaksi_dp || "-")}</dd>
+          <dt>Order ID</dt><dd class="mono">${escapeHtml(data.order_id_dp || "-")}</dd>
+          <dt>Metode</dt><dd>${escapeHtml(data.metode_dp || "-")} ${data.channel_dp ? "(" + escapeHtml(data.channel_dp) + ")" : ""}</dd>
           <dt>Tanggal bayar</dt><dd>${formatDateTime(data.tanggal_bayar_dp)}</dd>
         </dl>
       </section>
@@ -104,9 +104,9 @@
         <h4>Pelunasan (Full)</h4>
         <dl class="detail-dl">
           <dt>Nominal dibayar</dt><dd>${formatRupiah(data.nominal_full)}</dd>
-          <dt>No. Transaksi</dt><dd class="mono">${escapeHtml(data.no_transaksi_full || '-')}</dd>
-          <dt>Order ID</dt><dd class="mono">${escapeHtml(data.order_id_full || '-')}</dd>
-          <dt>Metode</dt><dd>${escapeHtml(data.metode_full || '-')} ${data.channel_full ? '(' + escapeHtml(data.channel_full) + ')' : ''}</dd>
+          <dt>No. Transaksi</dt><dd class="mono">${escapeHtml(data.no_transaksi_full || "-")}</dd>
+          <dt>Order ID</dt><dd class="mono">${escapeHtml(data.order_id_full || "-")}</dd>
+          <dt>Metode</dt><dd>${escapeHtml(data.metode_full || "-")} ${data.channel_full ? "(" + escapeHtml(data.channel_full) + ")" : ""}</dd>
           <dt>Tanggal bayar</dt><dd>${formatDateTime(data.tanggal_bayar_full)}</dd>
         </dl>
       </section>
@@ -117,7 +117,7 @@
 
   function renderStruk(data) {
     const h = data.header;
-    const jam = (h.jam || '').toString().substring(0, 5);
+    const jam = (h.jam || "").toString().substring(0, 5);
     const t = data.totals;
 
     const rows = (data.items || [])
@@ -126,16 +126,16 @@
         <tr>
           <td>
             <span class="struk-layanan-nama">${escapeHtml(item.nama_layanan)}</span>
-            ${item.kategori ? `<span class="struk-layanan-kat">${escapeHtml(item.kategori)}</span>` : ''}
+            ${item.kategori ? `<span class="struk-layanan-kat">${escapeHtml(item.kategori)}</span>` : ""}
           </td>
           <td class="text-right">${formatRupiah(item.harga_dp)}</td>
           <td class="text-right">${formatRupiah(item.harga_full)}</td>
           <td class="text-right">${formatRupiah(item.harga_sisa)}</td>
-        </tr>`
+        </tr>`,
       )
-      .join('');
+      .join("");
 
-    titleEl.textContent = 'Struk Pembayaran #' + h.id_reservasi;
+    titleEl.textContent = "Struk Pembayaran #" + h.id_reservasi;
 
     strukEl.innerHTML = `
       <article class="struk-card" id="strukPrintArea">
@@ -147,11 +147,11 @@
         </header>
         <section class="struk-info-block">
           <p><span>Pelanggan</span><strong>${escapeHtml(h.nama_pelanggan)}</strong></p>
-          <p><span>Kendaraan</span><strong>${escapeHtml(h.kendaraan)} (${escapeHtml(h.jenis_kendaraan || '-')})</strong></p>
+          <p><span>Kendaraan</span><strong>${escapeHtml(h.kendaraan)} (${escapeHtml(h.jenis_kendaraan || "-")})</strong></p>
           <p><span>Plat</span><strong>${escapeHtml(h.plat)}</strong></p>
           <p><span>Jadwal</span><strong>${formatTanggal(h.tanggal)} · ${escapeHtml(jam)}</strong></p>
         </section>
-        <p class="struk-harga-note">Harga resmi per layanan (${escapeHtml(h.jenis_kendaraan || 'kendaraan')})</p>
+        <p class="struk-harga-note">Harga resmi per layanan (${escapeHtml(h.jenis_kendaraan || "kendaraan")})</p>
         <div class="struk-table-wrap">
           <table class="struk-table">
             <thead>
@@ -176,8 +176,8 @@
           </table>
         </div>
         <footer class="struk-footer">
-          <p><span>Trx DP</span><span class="mono">${escapeHtml(h.no_transaksi_dp || '-')}</span></p>
-          <p><span>Trx Full</span><span class="mono">${escapeHtml(h.no_transaksi_full || '-')}</span></p>
+          <p><span>Trx DP</span><span class="mono">${escapeHtml(h.no_transaksi_dp || "-")}</span></p>
+          <p><span>Trx Full</span><span class="mono">${escapeHtml(h.no_transaksi_full || "-")}</span></p>
           <p class="struk-thanks">Terima kasih telah menggunakan layanan kami.</p>
         </footer>
       </article>
@@ -187,108 +187,110 @@
   }
 
   function showDetailView() {
-    contentEl.style.display = 'block';
-    strukEl.style.display = 'none';
-    setFooterMode('detail');
+    contentEl.style.display = "block";
+    strukEl.style.display = "none";
+    setFooterMode("detail");
   }
 
   function showStrukView() {
-    contentEl.style.display = 'none';
-    strukEl.style.display = 'block';
-    setFooterMode('struk');
+    contentEl.style.display = "none";
+    strukEl.style.display = "block";
+    setFooterMode("struk");
   }
 
   function openModal() {
-    modal.style.display = 'flex';
-    modal.setAttribute('aria-hidden', 'false');
+    modal.style.display = "flex";
+    modal.setAttribute("aria-hidden", "false");
   }
 
   function closeModal() {
-    modal.style.display = 'none';
-    modal.setAttribute('aria-hidden', 'true');
-    contentEl.style.display = 'none';
-    contentEl.innerHTML = '';
-    strukEl.style.display = 'none';
-    strukEl.innerHTML = '';
-    loadingEl.style.display = 'block';
-    loadingEl.textContent = 'Memuat data...';
+    modal.style.display = "none";
+    modal.setAttribute("aria-hidden", "true");
+    contentEl.style.display = "none";
+    contentEl.innerHTML = "";
+    strukEl.style.display = "none";
+    strukEl.innerHTML = "";
+    loadingEl.style.display = "block";
+    loadingEl.textContent = "Memuat data...";
     currentReservasiId = null;
-    setFooterMode('loading');
+    setFooterMode("loading");
   }
 
   async function loadDetail(idReservasi) {
     currentReservasiId = idReservasi;
     openModal();
-    loadingEl.style.display = 'block';
-    contentEl.style.display = 'none';
-    strukEl.style.display = 'none';
-    setFooterMode('loading');
+    loadingEl.style.display = "block";
+    contentEl.style.display = "none";
+    strukEl.style.display = "none";
+    setFooterMode("loading");
 
     try {
       const res = await fetch(
         `${baseUrl}/pelanggan/detailpembayaran/${idReservasi}`,
-        { headers: { Accept: 'application/json' } }
+        { headers: { Accept: "application/json" } },
       );
       const json = await res.json();
 
       if (!json.success || !json.data) {
-        throw new Error(json.message || 'Gagal memuat detail');
+        throw new Error(json.message || "Gagal memuat detail");
       }
 
       renderDetail(json.data);
-      loadingEl.style.display = 'none';
+      loadingEl.style.display = "none";
       showDetailView();
     } catch (err) {
-      loadingEl.textContent = err.message || 'Terjadi kesalahan';
-      setFooterMode('loading');
+      loadingEl.textContent = err.message || "Terjadi kesalahan";
+      setFooterMode("loading");
     }
   }
 
   async function loadStruk() {
     if (!currentReservasiId) return;
 
-    loadingEl.style.display = 'block';
-    loadingEl.textContent = 'Memuat struk...';
-    contentEl.style.display = 'none';
-    strukEl.style.display = 'none';
+    loadingEl.style.display = "block";
+    loadingEl.textContent = "Memuat struk...";
+    contentEl.style.display = "none";
+    strukEl.style.display = "none";
 
     try {
       const res = await fetch(
         `${baseUrl}/pelanggan/strukpembayaran/${currentReservasiId}`,
-        { headers: { Accept: 'application/json' } }
+        { headers: { Accept: "application/json" } },
       );
       const json = await res.json();
 
       if (!json.success || !json.data) {
-        throw new Error(json.message || 'Gagal memuat struk');
+        throw new Error(json.message || "Gagal memuat struk");
       }
 
       renderStruk(json.data);
-      loadingEl.style.display = 'none';
+      loadingEl.style.display = "none";
       showStrukView();
     } catch (err) {
-      loadingEl.textContent = err.message || 'Terjadi kesalahan';
-      loadingEl.style.display = 'block';
+      loadingEl.textContent = err.message || "Terjadi kesalahan";
+      loadingEl.style.display = "block";
     }
   }
 
-  document.querySelectorAll('.btn-detail-pembayaran').forEach((btn) => {
-    btn.addEventListener('click', () => {
-      const id = btn.getAttribute('data-id');
+  document.querySelectorAll(".btn-detail-pembayaran").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const id = btn.getAttribute("data-id");
       if (id) loadDetail(id);
     });
   });
 
-  document.getElementById('btnCloseDetailPembayaran')?.addEventListener('click', closeModal);
-  btnTutup?.addEventListener('click', closeModal);
-  btnStruk?.addEventListener('click', loadStruk);
-  btnKembali?.addEventListener('click', () => {
-    loadingEl.style.display = 'none';
+  document
+    .getElementById("btnCloseDetailPembayaran")
+    ?.addEventListener("click", closeModal);
+  btnTutup?.addEventListener("click", closeModal);
+  btnStruk?.addEventListener("click", loadStruk);
+  btnKembali?.addEventListener("click", () => {
+    loadingEl.style.display = "none";
     showDetailView();
-    titleEl.textContent = 'Detail Pembayaran #' + currentReservasiId;
+    titleEl.textContent = "Detail Pembayaran #" + currentReservasiId;
   });
 
-  modal.addEventListener('click', (e) => {
+  modal.addEventListener("click", (e) => {
     if (e.target === modal) closeModal();
   });
 })();

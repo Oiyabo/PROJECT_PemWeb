@@ -14,12 +14,17 @@ $title = 'Data Service';
   <form class="search-wrapper" method="GET" action="<?= BASEURL ?>/admin/dataservice">
     <div class="search-box">
       <i data-lucide="search" color="#38a3a5" width="18" height="18"></i>
+<<<<<<< HEAD
       <input
         type="text"
         name="q"
         placeholder="Cari pelanggan, kendaraan, plat, layanan..."
         value="<?= htmlspecialchars($keyword ?? '') ?>"
       >
+=======
+      <input type="text" name="q" placeholder="Cari pelanggan, kendaraan, plat, layanan..."
+        value="<?= htmlspecialchars($keyword ?? '') ?>">
+>>>>>>> 5050aa1868e7e474ce356535120cac92e664db99
     </div>
 
     <?php if (!empty($keyword)): ?>
