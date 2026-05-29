@@ -1,4 +1,4 @@
-﻿/* ============================================
+/* ============================================
    CLEAN & ORGANIZED CSS WITH NESTING
    AutoFix - Manajemen Bengkel
    ============================================ */
@@ -2400,54 +2400,229 @@ table {
   }
 }
 
-/* ============================================
-    MIDTRANS PAYMENT
-   ============================================ */
+.pelanggan-container,
+.dataservice-container {
+  padding: 20px;
+  background-color: transparent;
+}
 
-#payment-loading-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 10000;
-  background: rgba(15, 23, 42, 0.65);
-  display: none;
+.search-wrapper {
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.search-box {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid #38a3a5;
+  border-radius: 8px;
+  padding: 8px 16px;
+  background: #ffffff;
+  width: 300px;
+}
+
+.search-box input {
+  border: none;
+  outline: none;
+  margin-left: 10px;
+  width: 100%;
+  color: #1e6091;
+  font-size: 13px;
+  background: transparent;
+}
+
+.search-box input::placeholder {
+  color: #94a3b8;
+}
+
+.btn-reset-search {
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 20px;
-}
-#payment-loading-overlay.is-active {
-  display: flex;
-}
-.payment-loading-box {
-  background: #fff;
-  padding: 32px 40px;
-  border-radius: 12px;
-  text-align: center;
-  max-width: 360px;
-  width: 100%;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
-}
-.payment-loading-spinner {
-  width: 48px;
-  height: 48px;
-  margin: 0 auto 20px;
-  border: 4px solid #e2e8f0;
-  border-top-color: #38a3a5;
-  border-radius: 50%;
-  animation: payment-spin 0.85s linear infinite;
-}
-.payment-loading-text {
-  margin: 0;
-  font-size: 16px;
-  font-weight: 600;
-  color: #1e293b;
-  line-height: 1.5;
-}
-.payment-loading-hint {
-  margin: 10px 0 0;
+  padding: 8px 14px;
+  border-radius: 8px;
+  background: #e2e8f0;
+  color: #184e77;
   font-size: 13px;
-  color: #64748b;
-}
-@keyframes payment-spin {
-  to { transform: rotate(360deg); }
+  font-weight: 600;
+  text-decoration: none;
 }
 
+.btn-reset-search:hover {
+  background: #cbd5e1;
+}
+
+.table-pelanggan {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: transparent;
+}
+
+.table-pelanggan th {
+  text-align: left;
+  padding: 12px 15px;
+  color: #38a3a5;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  border-bottom: 2px solid #38a3a5;
+}
+
+.table-pelanggan td {
+  padding: 15px;
+  font-size: 14px;
+  color: #1e6091;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.id-text {
+  color: #38a3a5;
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.avatar-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.avatar-circle {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: #b5e48c;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #38a3a5;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.role-badge {
+  background-color: #1e6091;
+  color: #ffffff;
+  padding: 4px 12px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.empty-table {
+  text-align: center;
+  padding: 30px;
+  color: #52b69a;
+}
+
+.card {
+  background: #ffffff;
+  border: 1px solid #38a3a5;
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.card-header {
+  margin-bottom: 16px;
+}
+
+.card-header h3 {
+  color: #184e77;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: transparent;
+}
+
+.table th {
+  text-align: left;
+  padding: 12px 15px;
+  color: #38a3a5;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  border-bottom: 2px solid #38a3a5;
+}
+
+.table td {
+  padding: 15px;
+  font-size: 14px;
+  color: #1e6091;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.text-center {
+  text-align: center;
+  color: #52b69a;
+}
+
+.transaksi-container {
+  padding: 20px;
+  background-color: transparent;
+}
+
+.table-transaksi-wrapper {
+  background: #ffffff;
+  border: 1px solid #38a3a5;
+  border-radius: 12px;
+  overflow: hidden;
+  overflow-x: auto;
+}
+
+.table-transaksi {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table-transaksi th {
+  text-align: left;
+  padding: 16px 20px;
+  color: #38a3a5;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.table-transaksi td {
+  padding: 16px 20px;
+  font-size: 14px;
+  color: #1e6091;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.table-transaksi tr:last-child td {
+  border-bottom: none;
+}
+
+.badge-plat {
+  background: #b5e48c;
+  color: #ffffff;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  margin-left: 6px;
+  letter-spacing: 0.5px;
+}
+
+.badge-selesai {
+  background-color: #dcfce3;
+  color: #166534;
+  padding: 4px 12px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  border: 1px solid #bbf7d0;
+}
