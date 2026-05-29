@@ -1868,6 +1868,191 @@ table {
    PAYMENT SECTION
    ============================================ */
 
+.payment-alert {
+	margin-bottom: 16px;
+	padding: 12px;
+	border-radius: 6px;
+	background: #e7f3ff;
+	color: #1565c0;
+}
+
+.reservasi-table-container {
+	overflow-x: auto;
+	background: white;
+	border-radius: 8px;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.reservasi-table {
+	width: 100%;
+	border-collapse: collapse;
+	font-size: 14px;
+}
+
+.reservasi-table thead {
+	background: linear-gradient(135deg, #38a3a5 0%, #2d8a8c 100%);
+	color: white;
+}
+
+.reservasi-table th {
+	padding: 12px;
+	text-align: center;
+	font-weight: 600;
+}
+
+.reservasi-table tbody tr {
+	border-bottom: 1px solid #e2e8f0;
+	transition: background-color 0.2s;
+}
+
+.reservasi-table tbody tr:hover {
+	background-color: #f8f9fa;
+}
+
+.reservasi-table td {
+	padding: 12px;
+}
+
+.layanan-cell {
+	max-width: 300px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: normal;
+	line-height: 1.4;
+}
+
+.btn-small {
+	padding: 6px 12px;
+	font-size: 12px;
+	white-space: nowrap;
+}
+
+.text-right {
+	text-align: right;
+}
+
+.text-center {
+	text-align: center;
+}
+
+.text-success {
+	color: #28a745;
+}
+
+.text-danger-bold {
+	color: #dc3545;
+	font-weight: 600;
+}
+
+.btn-dashboard {
+	margin-top: 16px;
+}
+
+.empty-state {
+	text-align: center;
+	padding: 60px 20px;
+	background: white;
+	border-radius: 8px;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.empty-icon {
+	font-size: 48px;
+	margin-bottom: 16px;
+}
+
+.empty-state h2 {
+	color: #333;
+	margin-bottom: 8px;
+}
+
+.empty-state p {
+	color: #666;
+	margin-bottom: 0;
+}
+
+.popup-payment-box {
+	width: 90%;
+	max-width: 450px;
+}
+
+.payment-detail-box {
+	margin: 20px 0;
+	padding: 12px;
+	background-color: #f8f9fa;
+	border-radius: 6px;
+}
+
+.payment-info-row {
+	margin: 8px 0;
+}
+
+.font-semibold {
+	font-weight: 600;
+}
+
+.payment-total {
+	font-size: 18px;
+	color: #dc3545;
+	font-weight: 700;
+}
+
+.payment-description {
+	font-size: 14px;
+	color: #555;
+	margin-bottom: 16px;
+}
+
+.payment-success-box {
+	margin: 20px 0;
+	padding: 12px;
+	background-color: #d4edda;
+	border-radius: 6px;
+	text-align: center;
+}
+
+.payment-success-text {
+	margin: 0;
+	color: #155724;
+	font-size: 18px;
+	font-weight: 700;
+}
+
+.status-success {
+	color: #28a745;
+	font-weight: 600;
+}
+
+.reload-info-box {
+	padding: 12px;
+	background-color: #e7f3ff;
+	border-radius: 6px;
+	border-left: 4px solid #2196F3;
+}
+
+.reload-info-text {
+	margin: 0;
+	color: #1565c0;
+	font-size: 14px;
+}
+
+@media (max-width: 768px) {
+
+	.reservasi-table {
+		font-size: 12px;
+	}
+
+	.reservasi-table th,
+	.reservasi-table td {
+		padding: 8px;
+	}
+
+	.layanan-cell {
+		max-width: 150px;
+	}
+
+}
+
 .btn-info {
   display: inline-flex;
   align-items: center;
