@@ -9,7 +9,6 @@
   const modal = document.getElementById("sessionTimeoutModal");
   const titleEl = document.getElementById("sessionTimeoutTitle");
   const messageEl = document.getElementById("sessionTimeoutMessage");
-  const countdownEl = document.getElementById("sessionTimeoutCountdown");
   const btnExtend = document.getElementById("sessionTimeoutExtend");
   const btnLogout = document.getElementById("sessionTimeoutLogout");
 
@@ -18,19 +17,40 @@
   }
 
   let expiresAt = Number(config.expiresAt) || 0;
+  const serverOffset =
+    (Number(config.serverNow) || Math.floor(Date.now() / 1000)) -
+    Math.floor(Date.now() / 1000);
   const warningSeconds = Math.max(0, Number(config.warning) || 60);
   let modalVisible = false;
   let isExpiredState = false;
   let tickTimer = null;
 
-  function secondsLeft() {
-    return Math.max(0, expiresAt - Math.floor(Date.now() / 1000));
+  function nowServer() {
+    return Math.floor(Date.now() / 1000) + serverOffset;
   }
 
-  function formatCountdown(totalSeconds) {
-    const m = Math.floor(totalSeconds / 60);
-    const s = totalSeconds % 60;
-    return `${m}:${String(s).padStart(2, "0")}`;
+  function secondsLeft() {
+    return Math.max(0, expiresAt - nowServer());
+  }
+
+  function syncExpiresAt(value) {
+    const next = Number(value);
+    if (!next) {
+      return;
+    }
+
+    expiresAt = next;
+
+    if (modalVisible && !isExpiredState && secondsLeft() > warningSeconds) {
+      hideModal();
+    }
+  }
+
+  function syncExpiresFromResponse(response) {
+    const raw = response.headers.get("X-Session-Expires-At");
+    if (raw) {
+      syncExpiresAt(raw);
+    }
   }
 
   function showModal(expired) {
@@ -42,13 +62,13 @@
     if (expired) {
       titleEl.textContent = "Session habis";
       messageEl.textContent =
-        "Sesi Anda telah berakhir karena tidak ada aktivitas. Perpanjang untuk tetap masuk atau keluar dari akun.";
-      countdownEl.textContent = "";
-      btnExtend.textContent = "Perpanjang";
+        "Sesi Anda telah berakhir karena tidak ada aktivitas. Silakan keluar dan login kembali.";
+      btnExtend.hidden = true;
     } else {
       titleEl.textContent = "Session akan habis";
       messageEl.textContent =
         "Sesi Anda akan segera berakhir. Perpanjang untuk tetap masuk atau keluar dari akun.";
+      btnExtend.hidden = false;
       btnExtend.textContent = "Perpanjang";
     }
 
@@ -60,21 +80,9 @@
   function hideModal() {
     modalVisible = false;
     isExpiredState = false;
+    btnExtend.hidden = false;
     modal.classList.remove("show");
     modal.setAttribute("aria-hidden", "true");
-  }
-
-  function updateCountdownLabel() {
-    if (!modalVisible || isExpiredState) {
-      return;
-    }
-
-    const left = secondsLeft();
-    if (left > 0) {
-      countdownEl.textContent = `Sisa waktu: ${formatCountdown(left)}`;
-    } else {
-      countdownEl.textContent = "";
-    }
   }
 
   function onTick() {
@@ -87,11 +95,8 @@
       return;
     }
 
-    if (left <= warningSeconds) {
-      if (!modalVisible) {
-        showModal(false);
-      }
-      updateCountdownLabel();
+    if (left <= warningSeconds && !modalVisible) {
+      showModal(false);
     }
   }
 
@@ -104,6 +109,10 @@
   }
 
   async function extendSession() {
+    if (isExpiredState) {
+      return;
+    }
+
     btnExtend.disabled = true;
 
     try {
@@ -116,6 +125,8 @@
         credentials: "same-origin",
       });
 
+      syncExpiresFromResponse(res);
+
       const data = await res.json().catch(() => ({}));
 
       if (!res.ok || !data.ok) {
@@ -123,9 +134,12 @@
         return;
       }
 
-      expiresAt =
-        Number(data.expires_at) ||
-        Math.floor(Date.now() / 1000) + Number(config.timeout);
+      syncExpiresAt(
+        data.expires_at ||
+          Math.floor(Date.now() / 1000) +
+            serverOffset +
+            Number(config.timeout)
+      );
       hideModal();
       startTicker();
     } catch {
@@ -146,6 +160,8 @@
   const nativeFetch = window.fetch.bind(window);
   window.fetch = async function (...args) {
     const response = await nativeFetch(...args);
+
+    syncExpiresFromResponse(response);
 
     if (response.status === 401) {
       const cloned = response.clone();

@@ -1877,11 +1877,21 @@ tbody tr:last-child td {
    RESPONSIVE DESIGN
    ============================================ */
 
-@media (max-width: 768px) {
+@media (max-width: 768px), ((orientation: portrait) and (max-width: 1024px)) {
   #main .sidebar {
     position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
     transform: translateX(-100%);
     width: var(--sidebar-width);
+    min-width: var(--sidebar-width);
+  }
+
+  #main .sidebar.toggled {
+    transform: translateX(0);
+    width: var(--sidebar-width);
+    min-width: var(--sidebar-width);
   }
 
   #main .main-content-wrapper {
@@ -2105,12 +2115,6 @@ tbody tr:last-child td {
   color: var(--text-medium);
   font-size: 14px;
   line-height: 1.5;
-}
-
-.session-timeout-countdown {
-  margin-top: 12px;
-  color: var(--primary) !important;
-  font-weight: 800;
 }
 
 .popup-actions {
@@ -2550,20 +2554,6 @@ tbody tr:last-child td {
 }
 
 @media (max-width: 768px) {
-  .sidebar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 100vh;
-    transform: translateX(-100%);
-  }
-
-  .sidebar.toggled {
-    width: var(--sidebar-width);
-    min-width: var(--sidebar-width);
-    transform: translateX(0);
-  }
-
   .search-container {
     min-width: 120px;
   }

@@ -25,20 +25,27 @@ function app_is_ajax_request(): bool
 	return str_contains($accept, 'application/json');
 }
 
-function app_is_session_extend_request(): bool
+function app_session_expires_at(): int
 {
-	$path = strtolower(app_request_path());
-	return $path === 'auth/extendsession';
+	return (int) ($_SESSION['last_activity'] ?? time()) + (int) SESSION_TIMEOUT;
+}
+
+function app_send_session_expires_header(): void
+{
+	if (!isset($_SESSION['user']) || headers_sent()) {
+		return;
+	}
+
+	header('X-Session-Expires-At: ' . app_session_expires_at());
 }
 
 if (isset($_SESSION['user'])) {
 	$timeout = (int) SESSION_TIMEOUT;
-	$isExtend = app_is_session_extend_request();
 
 	if (isset($_SESSION['last_activity'])) {
 		$idle = time() - (int) $_SESSION['last_activity'];
 
-		if ($idle > $timeout && !$isExtend) {
+		if ($idle > $timeout) {
 			if (app_is_ajax_request()) {
 				header('Content-Type: application/json; charset=utf-8');
 				http_response_code(401);
@@ -61,9 +68,8 @@ if (isset($_SESSION['user'])) {
 		}
 	}
 
-	if (!$isExtend) {
-		$_SESSION['last_activity'] = time();
-	}
+	$_SESSION['last_activity'] = time();
+	app_send_session_expires_header();
 }
 
 require_once ROOT_PATH . '/app/libraries/MidtransService.php';

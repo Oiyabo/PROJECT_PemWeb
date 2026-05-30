@@ -7,7 +7,8 @@
 		window.APP_SESSION = {
 			timeout: <?= (int) SESSION_TIMEOUT ?>,
 			warning: <?= (int) SESSION_WARNING ?>,
-			expiresAt: <?= (int) ($_SESSION['last_activity'] ?? time()) + (int) SESSION_TIMEOUT ?>,
+			serverNow: <?= time() ?>,
+			expiresAt: <?= app_session_expires_at() ?>,
 			extendUrl: <?= json_encode(BASEURL . '/auth/extendSession', JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) ?>,
 			logoutUrl: <?= json_encode(BASEURL . '/auth/logout', JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) ?>
 		};
@@ -21,9 +22,17 @@
 	const sidebar = document.querySelector('.sidebar');
 	const sidebarToggle = document.getElementById('sidebarToggle');
 	const sidebarClose = document.getElementById('sidebarClose');
+	const mobileSidebarQuery = window.matchMedia(
+		'(max-width: 768px), ((orientation: portrait) and (max-width: 1024px))'
+	);
+
+	function isMobileSidebar() {
+		return mobileSidebarQuery.matches;
+	}
 
 	if (sidebarToggle && sidebar) {
-		sidebarToggle.addEventListener('click', () => {
+		sidebarToggle.addEventListener('click', (e) => {
+			e.stopPropagation();
 			sidebar.classList.toggle('toggled');
 		});
 	}
@@ -36,7 +45,7 @@
 
 	document.addEventListener('click', (e) => {
 		if (
-			window.innerWidth <= 768 &&
+			isMobileSidebar() &&
 			sidebar &&
 			sidebar.classList.contains('toggled') &&
 			!sidebar.contains(e.target) &&
