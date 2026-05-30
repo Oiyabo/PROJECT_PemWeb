@@ -39,70 +39,66 @@ class Pelanggan extends Controller
 		$ajax = $this->isAjaxRequest();
 
 		if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-			$existingData = $_SESSION['form_reservasi'] ?? [];
-			$newData = array_merge($existingData, $_POST);
-			if (!isset($newData['layanan_id'])) {
-				$newData['layanan_id'] = [];
-			}
-			$_SESSION['form_reservasi'] = $newData;
+            $existingData = $_SESSION['form_reservasi'] ?? [];
+            $newData = array_merge($existingData, $_POST);
+            if (!isset($newData['layanan_id'])) {
+                $newData['layanan_id'] = [];
+            }
+            $_SESSION['form_reservasi'] = $newData;
 
-			if ($ajax) {
-				$tanggal = trim($newData['tanggal'] ?? '');
-				$jam = trim($newData['jam'] ?? '');
+            if ($ajax) {
+                $tanggal = trim($newData['tanggal'] ?? '');
+                $jam = trim($newData['jam'] ?? '');
 
-				if ($tanggal !== '' && $jam !== '') {
-					if ($this->reservasiModel->isJadwalTerisi($tanggal, $jam)) {
-						$this->jsonResponse([
-							'success' => false,
-							'message' => 'Jadwal pada tanggal dan jam tersebut sudah dipesan. Silakan pilih waktu lain.',
-							'jadwal_terisi' => true,
-						], 409);
-					}
-				}
+                if ($tanggal !== '' && $jam !== '') {
+                    if ($this->reservasiModel->isJadwalTerisi($tanggal, $jam)) {
+                        $this->jsonResponse([
+                            'success' => false,
+                            'message' => 'Jadwal pada tanggal dan jam tersebut sudah dipesan. Silakan pilih waktu lain.',
+                            'jadwal_terisi' => true,
+                        ], 409);
+                    }
+                }
 
-				$layanans = $this->reservasiModel->getLayanan();
-				$ringkasan = $this->buildRingkasanHarga($layanans, $newData);
-				$this->jsonResponse([
-					'success' => true,
-					'data' => $newData,
-					'ringkasan' => $ringkasan,
-				]);
-			}
-		}
+                $layanans = $this->reservasiModel->getLayanan();
+                $ringkasan = $this->buildRingkasanHarga($layanans, $newData);
+                $this->jsonResponse([
+                    'success' => true,
+                    'data' => $newData,
+                    'ringkasan' => $ringkasan,
+                ]);
+            }
+        }
 
-		$layanans = $this->reservasiModel->getLayanan();
+        $layanans = $this->reservasiModel->getLayanan();
 
-		$layananMap = [];
+        $layananMap = [];
+        foreach ($layanans as $l) {
+            $layananMap[$l['layanan_id']] = $l['nama_layanan'];
+        }
 
-		foreach ($layanans as $l) {
-			$layananMap[$l['layanan_id']] = $l['nama_layanan'];
-		}
+        $kategoris = array_unique(array_column($layanans, 'kategori'));
+        sort($kategoris);
 
-		$midtrans = new MidtransService();
-		$formData = $_SESSION['form_reservasi'] ?? [];
-		$ringkasanHarga = [
-			'items' => [],
-			'total_dp' => 0,
-			'total_full' => 0,
-			'total_sisa' => 0,
-		];
+        $midtrans = new MidtransService();
+        $formData = $_SESSION['form_reservasi'] ?? [];
+        $ringkasanHarga = $this->buildRingkasanHarga($layanans, $formData);
 
-		$ringkasanHarga = $this->buildRingkasanHarga($layanans, $formData);
+        $data = [
+            'title' => 'Buat Reservasi Baru',
+            'user' => $_SESSION['user'],
+            'layanans' => $layanans,
+            'layananMap' => $layananMap,
+            'kategoris' => $kategoris,
+            'ringkasanHarga' => $ringkasanHarga,
+            'midtrans_client_key' => $midtrans->getClientKey(),
+            'midtrans_snap_script' => $midtrans->getSnapScriptUrl(),
+        ];
 
-		$data = [
-			'title' => 'Buat Reservasi Baru',
-			'user' => $_SESSION['user'],
-			'layanans' => $layanans,
-			'layananMap' => $layananMap,
-			'ringkasanHarga' => $ringkasanHarga,
-			'midtrans_client_key' => $midtrans->getClientKey(),
-			'midtrans_snap_script' => $midtrans->getSnapScriptUrl(),
-		];
-
-		$this->view('templates/header', $data);
-		$this->view('pelanggan/buat-reservasi', $data);
-		$this->view('templates/footer', $data);
-	}
+        $this->view('templates/header', $data);
+        $this->view('pelanggan/buat-reservasi', $data);
+        $this->view('templates/footer', $data);
+    }
 
 	// Proses pengiriman form (POST)
 	public function simpanReservasi(): void
