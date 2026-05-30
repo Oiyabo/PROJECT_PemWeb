@@ -1730,7 +1730,7 @@ tbody tr:last-child td {
 
   &:hover {
     border-color: var(--primary);
-    background: #f8fffb;
+    background: var(--secondary);
   }
 }
 

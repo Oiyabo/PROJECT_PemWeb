@@ -494,6 +494,7 @@ function bayarDpDanSelesaikan() {
       '#hiddenFieldsContainer input[name="layanan_id[]"]',
     ),
   ).map((el) => el.value);
+  
   const jenis =
     document.querySelector(
       '#hiddenFieldsContainer input[name="jenisKendaraan"]',
