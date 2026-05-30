@@ -8,7 +8,7 @@
 		</div>
 		<div class="detail-box-content">
 			<div id="detailReservasiContent" class="detail-pembayaran-content"></div>
-			<div id="detailReservasiAdminActions" class="detail-reservasi-admin-actions" style="display: none;"></div>
+			<div id="detailReservasiAdminActions" class="detail-reservasi-admin-actions hidden"></div>
 		</div>
 	</div>
 </div>

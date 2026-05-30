@@ -75,33 +75,7 @@
 		</div>
 	</div>
 
-	<script>
-		const signUpButton = document.getElementById('signUp');
-		const signInButton = document.getElementById('signIn');
-		const overlayContainer = document.getElementById('overlay-container');
-
-		// Toggle to Sign Up
-		signUpButton.addEventListener('click', (e) => {
-			e.preventDefault();
-			overlayContainer.classList.add('changed');
-		});
-
-		// Toggle to Sign In
-		signInButton.addEventListener('click', (e) => {
-			e.preventDefault();
-			overlayContainer.classList.remove('changed');
-		});
-
-		// Auto-dismiss flash messages
-		const flashes = document.querySelectorAll('.flash-auth');
-		flashes.forEach(el => {
-			setTimeout(() => {
-				el.style.transition = 'opacity 0.5s';
-				el.style.opacity = '0';
-				setTimeout(() => el.remove(), 500);
-			}, 4000);
-		});
-	</script>
+	<script src="<?= BASEURL ?>/assets/js/login.js"></script>
 </body>
 
 </html>

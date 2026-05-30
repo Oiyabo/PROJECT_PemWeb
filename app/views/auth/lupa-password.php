@@ -54,17 +54,7 @@
 		</div>
 	</div>
 
-	<script>
-		const flashes = document.querySelectorAll('.flash-auth');
-
-		flashes.forEach(el => {
-			setTimeout(() => {
-				el.style.transition = 'opacity 0.5s';
-				el.style.opacity = '0';
-				setTimeout(() => el.remove(), 500);
-			}, 4000);
-		});
-	</script>
+	<script src="<?= BASEURL ?>/assets/js/lupa-password.js"></script>
 
 </body>
 
