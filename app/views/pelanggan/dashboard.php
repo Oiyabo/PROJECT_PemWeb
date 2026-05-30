@@ -3,6 +3,7 @@ $title = 'Dashboard Pelanggan';
 ?>
 
 <div class="dashboard-container">
+
 	<div class="welcome-card">
 		<div class="avatar">
 			<?= strtoupper(substr($user['nama'], 0, 1)) ?>
@@ -27,17 +28,19 @@ $title = 'Dashboard Pelanggan';
 		</div>
 	</div>
 
-	<div class="pelanggan-stats-grid" style="margin-top: 24px;">
+	<div class="pelanggan-stats-grid dashboard-stats">
 
 		<div class="pelanggan-stat-card">
 			<div class="pelanggan-stat-header">
+
 				<div class="pelanggan-stat-label">
 					Total Reservasi
 				</div>
 
-				<div class="pelanggan-stat-icon-wrapper" style="background: rgba(22, 138, 173, 0.12);">
+				<div class="pelanggan-stat-icon-wrapper stat-icon-blue">
 					<i data-lucide="calendar-days" color="#168aad" width="18" height="18"></i>
 				</div>
+
 			</div>
 
 			<div class="pelanggan-stat-body">
@@ -49,13 +52,15 @@ $title = 'Dashboard Pelanggan';
 
 		<div class="pelanggan-stat-card">
 			<div class="pelanggan-stat-header">
+
 				<div class="pelanggan-stat-label">
 					Sedang Aktif
 				</div>
 
-				<div class="pelanggan-stat-icon-wrapper" style="background: rgba(52, 160, 164, 0.12);">
+				<div class="pelanggan-stat-icon-wrapper stat-icon-green">
 					<i data-lucide="loader-circle" color="#34a0a4" width="18" height="18"></i>
 				</div>
+
 			</div>
 
 			<div class="pelanggan-stat-body">
@@ -67,13 +72,15 @@ $title = 'Dashboard Pelanggan';
 
 		<div class="pelanggan-stat-card">
 			<div class="pelanggan-stat-header">
+
 				<div class="pelanggan-stat-label">
 					Selesai
 				</div>
 
-				<div class="pelanggan-stat-icon-wrapper" style="background: rgba(118, 200, 147, 0.15);">
+				<div class="pelanggan-stat-icon-wrapper stat-icon-success">
 					<i data-lucide="check-circle-2" color="#76c893" width="18" height="18"></i>
 				</div>
+
 			</div>
 
 			<div class="pelanggan-stat-body">
@@ -82,6 +89,5 @@ $title = 'Dashboard Pelanggan';
 				</div>
 			</div>
 		</div>
-
 	</div>
 </div>

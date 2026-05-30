@@ -628,6 +628,22 @@ body.auth-page {
   text-decoration: none;
 }
 
+.dashboard-stats {
+	margin-top: 24px;
+}
+
+.stat-icon-blue {
+	background: rgba(22, 138, 173, 0.12);
+}
+
+.stat-icon-green {
+	background: rgba(52, 160, 164, 0.12);
+}
+
+.stat-icon-success {
+	background: rgba(118, 200, 147, 0.15);
+}
+
 .reservation-item {
   display: flex;
   align-items: center;
