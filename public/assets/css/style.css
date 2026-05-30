@@ -655,13 +655,10 @@ body.auth-page {
   margin-bottom: 8px;
 }
 
-.reservation-date {
-    display: block;
-    margin-top: 6px;
-    margin-bottom: 20px;
-    font-size: 13px;
-    color: #64748b;
-    font-weight: 500;
+.reservation-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
 .admin-reservation-avatar,
@@ -759,7 +756,6 @@ body.auth-page {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 12px;
-  margin-bottom: 24px;
 }
 
 .pelanggan-stat-card {
@@ -767,72 +763,49 @@ body.auth-page {
   min-height: 150px;
 }
 
-.reservation-progress-card{
-    background:#fff;
-    border-radius:18px;
-    padding:24px 30px;
-    box-shadow:0 5px 15px rgba(0,0,0,.05);
+.dashboard-history-card {
+    background: #fff;
+    border-radius: 20px;
+    padding: 24px;
+    margin-top: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,.05);
 }
 
-.progress-header{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    margin-bottom:25px;
+.dashboard-history-header {
+    margin-bottom: 16px;
 }
 
-.progress-header h3{
-    margin:0;
-    color:#1d5b91;
+.dashboard-history-header h3 {
+    font-size: 22px;
+    font-weight: 700;
+    color: #1d3557;
 }
 
-.progress-header p{
-    margin-top:5px;
-    color:#6c757d;
+.dashboard-history-table {
+    width: 100%;
+    border-collapse: collapse;
 }
 
-.timeline-wrapper{
-    display:flex;
-    justify-content:center;
+.dashboard-history-table th {
+    text-align: left;
+    padding: 12px;
+    background: #f8fafc;
+    font-weight: 800;
 }
 
-.timeline{
-    display:flex;
-    align-items:center;
-    width:80%;
+.dashboard-history-table td {
+    padding: 12px;
+    border-top: 1px solid #e5e7eb;
 }
 
-.step{
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    min-width:90px;
+.dashboard-history-table tr:hover {
+    background: #f9fafb;
 }
 
-.circle{
-    width:42px;
-    height:42px;
-    border-radius:50%;
-    background:#e9ecef;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-weight:700;
-}
-
-.step.active .circle{
-    background:#1abc9c;
-    color:#fff;
-}
-
-.line{
-    flex:1;
-    height:4px;
-    background:#dee2e6;
-}
-
-.line.active{
-    background:#1abc9c;
+.dashboard-empty {
+    text-align: center;
+    padding: 30px;
+    color: #64748b;
 }
 
 .table-container {
@@ -1011,8 +984,8 @@ tbody tr:last-child td {
   justify-content: center;
   padding: 5px 11px;
   border-radius: 999px;
-  font-size: 11px;
-  font-weight: 800;
+  font-size: 12px;
+  font-weight: 500;
   white-space: nowrap;
 }
 
