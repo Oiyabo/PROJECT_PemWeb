@@ -655,10 +655,13 @@ body.auth-page {
   margin-bottom: 8px;
 }
 
-.reservation-info {
-  display: flex;
-  align-items: center;
-  gap: 12px;
+.reservation-date {
+    display: block;
+    margin-top: 6px;
+    margin-bottom: 20px;
+    font-size: 13px;
+    color: #64748b;
+    font-weight: 500;
 }
 
 .admin-reservation-avatar,
@@ -756,11 +759,80 @@ body.auth-page {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 12px;
+  margin-bottom: 24px;
 }
 
 .pelanggan-stat-card {
   padding: 30px;
   min-height: 150px;
+}
+
+.reservation-progress-card{
+    background:#fff;
+    border-radius:18px;
+    padding:24px 30px;
+    box-shadow:0 5px 15px rgba(0,0,0,.05);
+}
+
+.progress-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:25px;
+}
+
+.progress-header h3{
+    margin:0;
+    color:#1d5b91;
+}
+
+.progress-header p{
+    margin-top:5px;
+    color:#6c757d;
+}
+
+.timeline-wrapper{
+    display:flex;
+    justify-content:center;
+}
+
+.timeline{
+    display:flex;
+    align-items:center;
+    width:80%;
+}
+
+.step{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    min-width:90px;
+}
+
+.circle{
+    width:42px;
+    height:42px;
+    border-radius:50%;
+    background:#e9ecef;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:700;
+}
+
+.step.active .circle{
+    background:#1abc9c;
+    color:#fff;
+}
+
+.line{
+    flex:1;
+    height:4px;
+    background:#dee2e6;
+}
+
+.line.active{
+    background:#1abc9c;
 }
 
 .table-container {

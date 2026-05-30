@@ -1,5 +1,13 @@
 <?php
 $title = 'Dashboard Pelanggan';
+
+$statusOrder = [
+	'Menunggu' => 1,
+	'Konfirmasi' => 2,
+	'Proses' => 3,
+	'Selesai' => 4
+];
+
 ?>
 
 <div class="dashboard-container">
@@ -110,4 +118,96 @@ $title = 'Dashboard Pelanggan';
 			</div>
 		</div>
 	</div>
+
+	<h2>Status Reservasi</h2>
+	<?php if (!empty($reservasiAktif)): ?>
+
+		<?php foreach ($reservasiAktif as $reservasi): ?>
+
+			<?php
+			$currentStep = $statusOrder[$reservasi['status']] ?? 1;
+			?>
+
+			<div class="reservation-progress-card">
+				<div class="progress-header">
+					<div>
+						<h3>
+							<?= htmlspecialchars($reservasi['kendaraan']) ?>
+						</h3>
+
+						<p>
+							<?= htmlspecialchars($reservasi['plat']) ?>
+						</p>
+
+						<small class="reservation-date">
+							<?= date('d M Y', strtotime($reservasi['tanggal'])) ?>
+							•
+							<?= substr($reservasi['jam'], 0, 5) ?>
+						</small>
+					</div>
+
+					<span class="status-badge status-<?= strtolower($reservasi['status']) ?>">
+						<?= $reservasi['status'] ?>
+					</span>
+
+				</div>
+
+				<div class="timeline-wrapper">
+
+					<div class="timeline">
+
+						<div class="step <?= $currentStep >= 1 ? 'active' : '' ?>">
+							<div class="circle">
+								<?= $currentStep >= 1 ? '✓' : '○' ?>
+							</div>
+							<span>Menunggu</span>
+						</div>
+
+						<div class="line <?= $currentStep >= 2 ? 'active' : '' ?>"></div>
+
+						<div class="step <?= $currentStep >= 2 ? 'active' : '' ?>">
+							<div class="circle">
+								<?= $currentStep >= 2 ? '✓' : '○' ?>
+							</div>
+							<span>Konfirmasi</span>
+						</div>
+
+						<div class="line <?= $currentStep >= 3 ? 'active' : '' ?>"></div>
+
+						<div class="step <?= $currentStep >= 3 ? 'active' : '' ?>">
+							<div class="circle">
+								<?= $currentStep >= 3 ? '✓' : '○' ?>
+							</div>
+							<span>Proses</span>
+						</div>
+
+						<div class="line <?= $currentStep >= 4 ? 'active' : '' ?>"></div>
+
+						<div class="step <?= $currentStep >= 4 ? 'active' : '' ?>">
+							<div class="circle">
+								<?= $currentStep >= 4 ? '✓' : '○' ?>
+							</div>
+							<span>Selesai</span>
+						</div>
+
+					</div>
+				</div>
+			</div>
+
+		<?php endforeach; ?>
+
+	<?php else: ?>
+
+		<div class="reservation-empty-card">
+			<div class="empty-icon">🚗</div>
+
+			<h3>Tidak Ada Reservasi Aktif</h3>
+
+			<p>
+				Saat ini tidak ada reservasi yang sedang berjalan.
+				Buat reservasi baru untuk melakukan service kendaraan.
+			</p>
+		</div>
+
+	<?php endif; ?>
 </div>

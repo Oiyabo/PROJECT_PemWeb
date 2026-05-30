@@ -17,11 +17,16 @@ class Pelanggan extends Controller
 	{
 		$userId = $_SESSION['user']['id'];
 		$reservasi = $this->reservasiModel->getByUserId($userId);
+        $reservasiAktif = array_filter(
+            $reservasi,
+            fn($r) => in_array($r['status'], ['Menunggu', 'Konfirmasi', 'Proses'])
+        );
 
 		$data = [
 			'title' => 'Dashboard',
 			'user' => $_SESSION['user'],
 			'reservasi' => $reservasi,
+            'reservasiAktif' => $reservasiAktif,
 			'stats' => [
 				'total' => count($reservasi),
 				'aktif' => count(array_filter($reservasi, fn($r) => in_array($r['status'], ['Menunggu', 'Konfirmasi', 'Proses']))),
