@@ -119,18 +119,19 @@
     document.body.style.overflow = "";
   }
 
-  document.querySelectorAll(".btn-detail-reservasi").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      const raw = btn.getAttribute("data-reservasi");
-      if (!raw) return;
+  document.addEventListener("click", (e) => {
+    const btn = e.target.closest(".btn-detail-reservasi");
+    if (!btn) return;
 
-      try {
-        const data = JSON.parse(raw);
-        openModal(data);
-      } catch (e) {
-        console.error("Data reservasi tidak valid", e);
-      }
-    });
+    const raw = btn.getAttribute("data-reservasi");
+    if (!raw) return;
+
+    try {
+      const data = JSON.parse(raw);
+      openModal(data);
+    } catch (err) {
+      console.error("Data reservasi tidak valid", err);
+    }
   });
 
   btnClose?.addEventListener("click", closeModal);

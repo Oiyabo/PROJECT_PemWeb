@@ -2666,3 +2666,379 @@ tbody tr:last-child td {
   text-overflow: ellipsis !important;
   cursor: help;
 }
+
+/* =============================================================
+   Admin Jadwal (Calendar)
+   ============================================================= */
+
+.jadwal-page {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  overflow-y: auto;
+  height: 100%;
+}
+
+.jadwal-stats-grid {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.jadwal-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(320px, 1fr);
+  gap: 16px;
+  align-items: start;
+}
+
+.jadwal-calendar-section,
+.jadwal-lists-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+}
+
+.jadwal-calendar-card {
+  padding: 18px;
+}
+
+.jadwal-calendar-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.jadwal-calendar-nav {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.jadwal-calendar-title {
+  color: var(--text-dark);
+  font-size: 18px;
+  font-weight: 700;
+  min-width: 180px;
+  text-align: center;
+}
+
+.jadwal-nav-btn,
+.jadwal-today-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border);
+  background: var(--bg-surface);
+  color: var(--text-medium);
+  border-radius: 8px;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.jadwal-nav-btn {
+  width: 36px;
+  height: 36px;
+}
+
+.jadwal-today-btn {
+  padding: 8px 14px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.jadwal-nav-btn:hover,
+.jadwal-today-btn:hover {
+  border-color: var(--secondary-light);
+  color: var(--secondary);
+  background: rgba(22, 138, 173, 0.06);
+}
+
+.jadwal-calendar-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-bottom: 14px;
+  font-size: 11px;
+  color: var(--text-light);
+}
+
+.legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.legend-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.legend-upcoming {
+  background: var(--secondary-light);
+}
+
+.legend-done {
+  background: var(--primary);
+}
+
+.legend-cancel {
+  background: var(--error);
+}
+
+.jadwal-calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.jadwal-weekday {
+  text-align: center;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-light);
+  padding: 6px 0;
+  text-transform: uppercase;
+}
+
+.jadwal-day {
+  position: relative;
+  min-height: 72px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--bg-surface);
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+}
+
+.jadwal-day-empty {
+  border: none;
+  background: transparent;
+  cursor: default;
+  min-height: 72px;
+}
+
+.jadwal-day:hover:not(.jadwal-day-empty) {
+  border-color: var(--secondary-light);
+  box-shadow: 0 2px 8px rgba(22, 138, 173, 0.08);
+}
+
+.jadwal-day.is-today {
+  border-color: var(--secondary);
+  background: rgba(22, 138, 173, 0.05);
+}
+
+.jadwal-day.is-selected {
+  border-color: var(--secondary);
+  box-shadow: 0 0 0 2px rgba(22, 138, 173, 0.15);
+}
+
+.jadwal-day-number {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-dark);
+}
+
+.jadwal-day-dots {
+  display: flex;
+  gap: 3px;
+  flex-wrap: wrap;
+}
+
+.jadwal-day-count {
+  margin-top: auto;
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--secondary);
+  background: rgba(22, 138, 173, 0.1);
+  padding: 2px 6px;
+  border-radius: 999px;
+}
+
+.jadwal-day-detail {
+  padding: 16px 18px;
+}
+
+.jadwal-day-detail-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.btn-close-day-detail {
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg-surface);
+  color: var(--text-medium);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.btn-close-day-detail:hover {
+  border-color: var(--error);
+  color: var(--error);
+}
+
+.jadwal-detail-item {
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.jadwal-detail-item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.jadwal-detail-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.jadwal-detail-time {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--secondary);
+}
+
+.jadwal-detail-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-dark);
+  margin-bottom: 4px;
+}
+
+.jadwal-detail-meta,
+.jadwal-detail-service {
+  font-size: 12px;
+  color: var(--text-light);
+  margin-bottom: 4px;
+}
+
+.jadwal-list-card .admin-card-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.jadwal-list-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  max-height: 320px;
+  overflow-y: auto;
+}
+
+.jadwal-list-item {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.jadwal-list-item:last-child {
+  border-bottom: none;
+}
+
+.jadwal-list-date {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--secondary);
+  margin-bottom: 4px;
+}
+
+.jadwal-list-time {
+  color: var(--text-light);
+  font-weight: 500;
+}
+
+.jadwal-list-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-dark);
+  margin-bottom: 2px;
+}
+
+.jadwal-list-meta {
+  font-size: 11px;
+  color: var(--text-light);
+}
+
+.jadwal-list-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.jadwal-list-upcoming {
+  border-left: 3px solid var(--secondary-light);
+  padding-left: 10px;
+}
+
+.jadwal-list-done {
+  border-left: 3px solid var(--primary);
+  padding-left: 10px;
+}
+
+.jadwal-empty {
+  color: var(--text-light);
+  font-size: 13px;
+  padding: 8px 0;
+}
+
+.btn-sm {
+  padding: 6px 10px;
+  font-size: 11px;
+}
+
+@media (max-width: 1100px) {
+  .jadwal-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .jadwal-list-content {
+    max-height: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .jadwal-stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .jadwal-day {
+    min-height: 58px;
+    padding: 6px;
+  }
+
+  .jadwal-calendar-title {
+    font-size: 15px;
+    min-width: 140px;
+  }
+}

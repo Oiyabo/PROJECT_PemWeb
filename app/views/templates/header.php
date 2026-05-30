@@ -13,8 +13,14 @@ if (isset($user)) {
       [
         'url' => BASEURL . '/admin/reservasi',
         'label' => 'Reservasi',
-        'icon' => 'calendar',
+        'icon' => 'clipboard-list',
         'key' => 'reservasi'
+      ],
+      [
+        'url' => BASEURL . '/admin/jadwal',
+        'label' => 'Jadwal',
+        'icon' => 'calendar-days',
+        'key' => 'jadwal'
       ],
       [
         'url' => BASEURL . '/admin/pelanggan',
@@ -74,6 +80,10 @@ function isNavActive(array $nav, string $currentPath): bool
     return str_contains($currentPath, 'admin/reservasi')
       || str_contains($currentPath, 'admin/dataservice')
       || str_contains($currentPath, 'admin/transaksi');
+  }
+
+  if ($key === 'jadwal') {
+    return str_contains($currentPath, 'admin/jadwal');
   }
 
   if ($key === 'pelanggan') {

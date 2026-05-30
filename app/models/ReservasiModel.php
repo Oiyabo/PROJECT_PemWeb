@@ -114,6 +114,68 @@ class ReservasiModel
         return $stmt->execute([$status, $reservasiId]);
     }
 
+    public function getByDateRange(string $startDate, string $endDate): array
+    {
+        $stmt = $this->db->prepare(
+            'SELECT * FROM v_reservasi_detail
+             WHERE tanggal BETWEEN ? AND ?
+             ORDER BY tanggal ASC, jam ASC'
+        );
+        $stmt->execute([$startDate, $endDate]);
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function getUpcoming(int $limit = 15): array
+    {
+        $stmt = $this->db->prepare(
+            'SELECT * FROM v_reservasi_detail
+             WHERE status NOT IN (\'Selesai\', \'Batal\')
+               AND tanggal >= CURDATE()
+             ORDER BY tanggal ASC, jam ASC
+             LIMIT ?'
+        );
+        $stmt->bindValue(1, $limit, PDO::PARAM_INT);
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function getCompleted(int $limit = 15): array
+    {
+        $stmt = $this->db->prepare(
+            'SELECT * FROM v_reservasi_detail
+             WHERE status = \'Selesai\'
+             ORDER BY tanggal DESC, jam DESC
+             LIMIT ?'
+        );
+        $stmt->bindValue(1, $limit, PDO::PARAM_INT);
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function countUpcoming(): int
+    {
+        $stmt = $this->db->query(
+            'SELECT COUNT(*) FROM v_reservasi_detail
+             WHERE status NOT IN (\'Selesai\', \'Batal\')
+               AND tanggal >= CURDATE()'
+        );
+
+        return (int) $stmt->fetchColumn();
+    }
+
+    public function countCompleted(): int
+    {
+        $stmt = $this->db->query(
+            'SELECT COUNT(*) FROM v_reservasi_detail
+             WHERE status = \'Selesai\''
+        );
+
+        return (int) $stmt->fetchColumn();
+    }
+
     public function isJadwalTerisi(string $tanggal, string $jam): bool
     {
         $jamNormalized = strlen($jam) === 5 ? $jam . ':00' : $jam;
