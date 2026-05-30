@@ -24,6 +24,7 @@ $statusTabs = [
 	'Konfirmasi',
 	'Proses',
 	'Selesai',
+    'Terbayar',
 	'Batal'
 ];
 

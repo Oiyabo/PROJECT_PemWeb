@@ -271,8 +271,23 @@ class PembayaranModel
 
 		if ($ok && $localStatus === 'Selesai') {
 			$row = $this->getPembayaranFullByOrderId($orderId);
+
 			if ($row) {
-				$this->upsertHubung((int) $row['id_reservasi'], null, (int) $row['id_pembayaran_full']);
+				$this->upsertHubung(
+					(int) $row['id_reservasi'],
+					null,
+					(int) $row['id_pembayaran_full']
+				);
+
+				$stmt = $this->db->prepare(
+					"UPDATE reservasi
+					SET status = 'Terbayar'
+					WHERE id_reservasi = ?"
+				);
+
+				$stmt->execute([
+					$row['id_reservasi']
+				]);
 			}
 		}
 		return $ok;

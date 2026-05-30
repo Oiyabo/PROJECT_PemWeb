@@ -19,6 +19,7 @@ class Admin extends Controller
         $totalReservasi = count($reservasi);
         $aktif = count(array_filter($reservasi, fn($r) => in_array($r['status'], ['Konfirmasi', 'Proses'])));
         $selesai = count(array_filter($reservasi, fn($r) => $r['status'] === 'Selesai'));
+        $terbayar = count(array_filter($reservasi, fn($r) => $r['status'] === 'Terbayar'));
 
         $data = [
             'title' => 'Dashboard Admin',
@@ -28,6 +29,7 @@ class Admin extends Controller
                 'total' => $totalReservasi,
                 'aktif' => $aktif,
                 'selesai' => $selesai,
+                'terbayar' => $terbayar,
                 'pelanggan' => count($this->userModel->getAllPelanggan()),
             ],
         ];
@@ -42,7 +44,7 @@ class Admin extends Controller
         $keyword = trim($_GET['q'] ?? '');
         $statusAktif = trim($_GET['status'] ?? 'Semua');
 
-        $statusTabs = ['Semua', 'Menunggu', 'Konfirmasi', 'Proses', 'Selesai', 'Batal'];
+        $statusTabs = ['Semua', 'Menunggu', 'Konfirmasi', 'Proses', 'Selesai', 'Terbayar', 'Batal'];
 
         if (!in_array($statusAktif, $statusTabs, true)) {
             $statusAktif = 'Semua';

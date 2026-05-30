@@ -53,6 +53,18 @@ $title = 'Dashboard Admin';
 			<div class="admin-stat-value"><?= $stats['selesai'] ?></div>
 			<div class="admin-stat-description">Service telah selesai</div>
 		</div>
+
+		<!-- Reservasi Terbayar -->
+		<div class="admin-stat-card">
+			<div class="admin-stat-header">
+				<div class="admin-stat-label">Terbayar</div>
+				<div class="admin-stat-icon-wrapper">
+					<i data-lucide="circle-dollar-sign" color="#76c8a0"></i>
+				</div>
+			</div>
+			<div class="admin-stat-value"><?= $stats['terbayar'] ?></div>
+			<div class="admin-stat-description">Service telah dibayar</div>
+		</div>
 	</div>
 
 	<!-- Main Grid: Reservasi Terbaru & Progress -->
@@ -134,6 +146,21 @@ $title = 'Dashboard Admin';
 					<div class="progress">
 						<div class="progress-bar bg-primary"
 							style="width: <?= $stats['total'] > 0 ? ($stats['selesai'] / $stats['total']) * 100 : 0 ?>%;">
+						</div>
+					</div>
+				</div>
+
+				<!-- Reservasi Terbayar -->
+				<div class="progress-item">
+					<div class="progress-header">
+						<span class="progress-label">Reservasi Terbayar</span>
+						<span class="progress-value">
+							<?= $stats['terbayar'] ?>/<?= $stats['total'] ?>
+						</span>
+					</div>
+					<div class="progress">
+						<div class="progress-bar bg-primary"
+							style="width: <?= $stats['total'] > 0 ? ($stats['terbayar'] / $stats['total']) * 100 : 0 ?>%;">
 						</div>
 					</div>
 				</div>
