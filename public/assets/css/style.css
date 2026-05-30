@@ -777,6 +777,61 @@ body.auth-page {
   overflow-x: auto;
 }
 
+/* Tabel reservasi / riwayat: scroll horizontal di layar sempit (portrait) */
+.table-scroll-x {
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+
+.table-scroll-x .table-wrapper {
+  overflow: visible;
+  width: max-content;
+  min-width: 100%;
+}
+
+.table-scroll-x .table-reservasi,
+.table-scroll-x .table-riwayat-pelanggan {
+  table-layout: auto;
+  width: max-content;
+  min-width: 100%;
+}
+
+.table-scroll-x .table-reservasi th,
+.table-scroll-x .table-reservasi td,
+.table-scroll-x .table-riwayat-pelanggan th,
+.table-scroll-x .table-riwayat-pelanggan td {
+  white-space: nowrap;
+}
+
+.table-scroll-x .table-reservasi th:first-child,
+.table-scroll-x .table-reservasi td:first-child,
+.table-scroll-x .table-riwayat-pelanggan th:first-child,
+.table-scroll-x .table-riwayat-pelanggan td:first-child {
+  min-width: 140px;
+}
+
+.table-scroll-x .table-reservasi th:nth-child(2),
+.table-scroll-x .table-reservasi td:nth-child(2),
+.table-scroll-x .table-riwayat-pelanggan th:nth-child(2),
+.table-scroll-x .table-riwayat-pelanggan td:nth-child(2) {
+  min-width: 120px;
+}
+
+.table-scroll-x .table-reservasi th:nth-child(3),
+.table-scroll-x .table-reservasi td:nth-child(3),
+.table-scroll-x .table-riwayat-pelanggan th:nth-child(3),
+.table-scroll-x .table-riwayat-pelanggan td:nth-child(3) {
+  min-width: 110px;
+}
+
+.table-scroll-x .table-reservasi th:nth-child(4),
+.table-scroll-x .table-reservasi td:nth-child(4),
+.table-scroll-x .table-riwayat-pelanggan th:nth-child(4),
+.table-scroll-x .table-riwayat-pelanggan td:nth-child(4) {
+  min-width: 100px;
+}
+
 table,
 .table,
 .table-reservasi,
@@ -2132,6 +2187,7 @@ tbody tr:last-child td {
 }
 
 .btn-detail-pembayaran,
+.btn-detail-reservasi,
 .btn-struk-pembayaran {
   display: inline-flex;
   align-items: center;
@@ -2144,9 +2200,55 @@ tbody tr:last-child td {
   font-weight: 800;
 }
 
-.btn-detail-pembayaran {
+#detailReservasiModal .detail-box.detail-pembayaran-box {
+  display: flex;
+  flex-direction: column;
+  max-height: 90vh;
+  overflow: hidden;
+}
+
+#detailReservasiModal .detail-pembayaran-header {
+  flex-shrink: 0;
+}
+
+#detailReservasiModal .detail-box-content {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  margin-top: 16px;
+  -webkit-overflow-scrolling: touch;
+}
+
+#detailReservasiModal .detail-popup-actions {
+  flex-shrink: 0;
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+
+.btn-detail-pembayaran,
+.btn-detail-reservasi {
   background: var(--secondary);
   color: var(--white);
+}
+
+.detail-reservasi-admin-actions .status-form-modal {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.detail-status-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-light);
+}
+
+.btn-simpan-status {
+  align-self: flex-start;
+  padding: 8px 16px;
+  font-size: 13px;
 }
 
 .btn-struk-pembayaran {
@@ -2615,10 +2717,13 @@ tbody tr:last-child td {
   width: 100%;
 }
 
-.table-reservasi th:nth-child(7),
-.table-reservasi td:nth-child(7) {
-  width: 230px;
-  max-width: 230px;
+.table-reservasi th:last-child,
+.table-reservasi td:last-child,
+.table-riwayat-pelanggan th:last-child,
+.table-riwayat-pelanggan td:last-child {
+  width: 110px;
+  min-width: 110px;
+  text-align: center;
 }
 
 .layanan-cell {
@@ -2639,12 +2744,6 @@ tbody tr:last-child td {
 .table-riwayat-pelanggan {
   table-layout: fixed;
   width: 100%;
-}
-
-.table-riwayat-pelanggan th:nth-child(5),
-.table-riwayat-pelanggan td:nth-child(5) {
-  width: 240px;
-  max-width: 240px;
 }
 
 .table-riwayat-pelanggan th,
