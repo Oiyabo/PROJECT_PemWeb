@@ -760,7 +760,7 @@ body.auth-page {
 
 .pelanggan-stat-card {
   padding: 30px;
-  min-height: 150px;
+  min-height: 120px;
 }
 
 .dashboard-history-card {
@@ -991,19 +991,20 @@ tbody tr:last-child td {
 
 .status-waiting,
 .badge-warning {
-  background: #fef9c3;
-  color: #854d0e;
+  background: #fef3c7;
+  color: #92400e;
 }
 
 .status-confirmed,
 .badge-info {
   background: #dbeafe;
-  color: #1e40af;
+  color: #1d4ed8;
 }
 
-.status-process {
-  background: #e0f2fe;
-  color: #0369a1;
+.status-process,
+.badge-primary {
+  background: #cffafe;
+  color: #0e7490;
 }
 
 .status-done,
@@ -1013,15 +1014,16 @@ tbody tr:last-child td {
   color: #166534;
 }
 
+.status-paid,
+.badge-paid {
+  background: #ede9fe;
+  color: #6d28d9;
+}
+
 .status-danger,
 .badge-danger {
   background: #fee2e2;
   color: #b91c1c;
-}
-
-.badge-primary {
-  background: #dcfce7;
-  color: #15803d;
 }
 
 .role-badge {

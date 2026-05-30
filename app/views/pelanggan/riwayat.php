@@ -7,6 +7,7 @@ if (!function_exists('badgeStatus')) {
 			'Konfirmasi' => 'badge-info',
 			'Proses' => 'badge-primary',
 			'Selesai' => 'badge-success',
+			'Terbayar' => 'badge-paid',
 			'Batal' => 'badge-danger',
 		];
 
