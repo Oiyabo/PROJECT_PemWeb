@@ -18,7 +18,7 @@ if (!function_exists('badgeStatus')) {
 	}
 }
 
-$statusTabs = $statusTabs ?? ['Semua', 'Menunggu', 'Konfirmasi', 'Proses', 'Selesai', 'Batal'];
+$statusTabs = $statusTabs ?? ['Semua', 'Menunggu', 'Konfirmasi', 'Proses', 'Selesai', 'Terbayar', 'Batal'];
 $statusAktif = $statusAktif ?? 'Semua';
 $jumlahStatus = $jumlahStatus ?? [];
 $keyword = $keyword ?? '';

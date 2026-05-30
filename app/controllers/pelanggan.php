@@ -26,6 +26,7 @@ class Pelanggan extends Controller
 				'total' => count($reservasi),
 				'aktif' => count(array_filter($reservasi, fn($r) => in_array($r['status'], ['Menunggu', 'Konfirmasi', 'Proses']))),
 				'selesai' => count(array_filter($reservasi, fn($r) => $r['status'] === 'Selesai')),
+				'terbayar' => count(array_filter($reservasi, fn($r) => $r['status'] === 'Terbayar')),
 			],
 		];
 

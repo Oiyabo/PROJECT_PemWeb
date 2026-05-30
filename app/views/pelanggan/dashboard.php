@@ -89,5 +89,25 @@ $title = 'Dashboard Pelanggan';
 				</div>
 			</div>
 		</div>
+
+		<div class="pelanggan-stat-card">
+			<div class="pelanggan-stat-header">
+
+				<div class="pelanggan-stat-label">
+					Terbayar
+				</div>
+
+				<div class="pelanggan-stat-icon-wrapper stat-icon-success">
+					<i data-lucide="circle-dollar-sign" color="#76c8a0" width="18" height="18"></i>
+				</div>
+
+			</div>
+
+			<div class="pelanggan-stat-body">
+				<div class="pelanggan-stat-value">
+					<?= $stats['terbayar'] ?>
+				</div>
+			</div>
+		</div>
 	</div>
 </div>
