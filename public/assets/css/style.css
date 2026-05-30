@@ -1664,6 +1664,53 @@ tbody tr:last-child td {
   }
 }
 
+#payment-loading-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.55);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 99990;
+}
+
+#payment-loading-overlay.is-active {
+  display: flex;
+}
+
+.payment-loading-box {
+  background: var(--white, #fff);
+  padding: 28px 32px;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+  max-width: 90%;
+  min-width: 260px;
+}
+
+.payment-loading-spinner {
+  width: 44px;
+  height: 44px;
+  margin: 0 auto 16px;
+  border: 3px solid #e2e8f0;
+  border-top-color: var(--primary, #38a3a5);
+  border-radius: 50%;
+  animation: jadwal-spin 0.8s linear infinite;
+}
+
+.payment-loading-text {
+  font-weight: 600;
+  color: #1e293b;
+  margin: 0 0 8px;
+  font-size: 15px;
+}
+
+.payment-loading-hint {
+  font-size: 13px;
+  color: #64748b;
+  margin: 0;
+}
+
 .popup-overlay {
   position: fixed;
   inset: 0;

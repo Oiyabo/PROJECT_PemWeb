@@ -508,6 +508,8 @@ function bayarDpDanSelesaikan() {
   const btn = document.getElementById("btnBayarDpSelesai");
   if (btn) btn.disabled = true;
 
+  showPaymentLoading("Menyiapkan pembayaran Midtrans...");
+
   const formData = new FormData();
   formData.append("tipe", "DP_PRE");
   formData.append("jenis_kendaraan", jenis);
@@ -527,6 +529,9 @@ function bayarDpDanSelesaikan() {
             data.snap_token,
             data.client_key,
             startVerifikasiDanSimpan,
+            () => {
+              if (btn) btn.disabled = false;
+            },
             () => {
               if (btn) btn.disabled = false;
             },

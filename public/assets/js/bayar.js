@@ -26,6 +26,8 @@ function submitPaymentFull() {
     const btn = document.getElementById('btnSubmitFull');
     btn.disabled = true;
 
+    showPaymentLoading('Menyiapkan pembayaran Midtrans...');
+
     const formData = new FormData();
     formData.append('tipe', 'FULL');
     formData.append('id_reservasi', currentReservID);
@@ -36,8 +38,6 @@ function submitPaymentFull() {
         formData,
         (data) => {
             closePaymentModal();
-            btn.disabled = false;
-            btn.textContent = 'Bayar dengan Midtrans';
 
             loadMidtransSnap(
                 data.snap_script || window.MIDTRANS_SNAP_SCRIPT,
@@ -47,26 +47,41 @@ function submitPaymentFull() {
                         data.snap_token,
                         data.client_key,
                         () => verifikasiPembayaranFull(data.order_id, data.nominal),
-                        () => alert('Pembayaran gagal atau dibatalkan.')
+                        () => {
+                            alert('Pembayaran gagal atau dibatalkan.');
+                            resetSubmitFullBtn(btn);
+                        },
+                        () => resetSubmitFullBtn(btn)
                     );
                 }
             );
         },
         (msg) => {
             alert(msg);
-            btn.disabled = false;
-            btn.textContent = 'Bayar dengan Midtrans';
+            resetSubmitFullBtn(btn);
         }
     );
+}
+
+function resetSubmitFullBtn(btn) {
+    const el = btn || document.getElementById('btnSubmitFull');
+    if (!el) return;
+    el.disabled = false;
+    el.textContent = 'Bayar dengan Midtrans';
 }
 
 function verifikasiPembayaranFull(orderId, nominal) {
     afterSnapPaid(baseUrl, orderId, {
         maxAttempts: 25,
         verifyMessage: 'Memverifikasi pelunasan pembayaran...',
-        onPaid: () => showPaymentSuccess(nominal),
+        onPaid: () => {
+            hidePaymentLoading();
+            showPaymentSuccess(nominal);
+        },
         onTimeout: () => {
+            hidePaymentLoading();
             alert('Pembayaran masih diproses. Jika sudah bayar, tunggu 1–2 menit lalu refresh halaman.');
+            resetSubmitFullBtn();
         },
     });
 }
