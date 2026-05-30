@@ -114,7 +114,7 @@ $title = 'Dashboard Pelanggan';
 	<div class="dashboard-history-card">
 
     <div class="dashboard-history-header">
-        <h3>Reservasi Terbaru</h3>
+        <h3>Reservasi Aktif</h3>
     </div>
 
     <?php if (!empty($reservasiAktif)): ?>
