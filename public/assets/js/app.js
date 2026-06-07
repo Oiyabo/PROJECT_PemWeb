@@ -58,4 +58,22 @@ document.addEventListener('DOMContentLoaded', () => {
 			this.classList.add('active');
 		});
 	});
+
+	const notificationToggle = document.getElementById('notificationToggle');
+	const notificationDropdown = document.getElementById('notificationDropdown');
+
+	if (notificationToggle && notificationDropdown) {
+		notificationToggle.addEventListener('click', (e) => {
+			e.stopPropagation();
+			notificationDropdown.classList.toggle('show');
+		});
+
+		notificationDropdown.addEventListener('click', (e) => {
+			e.stopPropagation();
+		});
+
+		document.addEventListener('click', () => {
+			notificationDropdown.classList.remove('show');
+		});
+	}
 });

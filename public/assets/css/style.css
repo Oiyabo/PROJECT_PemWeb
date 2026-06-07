@@ -1,4 +1,4 @@
-/* ==================================================
+﻿/* ==================================================
    GLOBAL & UTILITIES
    ================================================== */
 :root {
@@ -2439,6 +2439,123 @@ table, .table, .table-reservasi, .table-pelanggan, .table-transaksi {
 @media (orientation: portrait) {
   .search-text { display: none; }
   .close-btn { display: flex; }
+}
+
+.notification-wrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.notification-dropdown {
+  position: absolute;
+  top: 48px;
+  right: 0;
+  width: 360px;
+  max-height: 430px;
+  background: #ffffff;
+  border: 1px solid var(--secondary-light);
+  border-radius: 14px;
+  box-shadow: 0 12px 35px rgba(24, 78, 119, 0.18);
+  overflow: hidden;
+  z-index: 9999;
+  display: none;
+}
+
+.notification-dropdown.show {
+  display: block;
+}
+
+.notification-header {
+  padding: 16px 18px;
+  border-bottom: 1px solid #e2e8f0;
+  background: #f8fafc;
+}
+
+.notification-header h3 {
+  margin: 0;
+  color: var(--text-dark);
+  font-size: 16px;
+  font-weight: 800;
+}
+
+.notification-header p {
+  margin: 3px 0 0;
+  color: var(--text-light);
+  font-size: 12px;
+}
+
+.notification-list {
+  max-height: 350px;
+  overflow-y: auto;
+}
+
+.notification-item {
+  display: flex;
+  gap: 12px;
+  padding: 14px 18px;
+  text-decoration: none;
+  border-bottom: 1px solid #edf2f7;
+  background: #ffffff;
+  transition: background 0.2s ease;
+}
+
+.notification-item:hover {
+  background: #f8fffb;
+}
+
+.notification-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  background: #d9ed92;
+  color: #184e77;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.notification-content {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.notification-content strong {
+  color: var(--text-dark);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.notification-content span {
+  color: var(--text-medium);
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.notification-content small {
+  color: var(--text-light);
+  font-size: 11px;
+}
+
+.notification-empty {
+  padding: 30px 18px;
+  text-align: center;
+  color: var(--text-light);
+}
+
+.notification-empty p {
+  margin-top: 8px;
+  font-size: 13px;
+}
+
+@media (max-width: 600px) {
+  .notification-dropdown {
+    width: 300px;
+    right: -8px;
+  }
 }
 
 
