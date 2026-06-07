@@ -22,6 +22,18 @@ class UserModel
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    public function getReservasiByUser(int $userId): array
+    {
+        $stmt = $this->db->prepare(
+            'SELECT tanggal, jam, kendaraan, plat, layanan, status
+            FROM v_reservasi_detail
+            WHERE user_id = ?
+            ORDER BY tanggal DESC'
+        );
+        $stmt->execute([$userId]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
     public function searchPelanggan(string $keyword): array
     {
         $keyword = '%' . $keyword . '%';

@@ -21,12 +21,20 @@
 				<th>Nama</th>
 				<th>Email</th>
 				<th>Role</th>
+				<th>Detail</th>
 			</tr>
 		</thead>
 
 		<tbody>
 			<?php if (!empty($pelanggan)): ?>
 				<?php foreach ($pelanggan as $index => $p): ?>
+					<?php
+					$pelangganJson = htmlspecialchars(
+						json_encode($p, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP),
+						ENT_QUOTES,
+						'UTF-8'
+					);
+					?>
 					<tr>
 						<td class="id-text">
 							#<?= htmlspecialchars($p['id'] ?? ($index + 1)) ?>
@@ -56,6 +64,13 @@
 								<?= htmlspecialchars($p['role'] ?? 'Pelanggan') ?>
 							</span>
 						</td>
+
+						<td>
+							<button type="button" class="btn btn-detail-pelanggan" data-pelanggan="<?= $pelangganJson ?>" title="Lihat detail">
+								<i data-lucide="eye" width="14" height="14"></i>
+								Detail
+							</button>
+						</td>
 					</tr>
 				<?php endforeach; ?>
 			<?php else: ?>
@@ -73,3 +88,7 @@
 	</table>
 
 </div>
+
+<?php require __DIR__ . '/../partials/detail-pelanggan-modal.php'; ?>
+
+<script src="<?= BASEURL ?>/assets/js/detail-pelanggan.js"></script>

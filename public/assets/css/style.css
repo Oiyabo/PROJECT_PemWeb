@@ -3188,3 +3188,21 @@ tbody tr:last-child td {
     min-width: 140px;
   }
 }
+
+.table-reservasi-mini {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.8rem;
+    margin-top: 8px;
+}
+.table-reservasi-mini th,
+.table-reservasi-mini td {
+    padding: 6px 10px;
+    border-bottom: 1px solid #f0f0f0;
+    text-align: left;
+    vertical-align: top;
+}
+.table-reservasi-mini th {
+    color: #38a3a5;
+    font-weight: 600;
+}
