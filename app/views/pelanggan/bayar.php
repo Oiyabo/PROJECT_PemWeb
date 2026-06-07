@@ -107,7 +107,7 @@ $userId = $_SESSION['user']['id'];
 </div>
 
 <!-- Modal Pembayaran -->
-<div id="paymentFullModal" class="popup-overlay" style="display: none;">
+<div id="paymentFullModal" class="popup-overlay hidden">
 	<div class="popup-box popup-payment-box">
 
 		<h3>Pelunasan via Midtrans</h3>
@@ -166,7 +166,7 @@ $userId = $_SESSION['user']['id'];
 </div>
 
 <!-- Modal Konfirmasi -->
-<div id="confirmPaymentModal" class="popup-overlay" style="display: none;">
+<div id="confirmPaymentModal" class="popup-overlay hidden">
 	<div class="popup-box popup-payment-box">
 
 		<h3>Pembayaran Berhasil</h3>

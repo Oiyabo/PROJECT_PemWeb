@@ -130,7 +130,7 @@ $data = $_SESSION['form_reservasi'] ?? [];
             <?php endforeach; ?>
         </div>
 
-        <div class="service-selected-count" id="serviceSelectedCount" style="display:none;">
+        <div class="service-selected-count hidden" id="serviceSelectedCount">
             <i class="ti ti-check"></i>
             <span id="serviceCountNum">0</span> layanan dipilih
         </div>
@@ -208,7 +208,7 @@ $data = $_SESSION['form_reservasi'] ?? [];
 	</div>
 
 	<!-- Modal sukses DP + reservasi -->
-	<div id="reservasiSuksesModal" class="popup-overlay popup-overlay-hidden">
+	<div id="reservasiSuksesModal" class="popup-overlay hidden">
 
 		<div class="popup-box popup-box-success">
 
@@ -256,4 +256,8 @@ $data = $_SESSION['form_reservasi'] ?? [];
 </script>
 
 <script src="<?= BASEURL ?>/assets/js/midtrans-payment.js"></script>
-<script src="<?= BASEURL ?>/assets/js/buat-reservasi.js"></script>
+<script src="<?= BASEURL ?>/assets/js/reservasi/common.js"></script>
+<script src="<?= BASEURL ?>/assets/js/reservasi/jadwal.js"></script>
+<script src="<?= BASEURL ?>/assets/js/reservasi/layanan.js"></script>
+<script src="<?= BASEURL ?>/assets/js/reservasi/pembayaran.js"></script>
+<script src="<?= BASEURL ?>/assets/js/reservasi/wizard.js"></script>

@@ -118,7 +118,7 @@ if ($keyword !== '') {
 	<?php endif; ?>
 </div>
 
-<div id="detailPembayaranModal" class="popup-overlay" style="display: none;" aria-hidden="true">
+<div id="detailPembayaranModal" class="popup-overlay hidden" aria-hidden="true">
 	<div class="popup-box detail-pembayaran-box" role="dialog" aria-labelledby="detailPembayaranTitle">
 		<div class="detail-pembayaran-header">
 			<h3 id="detailPembayaranTitle">Detail Pembayaran</h3>
@@ -127,14 +127,14 @@ if ($keyword !== '') {
 			</button>
 		</div>
 		<div id="detailPembayaranLoading" class="detail-pembayaran-loading">Memuat data...</div>
-		<div id="detailPembayaranContent" class="detail-pembayaran-content" style="display: none;"></div>
-		<div id="strukPembayaranContent" class="struk-pembayaran-content" style="display: none;"></div>
+		<div id="detailPembayaranContent" class="detail-pembayaran-content hidden"></div>
+		<div id="strukPembayaranContent" class="struk-pembayaran-content hidden"></div>
 		<div class="popup-actions detail-popup-actions">
-			<button type="button" class="btn-struk-pembayaran" id="btnStrukPembayaran" style="display: none;">
+			<button type="button" class="btn-struk-pembayaran hidden" id="btnStrukPembayaran">
 				<i data-lucide="receipt" width="14" height="14"></i>
 				Struk
 			</button>
-			<button type="button" class="btn-secondary" id="btnKembaliDetailPembayaran" style="display: none;">
+			<button type="button" class="btn-secondary hidden" id="btnKembaliDetailPembayaran">
 				Kembali
 			</button>
 			<button type="button" class="btn-secondary" id="btnTutupDetailPembayaran">Tutup</button>

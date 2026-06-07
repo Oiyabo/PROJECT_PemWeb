@@ -237,8 +237,6 @@ function isNavActive(array $nav, string $currentPath): bool
               Sesi Anda akan berakhir. Perpanjang untuk tetap masuk atau keluar dari akun.
             </p>
 
-            <p id="sessionTimeoutCountdown" class="session-timeout-countdown" aria-live="polite"></p>
-
             <div class="popup-actions">
               <button type="button" id="sessionTimeoutLogout" class="btn-cancel">Keluar</button>
               <button type="button" id="sessionTimeoutExtend" class="btn-confirm">Perpanjang</button>

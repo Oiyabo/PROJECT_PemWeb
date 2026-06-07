@@ -17,9 +17,10 @@ function ensurePaymentLoadingOverlay() {
 }
 
 function showPaymentLoading(message) {
-  const text = document.getElementById("payment-loading-text");
+  const overlay = ensurePaymentLoadingOverlay();
+  const text = overlay.querySelector("#payment-loading-text");
   if (text) text.textContent = message || "Memproses...";
-  ensurePaymentLoadingOverlay().classList.add("is-active");
+  overlay.classList.add("is-active");
   document.body.style.overflow = "hidden";
 }
 
@@ -51,22 +52,40 @@ function loadMidtransSnap(scriptUrl, clientKey, callback) {
   document.head.appendChild(script);
 }
 
-function openMidtransSnap(snapToken, clientKey, onDone, onError) {
+function runAfterSnapUiCloses(fn) {
+  requestAnimationFrame(() => requestAnimationFrame(fn));
+}
+
+function openMidtransSnap(snapToken, clientKey, onDone, onError, onCancel) {
   if (!window.snap) {
     hidePaymentLoading();
     alert("Midtrans belum siap. Coba lagi.");
     return;
   }
   hidePaymentLoading();
-  const done = typeof onDone === "function" ? onDone : function () {};
+
+  let verificationStarted = false;
+
+  function beginVerification() {
+    if (verificationStarted) return;
+    verificationStarted = true;
+    showPaymentLoading("Memverifikasi pembayaran...");
+    if (typeof onDone === "function") onDone();
+  }
+
   window.snap.pay(snapToken, {
-    onSuccess: done,
-    onPending: done,
+    onSuccess: () => runAfterSnapUiCloses(beginVerification),
+    onPending: () => runAfterSnapUiCloses(beginVerification),
     onError: (result) => {
       hidePaymentLoading();
       if (typeof onError === "function") onError(result);
     },
-    onClose: hidePaymentLoading,
+    onClose: () => {
+      if (!verificationStarted) {
+        hidePaymentLoading();
+        if (typeof onCancel === "function") onCancel();
+      }
+    },
   });
 }
 
@@ -81,7 +100,13 @@ function pollPaymentStatus(baseUrl, orderId, opts) {
       );
     };
 
-  showPaymentLoading(opts.message || "Memverifikasi pembayaran...");
+  const message = opts.message || "Memverifikasi pembayaran...";
+  if (opts.showLoading !== false) {
+    showPaymentLoading(message);
+  } else {
+    const text = document.getElementById("payment-loading-text");
+    if (text) text.textContent = message;
+  }
   let attempts = 0;
 
   function tick() {
@@ -119,8 +144,6 @@ function pollPaymentStatus(baseUrl, orderId, opts) {
 }
 
 function requestMidtransSnap(baseUrl, formData, onTokenReady, onError) {
-  showPaymentLoading("Menyiapkan pembayaran Midtrans...");
-
   fetch(baseUrl + "/pelanggan/midtranssnap", { method: "POST", body: formData })
     .then((r) => r.json())
     .then((data) => {
@@ -145,6 +168,7 @@ function afterSnapPaid(baseUrl, orderId, options) {
   pollPaymentStatus(baseUrl, orderId, {
     maxAttempts: options.maxAttempts || 20,
     message: options.verifyMessage,
+    showLoading: options.showLoading,
     onPaid: options.onPaid,
     onTimeout: options.onTimeout,
   });
