@@ -53,11 +53,16 @@ class Admin extends Controller
             ? $this->userModel->searchPelanggan($keyword)
             : $this->userModel->getAllPelanggan();
 
+        foreach ($pelanggan as &$p) {
+            $p['reservasi'] = $this->userModel->getReservasiByUser((int) $p['id']);
+        }
+        unset($p);
+
         $data = [
-            'title' => 'Data Pelanggan',
-            'user' => $_SESSION['user'],
+            'title'     => 'Data Pelanggan',
+            'user'      => $_SESSION['user'],
             'pelanggan' => $pelanggan,
-            'keyword' => $keyword,
+            'keyword'   => $keyword,
         ];
 
         $this->view('templates/header', $data);
