@@ -96,9 +96,11 @@
           </form>
         </section>
       `;
+      adminActionsEl.classList.remove('hidden');
       adminActionsEl.style.display = "block";
     } else if (adminActionsEl) {
       adminActionsEl.innerHTML = "";
+      adminActionsEl.classList.add('hidden');
       adminActionsEl.style.display = "none";
     }
 
