@@ -100,6 +100,7 @@ function verifikasiPembayaranFull(orderId, nominal) {
         maxAttempts: 25,
         verifyMessage: 'Memverifikasi pelunasan pembayaran...',
         onPaid: () => {
+            sessionStorage.removeItem('midtrans_full_order');
             hidePaymentLoading();
             showPaymentSuccess(nominal);
         },
@@ -141,8 +142,15 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function showPaymentSuccess(nominal) {
-    document.getElementById('confirmAmount').textContent =
-        'Rp ' + formatNumber(nominal || currentSisaBayar);
+    const amount = nominal || currentSisaBayar;
+    const confirmAmountEl = document.getElementById('confirmAmount');
+    if (amount) {
+        confirmAmountEl.textContent = 'Rp ' + formatNumber(amount);
+        confirmAmountEl.parentElement.style.display = 'block';
+    } else {
+        confirmAmountEl.parentElement.style.display = 'none';
+    }
+    
     const modal = document.getElementById('confirmPaymentModal');
     modal.classList.remove('hidden');
     modal.style.display = 'flex';

@@ -55,13 +55,24 @@
 
   function setFooterMode(mode) {
     if (mode === "detail") {
-      btnStruk.style.display = currentReservasiId ? "inline-flex" : "none";
+      if (currentReservasiId) {
+        btnStruk.classList.remove("hidden");
+        btnStruk.style.display = "inline-flex";
+      } else {
+        btnStruk.classList.add("hidden");
+        btnStruk.style.display = "none";
+      }
+      btnKembali.classList.add("hidden");
       btnKembali.style.display = "none";
     } else if (mode === "struk") {
+      btnStruk.classList.add("hidden");
       btnStruk.style.display = "none";
+      btnKembali.classList.remove("hidden");
       btnKembali.style.display = "inline-flex";
     } else {
+      btnStruk.classList.add("hidden");
       btnStruk.style.display = "none";
+      btnKembali.classList.add("hidden");
       btnKembali.style.display = "none";
     }
   }
@@ -187,29 +198,38 @@
   }
 
   function showDetailView() {
+    contentEl.classList.remove("hidden");
     contentEl.style.display = "block";
+    strukEl.classList.add("hidden");
     strukEl.style.display = "none";
     setFooterMode("detail");
   }
 
   function showStrukView() {
+    contentEl.classList.add("hidden");
     contentEl.style.display = "none";
+    strukEl.classList.remove("hidden");
     strukEl.style.display = "block";
     setFooterMode("struk");
   }
 
   function openModal() {
+    modal.classList.remove("hidden");
     modal.style.display = "flex";
     modal.setAttribute("aria-hidden", "false");
   }
 
   function closeModal() {
+    modal.classList.add("hidden");
     modal.style.display = "none";
     modal.setAttribute("aria-hidden", "true");
+    contentEl.classList.add("hidden");
     contentEl.style.display = "none";
     contentEl.innerHTML = "";
+    strukEl.classList.add("hidden");
     strukEl.style.display = "none";
     strukEl.innerHTML = "";
+    loadingEl.classList.remove("hidden");
     loadingEl.style.display = "block";
     loadingEl.textContent = "Memuat data...";
     currentReservasiId = null;
@@ -219,8 +239,11 @@
   async function loadDetail(idReservasi) {
     currentReservasiId = idReservasi;
     openModal();
+    loadingEl.classList.remove("hidden");
     loadingEl.style.display = "block";
+    contentEl.classList.add("hidden");
     contentEl.style.display = "none";
+    strukEl.classList.add("hidden");
     strukEl.style.display = "none";
     setFooterMode("loading");
 
@@ -236,6 +259,7 @@
       }
 
       renderDetail(json.data);
+      loadingEl.classList.add("hidden");
       loadingEl.style.display = "none";
       showDetailView();
     } catch (err) {
@@ -247,9 +271,12 @@
   async function loadStruk() {
     if (!currentReservasiId) return;
 
+    loadingEl.classList.remove("hidden");
     loadingEl.style.display = "block";
     loadingEl.textContent = "Memuat struk...";
+    contentEl.classList.add("hidden");
     contentEl.style.display = "none";
+    strukEl.classList.add("hidden");
     strukEl.style.display = "none";
 
     try {
@@ -264,10 +291,12 @@
       }
 
       renderStruk(json.data);
+      loadingEl.classList.add("hidden");
       loadingEl.style.display = "none";
       showStrukView();
     } catch (err) {
       loadingEl.textContent = err.message || "Terjadi kesalahan";
+      loadingEl.classList.remove("hidden");
       loadingEl.style.display = "block";
     }
   }
@@ -285,6 +314,7 @@
   btnTutup?.addEventListener("click", closeModal);
   btnStruk?.addEventListener("click", loadStruk);
   btnKembali?.addEventListener("click", () => {
+    loadingEl.classList.add("hidden");
     loadingEl.style.display = "none";
     showDetailView();
     titleEl.textContent = "Detail Pembayaran #" + currentReservasiId;
