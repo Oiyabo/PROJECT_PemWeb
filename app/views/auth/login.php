@@ -58,7 +58,6 @@
 					<span>Masuk dengan akun Anda</span>
 					<input type="email" name="email" placeholder="Email" required />
 					<input type="password" name="password" placeholder="Password" required />
-					<a href="<?= BASEURL ?>/auth/lupaPassword">Lupa password?</a>
 					<button type="submit">Masuk</button>
 					<div class="textLink">
 						Belum Punya Akun? <a id="signUp" href="#">Daftar Sekarang</a>
