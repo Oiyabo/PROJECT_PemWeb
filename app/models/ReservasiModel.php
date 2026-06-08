@@ -184,11 +184,11 @@ class ReservasiModel
             'SELECT COUNT(*) FROM reservasi
              WHERE tanggal = ?
                AND jam = ?
-               AND status NOT IN (?, ?)
+               AND status NOT IN (?, ?, ?)
              LIMIT 1'
         );
 
-        $stmt->execute([$tanggal, $jamNormalized, 'Batal', 'Selesai']);
+        $stmt->execute([$tanggal, $jamNormalized, 'Batal', 'Selesai', 'Terbayar']);
 
         return (int) $stmt->fetchColumn() > 0;
     }
