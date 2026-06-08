@@ -328,13 +328,26 @@ function tampilkanModalSuksesReservasi(data) {
   }
 
   const modal = document.getElementById("reservasiSuksesModal");
-  if (modal) modal.classList.remove("hidden");
+  if (modal) {
+    modal.classList.remove("hidden");
+    modal.style.display = 'flex';
+  }
 
   const btn = document.getElementById("btnBayarDpSelesai");
   if (btn) btn.textContent = "✓ Reservasi Berhasil";
+
+  // Auto-redirect ke halaman riwayat setelah 2 detik
+  setTimeout(() => {
+    tutupSuksesDanKeRiwayat();
+  }, 2000);
 }
 
 function tutupSuksesDanKeRiwayat() {
+  const modal = document.getElementById("reservasiSuksesModal");
+  if (modal) {
+    modal.classList.add("hidden");
+    modal.style.display = 'none';
+  }
   window.location.href = baseUrl + "/pelanggan/riwayat";
 }
 

@@ -25,13 +25,8 @@ $userId = $_SESSION['user']['id'];
 				<thead>
 					<tr>
 						<th>No. Reservasi</th>
-						<th>Tanggal</th>
-						<th>Jam</th>
-						<th>Kendaraan</th>
-						<th>Layanan</th>
 						<th>Jenis</th>
-						<th>Harga Full</th>
-						<th>DP Terbayar</th>
+						<th>Kendaraan</th>
 						<th>Sisa Pembayaran</th>
 						<th>Aksi</th>
 					</tr>
@@ -47,21 +42,8 @@ $userId = $_SESSION['user']['id'];
 						?>
 						<tr>
 							<td><strong>#<?= $idReservasi ?></strong></td>
-							<td><?= date('d/m/Y', strtotime($r['tanggal'])) ?></td>
-							<td><?= substr($r['jam'], 0, 5) ?></td>
-							<td><?= htmlspecialchars($r['kendaraan']) ?> (<?= htmlspecialchars($r['plat']) ?>)</td>
-							<td class="layanan-cell"><?= htmlspecialchars($r['layanan'] ?? '-') ?></td>
 							<td><?= htmlspecialchars($jenisKendaraan) ?></td>
-
-							<td class="text-right">
-								Rp <?= number_format($hargaFull, 0, ',', '.') ?>
-							</td>
-
-							<td class="text-right">
-								<span class="text-success">
-									Rp <?= number_format($dpTerbayar, 0, ',', '.') ?>
-								</span>
-							</td>
+							<td><?= htmlspecialchars($r['kendaraan']) ?> (<?= htmlspecialchars($r['plat']) ?>)</td>
 
 							<td class="text-right">
 								<span class="text-danger-bold">
@@ -78,10 +60,14 @@ $userId = $_SESSION['user']['id'];
 										<?= $hargaFull ?>,
 										<?= $sisaBayar ?>,
 										'<?= htmlspecialchars($r['kendaraan'], ENT_QUOTES) ?>',
-										'<?= htmlspecialchars($jenisKendaraan, ENT_QUOTES) ?>'
+										'<?= htmlspecialchars($jenisKendaraan, ENT_QUOTES) ?>',
+										'<?= date('d/m/Y', strtotime($r['tanggal'])) ?>',
+										'<?= substr($r['jam'], 0, 5) ?>',
+										'<?= htmlspecialchars($r['layanan'] ?? '-', ENT_QUOTES) ?>',
+										<?= $dpTerbayar ?>
 									)"
 								>
-									💳 Bayar (Midtrans)
+									💳 Bayar
 								</button>
 							</td>
 						</tr>
@@ -120,21 +106,41 @@ $userId = $_SESSION['user']['id'];
 			</p>
 
 			<p class="payment-info-row">
+				<strong>Tanggal Service:</strong>
+				<span id="modalTanggal">-</span>
+			</p>
+
+			<p class="payment-info-row">
+				<strong>Jam Service:</strong>
+				<span id="modalJam">-</span>
+			</p>
+
+			<p class="payment-info-row">
 				<strong>Kendaraan:</strong>
 				<span id="modalKendaraan">-</span>
 			</p>
 
 			<p class="payment-info-row">
-				<strong>Harga Full (layanan):</strong>
+				<strong>Layanan:</strong>
+				<span id="modalLayanan" class="layanan-text">-</span>
+			</p>
 
+			<p class="payment-info-row">
+				<strong>Harga Full (layanan):</strong>
 				<span id="modalHargaFull" class="font-semibold">
 					Rp 0
 				</span>
 			</p>
 
 			<p class="payment-info-row">
-				<strong>Sisa Pembayaran:</strong>
+				<strong>DP Terbayar:</strong>
+				<span id="modalDpTerbayar" class="text-success">
+					Rp 0
+				</span>
+			</p>
 
+			<p class="payment-info-row">
+				<strong>Sisa Pembayaran:</strong>
 				<span id="modalFullAmount" class="payment-total">
 					Rp 0
 				</span>

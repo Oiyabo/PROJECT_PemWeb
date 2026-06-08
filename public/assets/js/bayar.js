@@ -2,29 +2,53 @@ let currentReservID = null;
 let currentSisaBayar = null;
 let currentHargaFull = null;
 let currentJenisKendaraan = null;
-const baseUrl = window.APP_BASEURL;
+const baseUrl = window.APP_BASEURL || "";
 
-function openPaymentModal(reservID, hargaFull, sisaBayar, kendaraan, jenisKendaraan) {
+function openPaymentModal(reservID, hargaFull, sisaBayar, kendaraan, jenisKendaraan, tanggal, jam, layanan, dpTerbayar) {
     currentReservID = reservID;
     currentHargaFull = hargaFull;
     currentSisaBayar = sisaBayar;
     currentJenisKendaraan = jenisKendaraan;
 
     document.getElementById('modalReservID').textContent = '#' + reservID;
+    document.getElementById('modalTanggal').textContent = tanggal || '-';
+    document.getElementById('modalJam').textContent = jam || '-';
     document.getElementById('modalKendaraan').textContent = kendaraan;
+    document.getElementById('modalLayanan').textContent = layanan || '-';
     document.getElementById('modalHargaFull').textContent = 'Rp ' + formatNumber(hargaFull);
+    document.getElementById('modalDpTerbayar').textContent = 'Rp ' + formatNumber(dpTerbayar || 0);
     document.getElementById('modalFullAmount').textContent = 'Rp ' + formatNumber(sisaBayar);
 
-    document.getElementById('paymentFullModal').style.display = 'flex';
+    const modal = document.getElementById('paymentFullModal');
+    modal.classList.remove('hidden');
+    modal.style.display = 'flex';
 }
 
 function closePaymentModal() {
-    document.getElementById('paymentFullModal').style.display = 'none';
+    const modal = document.getElementById('paymentFullModal');
+    modal.classList.add('hidden');
+    modal.style.display = 'none';
 }
 
 function submitPaymentFull() {
     const btn = document.getElementById('btnSubmitFull');
+    if (!btn) {
+        alert('Tombol pembayaran tidak ditemukan. Silakan refresh halaman.');
+        return;
+    }
     btn.disabled = true;
+
+    if (!baseUrl) {
+        alert('Konfigurasi aplikasi tidak lengkap. Silakan refresh halaman.');
+        btn.disabled = false;
+        return;
+    }
+
+    if (typeof showPaymentLoading !== 'function') {
+        alert('Fungsi loading tidak ditemukan. Cek console.');
+        btn.disabled = false;
+        return;
+    }
 
     showPaymentLoading('Menyiapkan pembayaran Midtrans...');
 
@@ -102,11 +126,15 @@ document.addEventListener('DOMContentLoaded', () => {
 function showPaymentSuccess(nominal) {
     document.getElementById('confirmAmount').textContent =
         'Rp ' + formatNumber(nominal || currentSisaBayar);
-    document.getElementById('confirmPaymentModal').style.display = 'flex';
+    const modal = document.getElementById('confirmPaymentModal');
+    modal.classList.remove('hidden');
+    modal.style.display = 'flex';
 }
 
 function closeConfirmAndRefresh() {
-    document.getElementById('confirmPaymentModal').style.display = 'none';
+    const modal = document.getElementById('confirmPaymentModal');
+    modal.classList.add('hidden');
+    modal.style.display = 'none';
     location.reload();
 }
 

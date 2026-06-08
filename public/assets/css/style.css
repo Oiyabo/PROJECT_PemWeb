@@ -1,4 +1,4 @@
-﻿/* ==================================================
+/* ==================================================
    GLOBAL & UTILITIES
    ================================================== */
 :root {
@@ -1767,8 +1767,10 @@ body.auth-page {
   background: var(--white);
   border: 1px solid var(--secondary-light);
   border-radius: 18px;
-  overflow: hidden;
+  overflow-x: auto;
+  overflow-y: hidden;
   box-shadow: 0 4px 18px rgba(0, 0, 0, 0.04);
+  -webkit-overflow-scrolling: touch;
 }
 
 .table-wrapper, .table-responsive {
@@ -2150,6 +2152,7 @@ table, .table, .table-reservasi, .table-pelanggan, .table-transaksi {
   
   & .payment-info-row { margin: 8px 0; }
   & .payment-total { font-size: 18px; color: #dc3545; font-weight: 700; }
+  & .layanan-text { display: block; word-wrap: break-word; white-space: normal; }
   & .payment-description { font-size: 14px; color: #555; margin-bottom: 16px; }
 }
 
@@ -2385,11 +2388,14 @@ table, .table, .table-reservasi, .table-pelanggan, .table-transaksi {
     top: 0;
     left: 0;
     height: 100vh;
-    transform: translateX(-100%);
-    width: var(--sidebar-width);
-    min-width: var(--sidebar-width);
+    transform: translateX(0);
+    width: 0;
+    min-width: 0;
     
-    &.toggled { transform: translateX(0); }
+    &.toggled {
+      width: var(--sidebar-width);
+      min-width: var(--sidebar-width);
+    }
   }
   #main .main-content-wrapper {
     margin-left: 0;
@@ -2424,9 +2430,14 @@ table, .table, .table-reservasi, .table-pelanggan, .table-transaksi {
   .jadwal-day { min-height: 58px; padding: 6px; }
   .jadwal-calendar-title { font-size: 15px; min-width: 140px; }
   
-  .reservasi-table { font-size: 12px; }
-  .reservasi-table th, .reservasi-table td { padding: 8px; }
-  .layanan-cell { max-width: 150px; }
+  .reservasi-table { 
+    font-size: 12px; 
+    table-layout: auto;
+    width: max-content;
+    min-width: 100%;
+  }
+  .reservasi-table th, .reservasi-table td { padding: 8px; white-space: nowrap; }
+  .layanan-cell { min-width: 180px; max-width: 250px; white-space: normal; }
 }
 
 @media (max-width: 600px) {

@@ -14,13 +14,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	if (sidebarToggle && sidebar) {
 		sidebarToggle.addEventListener('click', (e) => {
-			e.stopPropagation();
+			e.preventDefault();
+			e.stopImmediatePropagation();
 			sidebar.classList.toggle('toggled');
 		});
 	}
 
 	if (sidebarClose && sidebar) {
-		sidebarClose.addEventListener('click', () => {
+		sidebarClose.addEventListener('click', (e) => {
+			e.preventDefault();
+			e.stopImmediatePropagation();
 			sidebar.classList.remove('toggled');
 		});
 	}
@@ -31,8 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
 			sidebar &&
 			sidebar.classList.contains('toggled') &&
 			!sidebar.contains(e.target) &&
-			sidebarToggle &&
-			!sidebarToggle.contains(e.target)
+			!e.target.closest('#sidebarToggle')
 		) {
 			sidebar.classList.remove('toggled');
 		}
@@ -64,7 +66,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	if (notificationToggle && notificationDropdown) {
 		notificationToggle.addEventListener('click', (e) => {
-			e.stopPropagation();
+			e.preventDefault();
+			e.stopImmediatePropagation();
 			notificationDropdown.classList.toggle('show');
 		});
 
