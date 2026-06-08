@@ -21,7 +21,7 @@
 					<span>Gunakan email untuk mendaftar</span>
 					<input type="text" name="nama" placeholder="Nama Lengkap" required />
 					<input type="email" name="email" placeholder="Email" required />
-					<input type="password" name="password" placeholder="Password" required />
+					<input type="password" name="password" placeholder="Password" required minlength="7" pattern="(?=.*\d).{7,}" title="Password harus minimal 7 karakter dan mengandung angka" />
 					<button type="submit">Daftar</button>
 					<div class="textLink">
 						Sudah Punya Akun? <a id="signIn" href="#">Masuk Sekarang</a>

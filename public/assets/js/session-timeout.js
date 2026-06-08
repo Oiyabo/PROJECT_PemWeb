@@ -11,6 +11,8 @@
   const messageEl = document.getElementById("sessionTimeoutMessage");
   const btnExtend = document.getElementById("sessionTimeoutExtend");
   const btnLogout = document.getElementById("sessionTimeoutLogout");
+  const countdownContainer = document.getElementById("sessionTimeoutCountdownContainer");
+  const countdownEl = document.getElementById("sessionTimeoutCountdown");
 
   if (!modal || !btnExtend || !btnLogout) {
     return;
@@ -64,12 +66,14 @@
       messageEl.textContent =
         "Sesi Anda telah berakhir karena tidak ada aktivitas. Silakan keluar dan login kembali.";
       btnExtend.hidden = true;
+      if (countdownContainer) countdownContainer.classList.add("hidden");
     } else {
       titleEl.textContent = "Session akan habis";
       messageEl.textContent =
         "Sesi Anda akan segera berakhir. Perpanjang untuk tetap masuk atau keluar dari akun.";
       btnExtend.hidden = false;
       btnExtend.textContent = "Perpanjang";
+      if (countdownContainer) countdownContainer.classList.remove("hidden");
     }
 
     if (typeof lucide !== "undefined") {
@@ -87,6 +91,10 @@
 
   function onTick() {
     const left = secondsLeft();
+
+    if (countdownEl) {
+      countdownEl.textContent = left > 0 ? left : 0;
+    }
 
     if (left <= 0) {
       if (!modalVisible || !isExpiredState) {

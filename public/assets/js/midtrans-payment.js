@@ -11,8 +11,21 @@ function ensurePaymentLoadingOverlay() {
     '<div class="payment-loading-spinner" aria-hidden="true"></div>' +
     '<p class="payment-loading-text" id="payment-loading-text">Memproses...</p>' +
     '<p class="payment-loading-hint">Mohon jangan tutup halaman ini</p>' +
+    '<button type="button" class="btn-secondary" id="payment-loading-cancel" style="margin-top: 15px; font-size: 14px; padding: 6px 12px; display: none; width: 100%;">Tutup / Batal</button>' +
     "</div>";
   document.body.appendChild(el);
+  
+  const cancelBtn = el.querySelector("#payment-loading-cancel");
+  if (cancelBtn) {
+      cancelBtn.addEventListener("click", () => {
+          window._cancelPaymentPolling = true;
+          hidePaymentLoading();
+          if (window._onPaymentPollingCancel) {
+              window._onPaymentPollingCancel();
+          }
+      });
+  }
+
   return el;
 }
 
@@ -28,6 +41,8 @@ function hidePaymentLoading() {
   const overlay = document.getElementById("payment-loading-overlay");
   if (overlay) overlay.classList.remove("is-active");
   document.body.style.overflow = "";
+  const cancelBtn = document.getElementById("payment-loading-cancel");
+  if (cancelBtn) cancelBtn.style.display = "none";
 }
 
 function loadMidtransSnap(scriptUrl, clientKey, callback) {
@@ -107,9 +122,21 @@ function pollPaymentStatus(baseUrl, orderId, opts) {
     const text = document.getElementById("payment-loading-text");
     if (text) text.textContent = message;
   }
+
+  const cancelBtn = document.getElementById("payment-loading-cancel");
+  if (cancelBtn) {
+      cancelBtn.style.display = "block";
+  }
+
+  window._cancelPaymentPolling = false;
+  window._onPaymentPollingCancel = () => {
+      onTimeout(true);
+  };
+
   let attempts = 0;
 
   function tick() {
+    if (window._cancelPaymentPolling) return;
     attempts++;
     fetch(
       baseUrl +
@@ -118,6 +145,7 @@ function pollPaymentStatus(baseUrl, orderId, opts) {
     )
       .then((r) => r.json())
       .then((data) => {
+        if (window._cancelPaymentPolling) return;
         if (data.paid) {
           hidePaymentLoading();
           onPaid();
@@ -125,15 +153,16 @@ function pollPaymentStatus(baseUrl, orderId, opts) {
         }
         if (attempts >= maxAttempts) {
           hidePaymentLoading();
-          onTimeout();
+          onTimeout(false);
           return;
         }
         setTimeout(tick, 2000);
       })
       .catch(() => {
+        if (window._cancelPaymentPolling) return;
         if (attempts >= maxAttempts) {
           hidePaymentLoading();
-          onTimeout();
+          onTimeout(false);
         } else {
           setTimeout(tick, 2000);
         }

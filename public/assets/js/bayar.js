@@ -62,6 +62,7 @@ function submitPaymentFull() {
         formData,
         (data) => {
             closePaymentModal();
+            sessionStorage.setItem('midtrans_full_order', data.order_id);
 
             loadMidtransSnap(
                 data.snap_script || window.MIDTRANS_SNAP_SCRIPT,
@@ -102,9 +103,11 @@ function verifikasiPembayaranFull(orderId, nominal) {
             hidePaymentLoading();
             showPaymentSuccess(nominal);
         },
-        onTimeout: () => {
+        onTimeout: (isCanceled) => {
             hidePaymentLoading();
-            alert('Pembayaran masih diproses. Jika sudah bayar, tunggu 1–2 menit lalu refresh halaman.');
+            if (!isCanceled) {
+                alert('Pembayaran masih diproses. Jika sudah bayar, tunggu 1–2 menit lalu refresh halaman.');
+            }
             resetSubmitFullBtn();
         },
     });
@@ -119,7 +122,21 @@ document.addEventListener('DOMContentLoaded', () => {
         orderId &&
         (payment === 'settlement' || payment === 'capture' || payment === 'pending')
     ) {
+        sessionStorage.removeItem('midtrans_full_order');
         verifikasiPembayaranFull(orderId, null);
+    } else if (!orderId) {
+        const savedOrderId = sessionStorage.getItem('midtrans_full_order');
+        if (savedOrderId) {
+            fetch(baseUrl + "/pelanggan/cekpembayaran?order_id=" + encodeURIComponent(savedOrderId))
+                .then((r) => r.json())
+                .then((data) => {
+                    if (data.paid) {
+                        sessionStorage.removeItem('midtrans_full_order');
+                        verifikasiPembayaranFull(savedOrderId, null);
+                    }
+                })
+                .catch(() => {});
+        }
     }
 });
 

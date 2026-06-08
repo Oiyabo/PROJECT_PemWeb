@@ -75,6 +75,12 @@ class Auth extends Controller
 			exit;
 		}
 
+		if (strlen($password) < 7 || !preg_match('/[0-9]/', $password)) {
+			$_SESSION['error'] = 'Password harus minimal 7 karakter dan mengandung angka.';
+			header('Location: ' . BASEURL . '/auth');
+			exit;
+		}
+
 		if ($this->userModel->findByEmail($email)) {
 			$_SESSION['error'] = 'Email sudah terdaftar. Silakan gunakan email lain.';
 			header('Location: ' . BASEURL . '/auth');

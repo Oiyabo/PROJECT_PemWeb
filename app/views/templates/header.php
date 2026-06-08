@@ -334,6 +334,11 @@ if (isset($user)) {
               Sesi Anda akan berakhir. Perpanjang untuk tetap masuk atau keluar dari akun.
             </p>
 
+            <div class="session-timeout-countdown hidden" id="sessionTimeoutCountdownContainer">
+              <i data-lucide="timer" width="16" height="16"></i>
+              <span>Sisa waktu: <strong id="sessionTimeoutCountdown">60</strong> detik</span>
+            </div>
+
             <div class="popup-actions">
               <button type="button" id="sessionTimeoutLogout" class="btn-cancel">Keluar</button>
               <button type="button" id="sessionTimeoutExtend" class="btn-confirm">Perpanjang</button>

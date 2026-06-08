@@ -92,6 +92,10 @@ trait PesanTrait
             $this->respondSimpan($ajax, false, 'Semua field wajib diisi!', BASEURL . '/pelanggan/buat-reservasi');
         }
 
+        if (!preg_match('/^[A-Za-z]{1,2}\s?\d{1,4}\s?[A-Za-z]{0,3}$/', $plat)) {
+            $this->respondSimpan($ajax, false, 'Format plat nomor tidak valid! (Contoh: B 1234 AB)', BASEURL . '/pelanggan/buatreservasi');
+        }
+
         $jenisKendaraan = trim($_POST['jenisKendaraan'] ?? '');
         $dpSudahDibayar = ($_POST['dp_paid'] ?? '') === '1';
         $midtransOrderId = trim($_POST['midtrans_order_id'] ?? '');

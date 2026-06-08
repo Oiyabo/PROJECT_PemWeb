@@ -63,13 +63,15 @@ function startVerifikasiDanSimpan() {
     maxAttempts: 25,
     verifyMessage: "Memverifikasi pembayaran DP...",
     onPaid: simpanReservasiOtomatis,
-    onTimeout: () => {
+    onTimeout: (isCanceled) => {
       verifikasiDpBerjalan = false;
       const btn = document.getElementById("btnBayarDpSelesai");
       if (btn) btn.disabled = false;
-      alert(
-        "Pembayaran masih diproses. Jika sudah bayar, tunggu sebentar lalu klik tombol lagi.",
-      );
+      if (!isCanceled) {
+          alert(
+            "Pembayaran masih diproses. Jika sudah bayar, tunggu sebentar lalu klik tombol lagi.",
+          );
+      }
     },
   });
 }
@@ -132,8 +134,31 @@ function handleMidtransReturn() {
   const orderFromUrl = params.get("order_id");
   const payment = (params.get("payment") || "").toLowerCase();
 
+  const savedOrderId = sessionStorage.getItem("midtrans_dp_order");
+
   if (!orderFromUrl) {
-    sessionStorage.removeItem("midtrans_dp_order");
+    if (savedOrderId) {
+      midtransOrderId = savedOrderId;
+      fetch(baseUrl + "/pelanggan/cekpembayaran?order_id=" + encodeURIComponent(savedOrderId))
+        .then((r) => r.json())
+        .then((data) => {
+          if (data.paid) {
+            const lanjut = () => {
+              showStep(3, false);
+              const btn = document.getElementById("btnBayarDpSelesai");
+              if (btn) btn.disabled = true;
+              startVerifikasiDanSimpan();
+            };
+            saveSessionToServer(3)
+              .then((res) => {
+                if (res.success) renderKonfirmasi(res.data, res.ringkasan);
+                lanjut();
+              })
+              .catch(lanjut);
+          }
+        })
+        .catch(() => {});
+    }
     return;
   }
 

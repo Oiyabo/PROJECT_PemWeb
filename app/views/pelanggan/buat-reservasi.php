@@ -43,6 +43,9 @@ $data = $_SESSION['form_reservasi'] ?? [];
 			<div class="form-group">
 				<label class="form-label">Plat Nomor <span class="required">*</span></label>
 				<input name="plat" id="plat" type="text" class="form-input" placeholder="BE 1234 AB" required
+					pattern="^[A-Za-z]{1,2}\s?\d{1,4}\s?[A-Za-z]{0,3}$"
+					title="Format plat nomor Indonesia. Contoh: B 1234 ABC atau BE 1234"
+					style="text-transform: uppercase;"
 					value="<?= htmlspecialchars($data['plat'] ?? '') ?>">
 			</div>
 		</div>

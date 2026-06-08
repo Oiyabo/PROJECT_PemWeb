@@ -2117,6 +2117,22 @@ table, .table, .table-reservasi, .table-pelanggan, .table-transaksi {
     font-size: 14px;
     line-height: 1.5;
   }
+
+  & .session-timeout-countdown {
+    margin-top: 16px;
+    padding: 12px;
+    background: #fff3e0;
+    color: #e65100;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    
+    &.hidden { display: none !important; }
+  }
 }
 
 .popup-actions, .detail-popup-actions {
