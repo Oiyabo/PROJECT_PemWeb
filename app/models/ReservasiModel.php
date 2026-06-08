@@ -192,4 +192,13 @@ class ReservasiModel
 
         return (int) $stmt->fetchColumn() > 0;
     }
+
+    public function getById(int $id): array|false
+    {
+        $stmt = $this->db->prepare(
+            'SELECT * FROM v_reservasi_detail WHERE id_reservasi = ? LIMIT 1'
+        );
+        $stmt->execute([$id]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
 }

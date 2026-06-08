@@ -169,6 +169,16 @@ trait PesanTrait
             }
         }
 
+        require_once ROOT_PATH . '/app/models/NotifikasiModel.php';
+        $notifModel = new NotifikasiModel();
+        $notifModel->create(
+            null,
+            'Admin',
+            'Reservasi Baru',
+            'Pelanggan ' . $_SESSION['user']['nama'] . ' membuat reservasi baru untuk ' . $kendaraan . ' (' . $plat . ')',
+            BASEURL . '/admin/reservasi?status=Menunggu'
+        );
+
         unset($_SESSION['form_reservasi']);
 
         $message = 'Pembayaran DP berhasil dan reservasi telah dibuat. Kami akan segera mengkonfirmasi.';

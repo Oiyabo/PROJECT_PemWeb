@@ -70,6 +70,24 @@ class Admin extends Controller
         $this->view('templates/footer', $data);
     }
 
+    public function marknotifread(): void
+    {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            http_response_code(400);
+            echo json_encode(['success' => false, 'message' => 'Metode tidak valid']);
+            exit;
+        }
+
+        require_once ROOT_PATH . '/app/models/NotifikasiModel.php';
+        $notifModel = new NotifikasiModel();
+        $userId = (int) $_SESSION['user']['id'];
+        $notifModel->markAllAsRead($userId, 'Admin');
+
+        header('Content-Type: application/json; charset=utf-8');
+        echo json_encode(['success' => true]);
+        exit;
+    }
+
     private function requireRole(string $role): void
     {
         if (!isset($_SESSION['user'])) {

@@ -69,6 +69,18 @@ document.addEventListener('DOMContentLoaded', () => {
 			e.preventDefault();
 			e.stopImmediatePropagation();
 			notificationDropdown.classList.toggle('show');
+
+			if (notificationDropdown.classList.contains('show')) {
+				const badge = notificationToggle.querySelector('.notification-badge');
+				if (badge) {
+					badge.remove();
+				}
+
+				const role = notificationToggle.getAttribute('data-role') || 'pelanggan';
+				fetch(`${window.APP_BASEURL || ''}/${role}/marknotifread`, {
+					method: 'POST'
+				}).catch(err => console.error(err));
+			}
 		});
 
 		notificationDropdown.addEventListener('click', (e) => {

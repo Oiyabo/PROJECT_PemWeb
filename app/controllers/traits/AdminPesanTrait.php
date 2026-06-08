@@ -75,7 +75,20 @@ trait AdminPesanTrait
             $validStatuses = ['Menunggu', 'Konfirmasi', 'Proses', 'Selesai', 'Batal'];
 
             if (in_array($status, $validStatuses, true)) {
-                $this->reservasiModel->updateStatus((int) $id, $status);
+                $reservasi = $this->reservasiModel->getById((int) $id);
+                if ($reservasi) {
+                    $this->reservasiModel->updateStatus((int) $id, $status);
+
+                    require_once ROOT_PATH . '/app/models/NotifikasiModel.php';
+                    $notifModel = new NotifikasiModel();
+                    $notifModel->create(
+                        (int) $reservasi['user_id'],
+                        'Pelanggan',
+                        'Status Reservasi Diperbarui',
+                        'Status reservasi untuk kendaraan ' . $reservasi['kendaraan'] . ' (' . $reservasi['plat'] . ') telah diubah menjadi: ' . $status,
+                        BASEURL . '/pelanggan/riwayat?status=' . urlencode($status)
+                    );
+                }
                 $_SESSION['success'] = 'Status reservasi berhasil diperbarui.';
             } else {
                 $_SESSION['error'] = 'Status tidak valid.';

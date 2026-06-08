@@ -120,8 +120,9 @@ if (isset($user)) {
 
     if ($user['role'] === 'Admin') {
       $stmtNotif = $db->query(
-        "SELECT id_reservasi, nama, kendaraan, plat, layanan, status, tanggal, jam, created_at
-         FROM v_reservasi_detail
+        "SELECT title, message, url, created_at
+         FROM notifikasi
+         WHERE role = 'Admin'
          ORDER BY created_at DESC
          LIMIT 8"
       );
@@ -129,22 +130,21 @@ if (isset($user)) {
       $rowsNotif = $stmtNotif->fetchAll(PDO::FETCH_ASSOC);
 
       foreach ($rowsNotif as $n) {
-        $status = $n['status'] ?? 'Menunggu';
-
         $notificationItems[] = [
-          'title' => 'Reservasi ' . $status,
-          'message' => ($n['nama'] ?? 'Pelanggan') . ' - ' . ($n['kendaraan'] ?? '-') . ' (' . ($n['plat'] ?? '-') . ')',
-          'time' => !empty($n['tanggal']) ? date('d M Y', strtotime($n['tanggal'])) . ' ' . substr((string) ($n['jam'] ?? ''), 0, 5) : '-',
-          'url' => BASEURL . '/admin/reservasi?status=' . urlencode($status),
+          'title' => $n['title'],
+          'message' => $n['message'],
+          'time' => !empty($n['created_at']) ? date('d M Y H:i', strtotime($n['created_at'])) : '-',
+          'url' => $n['url'],
         ];
       }
 
-      $notificationCount = count($rowsNotif);
+      $stmtCount = $db->query("SELECT COUNT(*) FROM notifikasi WHERE role = 'Admin' AND is_read = 0");
+      $notificationCount = (int) $stmtCount->fetchColumn();
     } else {
       $stmtNotif = $db->prepare(
-        "SELECT id_reservasi, nama, kendaraan, plat, layanan, status, tanggal, jam, created_at
-         FROM v_reservasi_detail
-         WHERE user_id = ?
+        "SELECT title, message, url, created_at
+         FROM notifikasi
+         WHERE user_id = ? AND role = 'Pelanggan'
          ORDER BY created_at DESC
          LIMIT 8"
       );
@@ -153,17 +153,17 @@ if (isset($user)) {
       $rowsNotif = $stmtNotif->fetchAll(PDO::FETCH_ASSOC);
 
       foreach ($rowsNotif as $n) {
-        $status = $n['status'] ?? 'Menunggu';
-
         $notificationItems[] = [
-          'title' => 'Status reservasi: ' . $status,
-          'message' => ($n['kendaraan'] ?? '-') . ' (' . ($n['plat'] ?? '-') . ') - ' . ($n['layanan'] ?? '-'),
-          'time' => !empty($n['tanggal']) ? date('d M Y', strtotime($n['tanggal'])) . ' ' . substr((string) ($n['jam'] ?? ''), 0, 5) : '-',
-          'url' => BASEURL . '/pelanggan/riwayat?status=' . urlencode($status),
+          'title' => $n['title'],
+          'message' => $n['message'],
+          'time' => !empty($n['created_at']) ? date('d M Y H:i', strtotime($n['created_at'])) : '-',
+          'url' => $n['url'],
         ];
       }
 
-      $notificationCount = count($rowsNotif);
+      $stmtCount = $db->prepare("SELECT COUNT(*) FROM notifikasi WHERE user_id = ? AND role = 'Pelanggan' AND is_read = 0");
+      $stmtCount->execute([(int) $user['id']]);
+      $notificationCount = (int) $stmtCount->fetchColumn();
     }
   } catch (Throwable $e) {
     $notificationItems = [];
@@ -256,7 +256,7 @@ if (isset($user)) {
 
         <div class="header-right">
           <div class="notification-wrapper">
-            <button class="notification-btn" id="notificationToggle" type="button">
+            <button class="notification-btn" id="notificationToggle" type="button" data-role="<?= strtolower($user['role'] ?? 'pelanggan') ?>">
               <i data-lucide="bell" color="var(--text-medium)" width="18" height="18"></i>
 
               <?php if ($notificationCount > 0): ?>

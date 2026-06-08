@@ -182,6 +182,27 @@ class PendingModel
                     "UPDATE reservasi SET status = 'Terbayar' WHERE id_reservasi = ?"
                 );
                 $stmtUpdate->execute([ $row['id_reservasi'] ]);
+
+                $stmtDetails = $this->db->prepare("
+                    SELECT r.kendaraan, r.plat, u.nama 
+                    FROM reservasi r 
+                    JOIN users u ON r.user_id = u.id 
+                    WHERE r.id_reservasi = ?
+                ");
+                $stmtDetails->execute([(int) $row['id_reservasi']]);
+                $resDetails = $stmtDetails->fetch(PDO::FETCH_ASSOC);
+
+                if ($resDetails) {
+                    require_once ROOT_PATH . '/app/models/NotifikasiModel.php';
+                    $notifModel = new NotifikasiModel();
+                    $notifModel->create(
+                        null,
+                        'Admin',
+                        'Pembayaran Lunas',
+                        'Pelanggan ' . $resDetails['nama'] . ' telah membayar lunas untuk ' . $resDetails['kendaraan'] . ' (' . $resDetails['plat'] . ')',
+                        BASEURL . '/admin/reservasi?status=Terbayar'
+                    );
+                }
             }
         }
         return $ok;
