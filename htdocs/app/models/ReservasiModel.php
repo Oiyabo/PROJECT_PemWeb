@@ -12,7 +12,7 @@ class ReservasiModel
     public function getAll(): array
     {
         $stmt = $this->db->query(
-            'SELECT * FROM v_reservasi_detail ORDER BY tanggal DESC, jam ASC'
+            'SELECT * FROM ' . DbView::v_reservasi_detail() . ' AS v_reservasi_detail ORDER BY tanggal DESC, jam ASC'
         );
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
@@ -22,7 +22,7 @@ class ReservasiModel
         $keyword = '%' . $keyword . '%';
 
         $stmt = $this->db->prepare(
-            'SELECT * FROM v_reservasi_detail
+            'SELECT * FROM ' . DbView::v_reservasi_detail() . ' AS v_reservasi_detail
              WHERE nama LIKE ?
                 OR email LIKE ?
                 OR kendaraan LIKE ?
@@ -53,7 +53,7 @@ class ReservasiModel
         $stmt = $this->db->prepare(
             'SELECT id_reservasi, user_id, kendaraan, plat, tanggal, jam, catatan,
                     status, created_at, nama, email, layanan
-             FROM v_reservasi_detail
+             FROM ' . DbView::v_reservasi_detail() . ' AS v_reservasi_detail
              WHERE user_id = ?
              ORDER BY tanggal DESC, jam ASC'
         );
@@ -117,7 +117,7 @@ class ReservasiModel
     public function getByDateRange(string $startDate, string $endDate): array
     {
         $stmt = $this->db->prepare(
-            'SELECT * FROM v_reservasi_detail
+            'SELECT * FROM ' . DbView::v_reservasi_detail() . ' AS v_reservasi_detail
              WHERE tanggal BETWEEN ? AND ?
              ORDER BY tanggal ASC, jam ASC'
         );
@@ -129,7 +129,7 @@ class ReservasiModel
     public function getUpcoming(int $limit = 15): array
     {
         $stmt = $this->db->prepare(
-            'SELECT * FROM v_reservasi_detail
+            'SELECT * FROM ' . DbView::v_reservasi_detail() . ' AS v_reservasi_detail
              WHERE status NOT IN (\'Selesai\', \'Batal\')
                AND tanggal >= CURDATE()
              ORDER BY tanggal ASC, jam ASC
@@ -144,7 +144,7 @@ class ReservasiModel
     public function getCompleted(int $limit = 15): array
     {
         $stmt = $this->db->prepare(
-            'SELECT * FROM v_reservasi_detail
+            'SELECT * FROM ' . DbView::v_reservasi_detail() . ' AS v_reservasi_detail
              WHERE status = \'Selesai\'
              ORDER BY tanggal DESC, jam DESC
              LIMIT ?'
@@ -158,7 +158,7 @@ class ReservasiModel
     public function countUpcoming(): int
     {
         $stmt = $this->db->query(
-            'SELECT COUNT(*) FROM v_reservasi_detail
+            'SELECT COUNT(*) FROM ' . DbView::v_reservasi_detail() . ' AS v_reservasi_detail
              WHERE status NOT IN (\'Selesai\', \'Batal\')
                AND tanggal >= CURDATE()'
         );
@@ -169,7 +169,7 @@ class ReservasiModel
     public function countCompleted(): int
     {
         $stmt = $this->db->query(
-            'SELECT COUNT(*) FROM v_reservasi_detail
+            'SELECT COUNT(*) FROM ' . DbView::v_reservasi_detail() . ' AS v_reservasi_detail
              WHERE status = \'Selesai\''
         );
 
@@ -196,7 +196,7 @@ class ReservasiModel
     public function getById(int $id)
     {
         $stmt = $this->db->prepare(
-            'SELECT * FROM v_reservasi_detail WHERE id_reservasi = ? LIMIT 1'
+            'SELECT * FROM ' . DbView::v_reservasi_detail() . ' AS v_reservasi_detail WHERE id_reservasi = ? LIMIT 1'
         );
         $stmt->execute([$id]);
         return $stmt->fetch(PDO::FETCH_ASSOC);

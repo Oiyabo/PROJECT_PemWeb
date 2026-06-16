@@ -18,7 +18,7 @@ class UserModel
 
     public function getAllPelanggan(): array
     {
-        $stmt = $this->db->query('SELECT * FROM v_pelanggan ORDER BY nama ASC');
+        $stmt = $this->db->query('SELECT * FROM ' . DbView::v_pelanggan() . ' AS v_pelanggan ORDER BY nama ASC');
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
@@ -26,7 +26,7 @@ class UserModel
     {
         $stmt = $this->db->prepare(
             'SELECT tanggal, jam, kendaraan, plat, layanan, status
-            FROM v_reservasi_detail
+            FROM ' . DbView::v_reservasi_detail() . ' AS v_reservasi_detail
             WHERE user_id = ?
             ORDER BY tanggal DESC'
         );
@@ -39,7 +39,7 @@ class UserModel
         $keyword = '%' . $keyword . '%';
 
         $stmt = $this->db->prepare(
-            'SELECT * FROM v_pelanggan
+            'SELECT * FROM ' . DbView::v_pelanggan() . ' AS v_pelanggan
              WHERE nama LIKE ?
                 OR email LIKE ?
                 OR role LIKE ?

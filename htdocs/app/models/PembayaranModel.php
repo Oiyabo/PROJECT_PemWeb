@@ -12,7 +12,7 @@ class PembayaranModel
     public function hitungTotalHarga(int $reservasiId, string $jenisKendaraan = ''): array
     {
         $stmt = $this->db->prepare(
-            'SELECT jenis_kendaraan, total_dp, total_full, total_sisa FROM v_reservasi_harga WHERE id_reservasi = ?'
+            'SELECT jenis_kendaraan, total_dp, total_full, total_sisa FROM ' . DbView::v_reservasi_harga() . ' AS v_reservasi_harga WHERE id_reservasi = ?'
         );
         $stmt->execute([$reservasiId]);
         $row = $stmt->fetch(PDO::FETCH_ASSOC);

@@ -1,0 +1,4 @@
+<IfModule mod_rewrite.c>
+  Options -Indexes
+  Deny from all
+</IfModule>

@@ -12,7 +12,7 @@ class RiwayatModel
     public function getPembayaranPendingByUser(int $userId): array
     {
         $stmt = $this->db->prepare(
-            'SELECT * FROM v_pembayaran_pending WHERE user_id = ? ORDER BY created_at DESC'
+            'SELECT * FROM ' . DbView::v_pembayaran_pending() . ' AS v_pembayaran_pending WHERE user_id = ? ORDER BY created_at DESC'
         );
         $stmt->execute([$userId]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -21,7 +21,7 @@ class RiwayatModel
     public function getReservasiSelesaiUnpaidFull(int $userId): array
     {
         $stmt = $this->db->prepare(
-            'SELECT * FROM v_reservasi_unpaid_full
+            'SELECT * FROM ' . DbView::v_reservasi_unpaid_full() . ' AS v_reservasi_unpaid_full
              WHERE user_id = ?
              ORDER BY tanggal DESC, jam DESC'
         );
@@ -34,7 +34,7 @@ class RiwayatModel
         $stmt = $this->db->prepare(
             'SELECT id_reservasi, kendaraan, plat, tanggal, jam, jenis_kendaraan,
                     harga_dp, harga_full, nominal_dp_dibayar, nominal_full_dibayar, tanggal_lunas
-             FROM v_riwayat_pembayaran_lunas
+             FROM ' . DbView::v_riwayat_pembayaran_lunas() . ' AS v_riwayat_pembayaran_lunas
              WHERE user_id = ?
              ORDER BY tanggal_lunas DESC, id_reservasi DESC'
         );
@@ -45,7 +45,7 @@ class RiwayatModel
     public function getRiwayatDetailByReservasi(int $reservasiId, int $userId)
     {
         $stmt = $this->db->prepare(
-            'SELECT * FROM v_riwayat_pembayaran_detail
+            'SELECT * FROM ' . DbView::v_riwayat_pembayaran_detail() . ' AS v_riwayat_pembayaran_detail
              WHERE id_reservasi = ? AND user_id = ?
              LIMIT 1'
         );
@@ -61,7 +61,7 @@ class RiwayatModel
                     tanggal, jam, layanan_id, nama_layanan, kategori,
                     harga_dp, harga_full, harga_sisa,
                     no_transaksi_dp, no_transaksi_full, tanggal_struk
-             FROM v_struk_pembayaran
+             FROM ' . DbView::v_struk_pembayaran() . ' AS v_struk_pembayaran
              WHERE id_reservasi = ? AND user_id = ?
              ORDER BY nama_layanan ASC'
         );

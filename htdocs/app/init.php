@@ -83,6 +83,7 @@ require_once ROOT_PATH . '/app/libraries/MidtransService.php';
 require_once ROOT_PATH . '/app/core/dbFunction.php';
 require_once ROOT_PATH . '/app/core/dbProcedure.php';
 require_once ROOT_PATH . '/app/core/dbTrigger.php';
+require_once ROOT_PATH . '/app/core/DbView.php';
 
 require_once ROOT_PATH . '/app/core/Controller.php';
 require_once ROOT_PATH . '/app/core/App.php';
